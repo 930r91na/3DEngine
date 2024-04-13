@@ -8,11 +8,12 @@ namespace PLAYGROUND
     public class Renderer
     {
         private readonly Canvas _canvas;
-        private const float ProjectionPlaneZ = 1;
+        private readonly Camera _camera;
 
         public Renderer(Canvas canvas)
         {
             this._canvas = canvas;
+            _camera = new Camera(canvas);
         }
 
         public void DrawPixel(int x, int y, Color color)
@@ -119,7 +120,7 @@ namespace PLAYGROUND
             for (var index = 0; index < model.Vertexes.Length; index++)
             {
                 var t = model.Vertexes[index];
-                projected.Add(ProjectVertex(transform * t));
+                projected.Add(_camera.Project(transform*t));
             }
 
             for (var t = model.Triangles.Length - 1; t >= 0; t--)
@@ -353,23 +354,6 @@ namespace PLAYGROUND
 
             // Create a new color with the adjusted RGB values
             return Color.FromArgb(color.A, r, g, b);
-        }
-
-        // PROJECTION FUNCTIONS
-        private Vertex ProjectVertex(Vertex v)
-        {
-            // Project the 3D coordinates into the 2D viewport
-            return ViewportToCanvas(new Vertex(v.X * ProjectionPlaneZ / (v.Z), v.Y * ProjectionPlaneZ / (v.Z), 0, 0));
-        }
-
-        private Vertex ViewportToCanvas(Vertex p2d)
-        {
-            // The viewport is proportional to the canvas but normalized to 0-1
-            var vH = 1;
-            var vW = ((float)_canvas.Width / _canvas.Height) * vH;
-
-            // Convert the normalized viewport to canvas coordinates
-            return new Vertex((p2d.X * _canvas.Width / vW), (p2d.Y * _canvas.Height / vH), 0, 0);
         }
 
         // CLIPPING FUNCTIONS

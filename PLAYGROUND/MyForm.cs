@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
@@ -10,10 +11,11 @@ namespace PLAYGROUND
 {
     public partial class MyForm : Form
     {
-        Scene[] _scenes;
+        List<Scene> _scenes;
         Scene _selectedScene;
         Renderer _renderer;
         Canvas _canvas;
+
         private Model _selectedModel;
 
         private float _angle;
@@ -31,19 +33,26 @@ namespace PLAYGROUND
 
         public MyForm()
         {
+            _scenes = new List<Scene>();
             InitializeComponent();
         }
 
         private void Init()
         {
             _canvas = new Canvas(PCT_CANVAS);
+
             _renderer = new Renderer(_canvas);
-            _selectedScene = new Scene();
+            if (_selectedScene == null)
+            {
+                _selectedScene = new Scene();
+                _scenes.Add(_selectedScene);
+            }
         }
 
         private void MyForm_SizeChanged(object sender, EventArgs e)
         {
             Init();
+            
         }
 
         private void TIMER_Tick(object sender, EventArgs e)
@@ -59,17 +68,16 @@ namespace PLAYGROUND
             openFileDialog.Title = @"Buscar archivo";
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
-            openFileDialog.ShowDialog();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                var filePath = openFileDialog.FileName;
 
-            var filePath = openFileDialog.FileName;
-
-            ReadObj(filePath);
+                ReadObj(filePath);
+            }
         }
 
         private void ReadObj(string file)
         {
-            if (file == null) throw new ArgumentNullException(nameof(file));
-
             using (StreamReader reader = new StreamReader(file))
             {
                 ReadObj(reader);
@@ -177,16 +185,22 @@ namespace PLAYGROUND
 
         private void RDBTNWIREFRAME_CheckedChanged(object sender, EventArgs e)
         {
+            if (_selectedModel == null) return;
+
             _selectedModel.Mode = Mode.Wireframe;
         }
 
         private void RDBTNSOLID_CheckedChanged(object sender, EventArgs e)
         {
+            if (_selectedNode == null) return;
+
             _selectedModel.Mode = Mode.Solid;
         }
 
         private void RDBTNSHADED_CheckedChanged(object sender, EventArgs e)
         {
+            if (_selectedModel == null) return;
+
             _selectedModel.Mode = Mode.Shaded;
         }
 
@@ -199,19 +213,21 @@ namespace PLAYGROUND
         {
             if (_selectedModel == null) return;
 
-            _angle += 1f;
             if (_isRotatingX)
             {
+                _angle += 1f;
                 _selectedModel.Transform.Rotation = Matrix.RotX(_angle);
             }
 
             if (_isRotatingY)
             {
+                _angle += 1f;
                 _selectedModel.Transform.Rotation = Matrix.RotY(_angle);
             }
 
             if (_isRotatingZ)
             {
+                _angle += 1f;
                 _selectedModel.Transform.Rotation = Matrix.RotZ(_angle);
             }
         }
@@ -219,7 +235,7 @@ namespace PLAYGROUND
         private void BTNRX_Click(object sender, EventArgs e)
         {
             _isRotatingX = !_isRotatingX;
-            if (_isRotatingX)
+            if (!_isRotatingX)
             {
                 BTNRX.BackColor = Color.Coral;
                 BTNRX.ForeColor = Color.White;
@@ -234,7 +250,7 @@ namespace PLAYGROUND
         private void BTNRY_Click(object sender, EventArgs e)
         {
             _isRotatingY = !_isRotatingY;
-            if (_isRotatingY)
+            if (!_isRotatingY)
             {
                 BTNRY.BackColor = Color.Coral;
                 BTNRY.ForeColor = Color.White;
@@ -249,7 +265,7 @@ namespace PLAYGROUND
         private void BTNRZ_Click(object sender, EventArgs e)
         {
             _isRotatingZ = !_isRotatingZ;
-            if (_isRotatingZ)
+            if (!_isRotatingZ)
             {
                 BTNRZ.BackColor = Color.Coral;
                 BTNRZ.ForeColor = Color.White;
@@ -318,6 +334,24 @@ namespace PLAYGROUND
         private void BTNSPHERE_Click(object sender, EventArgs e)
         {
             ReadObjFromResource("Resources.sph.obj");
+        }
+
+        private void Triangle_Click(object sender, EventArgs e)
+        {
+            // Create a new model with a triangle 
+            Vertex[] vertices =
+            [
+                new Vertex(0, 1, 0, 1),
+                new Vertex(1, 0, 0, 0.5f),
+                new Vertex(0, 0, 1, 0.3f),
+            ];
+
+            Triangle[] faces =
+            [
+                new Triangle(0, 1, 2, Color.Red),
+            ];
+
+            NewModel(vertices, faces);
         }
     }
 }

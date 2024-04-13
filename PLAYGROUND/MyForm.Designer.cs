@@ -55,6 +55,7 @@ namespace PLAYGROUND
             this.BTNRZ = new System.Windows.Forms.Button();
             this.BTNSCALATE = new System.Windows.Forms.TextBox();
             this.TIMER = new System.Windows.Forms.Timer(this.components);
+            this.Triangle = new System.Windows.Forms.Button();
             this.PNL_MAIN.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PCT_CANVAS)).BeginInit();
             this.panel1.SuspendLayout();
@@ -254,6 +255,7 @@ namespace PLAYGROUND
             // PNL_HEADER
             // 
             this.PNL_HEADER.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.PNL_HEADER.Controls.Add(this.Triangle);
             this.PNL_HEADER.Controls.Add(this.LBLESCALATE);
             this.PNL_HEADER.Controls.Add(this.FLWLYTBTNSMOVE);
             this.PNL_HEADER.Controls.Add(this.BTNSCALATE);
@@ -332,6 +334,16 @@ namespace PLAYGROUND
             this.TIMER.Interval = 10;
             this.TIMER.Tick += new System.EventHandler(this.TIMER_Tick);
             // 
+            // Triangle
+            // 
+            this.Triangle.Location = new System.Drawing.Point(117, 52);
+            this.Triangle.Name = "Triangle";
+            this.Triangle.Size = new System.Drawing.Size(75, 47);
+            this.Triangle.TabIndex = 5;
+            this.Triangle.Text = "T";
+            this.Triangle.UseVisualStyleBackColor = true;
+            this.Triangle.Click += new System.EventHandler(this.Triangle_Click);
+            // 
             // MyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -383,6 +395,7 @@ namespace PLAYGROUND
         private System.Windows.Forms.RadioButton RDBTNSOLID;
         private System.Windows.Forms.RadioButton RDBTNSHADED;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button Triangle;
     }
 }
 
