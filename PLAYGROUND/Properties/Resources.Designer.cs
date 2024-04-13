@@ -59,5 +59,25 @@ namespace PLAYGROUND.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] sph {
+            get {
+                object obj = ResourceManager.GetObject("sph", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Square {
+            get {
+                object obj = ResourceManager.GetObject("Square", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

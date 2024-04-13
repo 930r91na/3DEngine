@@ -16,7 +16,6 @@ namespace PLAYGROUND
             B = b;
             C = c;
             Color = color;
-
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System;
 using System.Linq;
@@ -8,103 +7,28 @@ namespace PLAYGROUND
 {
     public class Renderer
     {
-        Canvas canvas;
+        private readonly Canvas _canvas;
         private const float ProjectionPlaneZ = 1;
 
         public Renderer(Canvas canvas)
         {
-            this.canvas = canvas;
+            this._canvas = canvas;
         }
 
         public void DrawPixel(int x, int y, Color color)
         {
-            x = canvas.Width / 2 + x;
-            y = canvas.Height / 2 - y - 1;
+            x = _canvas.Width / 2 + x;
+            y = _canvas.Height / 2 - y - 1;
 
-            if (x < 0 || x >= canvas.Width || y < 0 || y >= canvas.Height)
+            if (x < 0 || x >= _canvas.Width || y < 0 || y >= _canvas.Height)
             {
                 return;
             }
 
-            canvas.SetPixel(x, y, color);
+            _canvas.SetPixel(x, y, color);
         }
 
-        public void SortByY(ref Vertex p0, ref Vertex p1, ref Vertex p2)
-        {
-            // Sort the vertices
-            if (p1.Y < p0.Y)
-            {
-                (p0, p1) = (p1, p0);
-            }
-            if (p2.Y < p0.Y)
-            {
-                (p0, p2) = (p2, p0);
-            }
-            if (p2.Y < p1.Y)
-            {
-                (p1, p2) = (p2, p1);
-            }
-        }
-
-        private List<float> Interpolate(float i0, float d0, float i1, float d1)
-        {
-            List<float> values = new List<float>();
-            if (Math.Abs(i0 - i1) < 0)
-            {
-                values.Add(d0);
-                return values;
-            }
-            float a = (d1 - d0) / (i1 - i0);
-            float d = d0;
-            for (int i = (int)i0; i <= i1; i++)
-            {
-                values.Add(d);
-                d = d + a;
-            }
-            return values;
-        }
-
-        // RENDER FUNCTIONS
-        public void RenderTriangle(Triangle triangle, List<Vertex> projected, Mode mode)
-        {
-            switch (mode)
-            {
-                case Mode.Shaded:
-                    DrawShadowedTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C], triangle.Color);
-                    break;
-                case Mode.Wireframe:
-                    DrawWireFrameTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C], triangle.Color);
-                    break;
-                case Mode.Solid:
-                    DrawFilledTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C], triangle.Color);
-                    break;
-                default:
-                    DrawWireFrameTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C], triangle.Color);
-                    break;
-            }
-        }
-
-        private void RenderModel(Mesh model, Matrix transform)
-        {
-            List<Vertex> projected = new List<Vertex>();
-
-            foreach (var t in model.Vertexes)
-            {
-                projected.Add(ProjectVertex(transform * t));
-            }
-
-            foreach (var t in model.Triangles)
-            {
-                RenderTriangle(t, projected, Mode.Wireframe);
-            }
-        }
-
-        
-
-        public void RenderMesh(Mesh mesh)
-        { }
-
-        void DrawLine(Vertex p0, Vertex p1, Color color)
+        private void DrawLine(Vertex p0, Vertex p1, Color color)
         {
             var dx = p1.X - p0.X;
             var dy = p1.Y - p0.Y;
@@ -128,11 +52,116 @@ namespace PLAYGROUND
                 {
                     (p0, p1) = (p1, p0);
                 }
+
                 var xs = Interpolate((int)p0.Y, p0.X, (int)p1.Y, p1.X);
                 for (var y = (int)p0.Y; y <= p1.Y; y++)
                 {
                     DrawPixel((int)xs[(y - (int)p0.Y)], y, color);
                 }
+            }
+        }
+
+        public void SortByY(ref Vertex p0, ref Vertex p1, ref Vertex p2)
+        {
+            // Sort the vertices
+            if (p1.Y < p0.Y)
+            {
+                (p0, p1) = (p1, p0);
+            }
+
+            if (p2.Y < p0.Y)
+            {
+                (p0, p2) = (p2, p0);
+            }
+
+            if (p2.Y < p1.Y)
+            {
+                (p1, p2) = (p2, p1);
+            }
+        }
+
+        private static List<float> Interpolate(float i0, float d0, float i1, float d1)
+        {
+            List<float> values = new List<float>();
+            if (Math.Abs(i0 - i1) < 0)
+            {
+                values.Add(d0);
+                return values;
+            }
+
+            float a = (d1 - d0) / (i1 - i0);
+            float d = d0;
+            for (int i = (int)i0; i <= i1; i++)
+            {
+                values.Add(d);
+                d = d + a;
+            }
+
+            return values;
+        }
+
+        // RENDER FUNCTIONS
+        public void RenderScene(Scene scene)
+        {
+            _canvas.FastClear();
+            for (var m = scene.Models.Count - 1; m >= 0; m--)
+            {
+                RenderModel(scene.Models[m].Mesh, scene.Models[m].Transform.transform(), scene.Models[m].Mode);
+            }
+
+            _canvas.Refresh();
+        }
+
+        private void RenderModel(Mesh model, Matrix transform, Mode mode)
+        {
+            var projected = new List<Vertex>();
+
+            for (var index = 0; index < model.Vertexes.Length; index++)
+            {
+                var t = model.Vertexes[index];
+                projected.Add(ProjectVertex(transform * t));
+            }
+
+            for (var t = model.Triangles.Length - 1; t >= 0; t--)
+            {
+                switch (mode)
+                {
+                    case Mode.Shaded:
+                        RenderTriangle(model.Triangles[t], projected, Mode.Shaded);
+                        break;
+                    case Mode.Wireframe:
+                        RenderTriangle(model.Triangles[t], projected, Mode.Wireframe);
+                        break;
+                    case Mode.Solid:
+                        RenderTriangle(model.Triangles[t], projected, Mode.Solid);
+                        break;
+                    default:
+                        RenderTriangle(model.Triangles[t], projected, Mode.Wireframe);
+                        break;
+                }
+            }
+        }
+
+        public void RenderTriangle(Triangle triangle, List<Vertex> projected, Mode mode)
+        {
+            switch (mode)
+            {
+                case Mode.Shaded:
+                    DrawShadowedTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C],
+                        triangle.Color);
+                    break;
+                case Mode.Wireframe:
+                    DrawWireFrameTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C],
+                        triangle.Color);
+                    break;
+                case Mode.Solid:
+                    DrawFilledTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C],
+                        triangle.Color);
+                    break;
+                default:
+                    DrawWireFrameTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C],
+                        triangle.Color);
+                    break;
             }
         }
 
@@ -154,7 +183,7 @@ namespace PLAYGROUND
             var x02 = Interpolate(p0.Y, p0.X, p2.Y, p2.X);
 
             // Ensure lists are not empty before removing an element
-            if (x01.Count > 0 && x12.Count > 0 && isOverlapping(x01, x12))
+            if (x01.Count > 0 && x12.Count > 0 && IsOverlapping(x01, x12))
             {
                 //x01.RemoveAt(x01.Count - 1);
             }
@@ -202,7 +231,7 @@ namespace PLAYGROUND
             }
         }
 
-        private bool isOverlapping(List<float> x01, List<float> x12)
+        private static bool IsOverlapping(List<float> x01, List<float> x12)
         {
             if (!x01.Any() || !x12.Any())
             {
@@ -230,11 +259,12 @@ namespace PLAYGROUND
             var h02 = Interpolate(p0.Y, p0.H, p2.Y, p2.H);
 
             // Ensure lists are not empty before removing an element
-            if (x01.Count > 0 && x12.Count > 0 && isOverlapping(x01, x12))
+            if (x01.Count > 0 && x12.Count > 0 && IsOverlapping(x01, x12))
             {
                 x01.RemoveAt(x01.Count - 1);
             }
-            if (h01.Count > 0 && h12.Count > 0 && isOverlapping(h01, h12))
+
+            if (h01.Count > 0 && h12.Count > 0 && IsOverlapping(h01, h12))
             {
                 h01.RemoveAt(h01.Count - 1);
             }
@@ -252,6 +282,7 @@ namespace PLAYGROUND
             {
                 return;
             }
+
             // Ensure h012 and h02 have elements before accessing them
             if (h012.Count == 0 || h02.Count == 0)
             {
@@ -324,17 +355,6 @@ namespace PLAYGROUND
             return Color.FromArgb(color.A, r, g, b);
         }
 
-        public void RenderScene(Scene scene)
-        {
-            canvas.FastClear();
-            //  PROCESS SCENE
-            for (int m = 0; m < scene.Models.Count; m++)
-            {
-                RenderMesh(scene.Models[m]);
-            }
-            canvas.Refresh();
-        }
-
         // PROJECTION FUNCTIONS
         private Vertex ProjectVertex(Vertex v)
         {
@@ -346,10 +366,12 @@ namespace PLAYGROUND
         {
             // The viewport is proportional to the canvas but normalized to 0-1
             var vH = 1;
-            var vW = ((float)canvas.Width / canvas.Height) * vH;
+            var vW = ((float)_canvas.Width / _canvas.Height) * vH;
 
             // Convert the normalized viewport to canvas coordinates
-            return new Vertex((p2d.X * canvas.Width / vW), (p2d.Y * canvas.Height / vH), 0, 0);
+            return new Vertex((p2d.X * _canvas.Width / vW), (p2d.Y * _canvas.Height / vH), 0, 0);
         }
+
+        // CLIPPING FUNCTIONS
     }
 }

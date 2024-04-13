@@ -4,7 +4,6 @@ namespace PLAYGROUND
 {
     public class Mesh
     {
-
         public readonly Vertex[] Vertexes;
         public readonly Triangle[] Triangles;
 
@@ -12,7 +11,6 @@ namespace PLAYGROUND
         {
             Vertexes = vertexes;
             Triangles = triangles;
-
         }
     }
 }

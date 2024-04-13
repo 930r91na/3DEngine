@@ -1,5 +1,4 @@
-﻿
-namespace PLAYGROUND
+﻿namespace PLAYGROUND
 {
     public class Vertex
     {

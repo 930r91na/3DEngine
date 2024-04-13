@@ -53,13 +53,12 @@ namespace PLAYGROUND
         {
             long res = (x * _pixelFormatSize) + (y * _stride);
 
-            _bits[res + 0] = c.B;// (byte)Blue;
-            _bits[res + 1] = c.G;// (byte)Green;
-            _bits[res + 2] = c.R;// (byte)Red;
-            _bits[res + 3] = c.A;// (byte)Alpha;
+            _bits[res + 0] = c.B; // (byte)Blue;
+            _bits[res + 1] = c.G; // (byte)Green;
+            _bits[res + 2] = c.R; // (byte)Red;
+            _bits[res + 3] = c.A; // (byte)Alpha;
         }
 
-        
 
         public void FastClear()
         {
@@ -93,6 +92,5 @@ namespace PLAYGROUND
         {
             pctCanvas.Invalidate();
         }
-
     }
 }

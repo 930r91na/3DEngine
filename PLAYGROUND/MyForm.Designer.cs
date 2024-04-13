@@ -33,28 +33,28 @@ namespace PLAYGROUND
             this.components = new System.ComponentModel.Container();
             this.PNL_MAIN = new System.Windows.Forms.Panel();
             this.PCT_CANVAS = new System.Windows.Forms.PictureBox();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.BTNOBJ = new System.Windows.Forms.Button();
             this.BTNCUBE = new System.Windows.Forms.Button();
             this.BTNSPHERE = new System.Windows.Forms.Button();
+            this.LBLTREEVIEW = new System.Windows.Forms.Label();
             this.treeView1 = new System.Windows.Forms.TreeView();
-            this.PNL_BOTTOM = new System.Windows.Forms.Panel();
-            this.LBL_STATUS = new System.Windows.Forms.Label();
-            this.PNL_HEADER = new System.Windows.Forms.Panel();
-            this.TIMER = new System.Windows.Forms.Timer(this.components);
-            this.BTNRX = new System.Windows.Forms.Button();
-            this.FLWLYTBTNSMOVE = new System.Windows.Forms.FlowLayoutPanel();
-            this.BTNRY = new System.Windows.Forms.Button();
-            this.BTNRZ = new System.Windows.Forms.Button();
-            this.BTNSCALATE = new System.Windows.Forms.TextBox();
-            this.LBLESCALATE = new System.Windows.Forms.Label();
+            this.LBLRENDERMODE = new System.Windows.Forms.Label();
             this.RDBTNWIREFRAME = new System.Windows.Forms.RadioButton();
             this.RDBTNSOLID = new System.Windows.Forms.RadioButton();
             this.RDBTNSHADED = new System.Windows.Forms.RadioButton();
-            this.LBLTREEVIEW = new System.Windows.Forms.Label();
-            this.LBLRENDERMODE = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.PNL_BOTTOM = new System.Windows.Forms.Panel();
+            this.LBL_STATUS = new System.Windows.Forms.Label();
+            this.PNL_HEADER = new System.Windows.Forms.Panel();
+            this.LBLESCALATE = new System.Windows.Forms.Label();
+            this.FLWLYTBTNSMOVE = new System.Windows.Forms.FlowLayoutPanel();
+            this.BTNRX = new System.Windows.Forms.Button();
+            this.BTNRY = new System.Windows.Forms.Button();
+            this.BTNRZ = new System.Windows.Forms.Button();
+            this.BTNSCALATE = new System.Windows.Forms.TextBox();
+            this.TIMER = new System.Windows.Forms.Timer(this.components);
             this.PNL_MAIN.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PCT_CANVAS)).BeginInit();
             this.panel1.SuspendLayout();
@@ -93,6 +93,16 @@ namespace PLAYGROUND
             this.PCT_CANVAS.TabIndex = 6;
             this.PCT_CANVAS.TabStop = false;
             this.PCT_CANVAS.Click += new System.EventHandler(this.PCT_CANVAS_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel2.Location = new System.Drawing.Point(1754, 123);
+            this.panel2.Margin = new System.Windows.Forms.Padding(4);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(121, 597);
+            this.panel2.TabIndex = 5;
             // 
             // panel1
             // 
@@ -143,6 +153,7 @@ namespace PLAYGROUND
             this.BTNCUBE.TabIndex = 1;
             this.BTNCUBE.Text = "Cube";
             this.BTNCUBE.UseVisualStyleBackColor = false;
+            this.BTNCUBE.Click += new System.EventHandler(this.BTNCUBE_Click);
             // 
             // BTNSPHERE
             // 
@@ -154,16 +165,71 @@ namespace PLAYGROUND
             this.BTNSPHERE.TabIndex = 2;
             this.BTNSPHERE.Text = "Sphere";
             this.BTNSPHERE.UseVisualStyleBackColor = false;
+            this.BTNSPHERE.Click += new System.EventHandler(this.BTNSPHERE_Click);
+            // 
+            // LBLTREEVIEW
+            // 
+            this.LBLTREEVIEW.AutoSize = true;
+            this.LBLTREEVIEW.Location = new System.Drawing.Point(3, 98);
+            this.LBLTREEVIEW.Name = "LBLTREEVIEW";
+            this.LBLTREEVIEW.Size = new System.Drawing.Size(105, 29);
+            this.LBLTREEVIEW.TabIndex = 6;
+            this.LBLTREEVIEW.Text = "Models: ";
             // 
             // treeView1
             // 
             this.treeView1.BackColor = System.Drawing.SystemColors.WindowText;
-            this.treeView1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.treeView1.ForeColor = System.Drawing.Color.White;
             this.treeView1.Location = new System.Drawing.Point(3, 130);
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(223, 237);
             this.treeView1.TabIndex = 0;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            // 
+            // LBLRENDERMODE
+            // 
+            this.LBLRENDERMODE.AutoSize = true;
+            this.LBLRENDERMODE.Location = new System.Drawing.Point(3, 370);
+            this.LBLRENDERMODE.Name = "LBLRENDERMODE";
+            this.LBLRENDERMODE.Size = new System.Drawing.Size(167, 29);
+            this.LBLRENDERMODE.TabIndex = 7;
+            this.LBLRENDERMODE.Text = "Render Mode:";
+            // 
+            // RDBTNWIREFRAME
+            // 
+            this.RDBTNWIREFRAME.AutoSize = true;
+            this.RDBTNWIREFRAME.Location = new System.Drawing.Point(3, 402);
+            this.RDBTNWIREFRAME.Name = "RDBTNWIREFRAME";
+            this.RDBTNWIREFRAME.Size = new System.Drawing.Size(145, 33);
+            this.RDBTNWIREFRAME.TabIndex = 3;
+            this.RDBTNWIREFRAME.TabStop = true;
+            this.RDBTNWIREFRAME.Text = "Wireframe";
+            this.RDBTNWIREFRAME.UseVisualStyleBackColor = true;
+            this.RDBTNWIREFRAME.CheckedChanged += new System.EventHandler(this.RDBTNWIREFRAME_CheckedChanged);
+            // 
+            // RDBTNSOLID
+            // 
+            this.RDBTNSOLID.AutoSize = true;
+            this.RDBTNSOLID.Location = new System.Drawing.Point(3, 441);
+            this.RDBTNSOLID.Name = "RDBTNSOLID";
+            this.RDBTNSOLID.Size = new System.Drawing.Size(108, 33);
+            this.RDBTNSOLID.TabIndex = 4;
+            this.RDBTNSOLID.TabStop = true;
+            this.RDBTNSOLID.Text = "Solid   ";
+            this.RDBTNSOLID.UseVisualStyleBackColor = true;
+            this.RDBTNSOLID.CheckedChanged += new System.EventHandler(this.RDBTNSOLID_CheckedChanged);
+            // 
+            // RDBTNSHADED
+            // 
+            this.RDBTNSHADED.AutoSize = true;
+            this.RDBTNSHADED.Location = new System.Drawing.Point(3, 480);
+            this.RDBTNSHADED.Name = "RDBTNSHADED";
+            this.RDBTNSHADED.Size = new System.Drawing.Size(118, 33);
+            this.RDBTNSHADED.TabIndex = 5;
+            this.RDBTNSHADED.TabStop = true;
+            this.RDBTNSHADED.Text = "Shaded";
+            this.RDBTNSHADED.UseVisualStyleBackColor = true;
+            this.RDBTNSHADED.CheckedChanged += new System.EventHandler(this.RDBTNSHADED_CheckedChanged);
             // 
             // PNL_BOTTOM
             // 
@@ -198,11 +264,24 @@ namespace PLAYGROUND
             this.PNL_HEADER.Size = new System.Drawing.Size(1875, 123);
             this.PNL_HEADER.TabIndex = 0;
             // 
-            // TIMER
+            // LBLESCALATE
             // 
-            this.TIMER.Enabled = true;
-            this.TIMER.Interval = 10;
-            this.TIMER.Tick += new System.EventHandler(this.TIMER_Tick);
+            this.LBLESCALATE.AutoSize = true;
+            this.LBLESCALATE.Location = new System.Drawing.Point(1611, 33);
+            this.LBLESCALATE.Name = "LBLESCALATE";
+            this.LBLESCALATE.Size = new System.Drawing.Size(143, 29);
+            this.LBLESCALATE.TabIndex = 4;
+            this.LBLESCALATE.Text = "ESCALATE:";
+            // 
+            // FLWLYTBTNSMOVE
+            // 
+            this.FLWLYTBTNSMOVE.Controls.Add(this.BTNRX);
+            this.FLWLYTBTNSMOVE.Controls.Add(this.BTNRY);
+            this.FLWLYTBTNSMOVE.Controls.Add(this.BTNRZ);
+            this.FLWLYTBTNSMOVE.Location = new System.Drawing.Point(267, 34);
+            this.FLWLYTBTNSMOVE.Name = "FLWLYTBTNSMOVE";
+            this.FLWLYTBTNSMOVE.Size = new System.Drawing.Size(502, 65);
+            this.FLWLYTBTNSMOVE.TabIndex = 1;
             // 
             // BTNRX
             // 
@@ -215,16 +294,6 @@ namespace PLAYGROUND
             this.BTNRX.Text = "RX";
             this.BTNRX.UseVisualStyleBackColor = false;
             this.BTNRX.Click += new System.EventHandler(this.BTNRX_Click);
-            // 
-            // FLWLYTBTNSMOVE
-            // 
-            this.FLWLYTBTNSMOVE.Controls.Add(this.BTNRX);
-            this.FLWLYTBTNSMOVE.Controls.Add(this.BTNRY);
-            this.FLWLYTBTNSMOVE.Controls.Add(this.BTNRZ);
-            this.FLWLYTBTNSMOVE.Location = new System.Drawing.Point(267, 34);
-            this.FLWLYTBTNSMOVE.Name = "FLWLYTBTNSMOVE";
-            this.FLWLYTBTNSMOVE.Size = new System.Drawing.Size(502, 65);
-            this.FLWLYTBTNSMOVE.TabIndex = 1;
             // 
             // BTNRY
             // 
@@ -257,75 +326,11 @@ namespace PLAYGROUND
             this.BTNSCALATE.Size = new System.Drawing.Size(138, 34);
             this.BTNSCALATE.TabIndex = 3;
             // 
-            // LBLESCALATE
+            // TIMER
             // 
-            this.LBLESCALATE.AutoSize = true;
-            this.LBLESCALATE.Location = new System.Drawing.Point(1611, 33);
-            this.LBLESCALATE.Name = "LBLESCALATE";
-            this.LBLESCALATE.Size = new System.Drawing.Size(143, 29);
-            this.LBLESCALATE.TabIndex = 4;
-            this.LBLESCALATE.Text = "ESCALATE:";
-            // 
-            // RDBTNWIREFRAME
-            // 
-            this.RDBTNWIREFRAME.AutoSize = true;
-            this.RDBTNWIREFRAME.Location = new System.Drawing.Point(3, 402);
-            this.RDBTNWIREFRAME.Name = "RDBTNWIREFRAME";
-            this.RDBTNWIREFRAME.Size = new System.Drawing.Size(145, 33);
-            this.RDBTNWIREFRAME.TabIndex = 3;
-            this.RDBTNWIREFRAME.TabStop = true;
-            this.RDBTNWIREFRAME.Text = "Wireframe";
-            this.RDBTNWIREFRAME.UseVisualStyleBackColor = true;
-            // 
-            // RDBTNSOLID
-            // 
-            this.RDBTNSOLID.AutoSize = true;
-            this.RDBTNSOLID.Location = new System.Drawing.Point(3, 441);
-            this.RDBTNSOLID.Name = "RDBTNSOLID";
-            this.RDBTNSOLID.Size = new System.Drawing.Size(108, 33);
-            this.RDBTNSOLID.TabIndex = 4;
-            this.RDBTNSOLID.TabStop = true;
-            this.RDBTNSOLID.Text = "Solid   ";
-            this.RDBTNSOLID.UseVisualStyleBackColor = true;
-            // 
-            // RDBTNSHADED
-            // 
-            this.RDBTNSHADED.AutoSize = true;
-            this.RDBTNSHADED.Location = new System.Drawing.Point(3, 480);
-            this.RDBTNSHADED.Name = "RDBTNSHADED";
-            this.RDBTNSHADED.Size = new System.Drawing.Size(118, 33);
-            this.RDBTNSHADED.TabIndex = 5;
-            this.RDBTNSHADED.TabStop = true;
-            this.RDBTNSHADED.Text = "Shaded";
-            this.RDBTNSHADED.UseVisualStyleBackColor = true;
-            // 
-            // LBLTREEVIEW
-            // 
-            this.LBLTREEVIEW.AutoSize = true;
-            this.LBLTREEVIEW.Location = new System.Drawing.Point(3, 98);
-            this.LBLTREEVIEW.Name = "LBLTREEVIEW";
-            this.LBLTREEVIEW.Size = new System.Drawing.Size(105, 29);
-            this.LBLTREEVIEW.TabIndex = 6;
-            this.LBLTREEVIEW.Text = "Models: ";
-            // 
-            // LBLRENDERMODE
-            // 
-            this.LBLRENDERMODE.AutoSize = true;
-            this.LBLRENDERMODE.Location = new System.Drawing.Point(3, 370);
-            this.LBLRENDERMODE.Name = "LBLRENDERMODE";
-            this.LBLRENDERMODE.Size = new System.Drawing.Size(167, 29);
-            this.LBLRENDERMODE.TabIndex = 7;
-            this.LBLRENDERMODE.Text = "Render Mode:";
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel2.Location = new System.Drawing.Point(1754, 123);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(121, 597);
-            this.panel2.TabIndex = 5;
+            this.TIMER.Enabled = true;
+            this.TIMER.Interval = 10;
+            this.TIMER.Tick += new System.EventHandler(this.TIMER_Tick);
             // 
             // MyForm
             // 
@@ -333,6 +338,7 @@ namespace PLAYGROUND
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1875, 801);
             this.Controls.Add(this.PNL_MAIN);
+            this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MyForm";
             this.Text = "PLAYGROUND || VERLETS";

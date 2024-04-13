@@ -4,17 +4,16 @@ namespace PLAYGROUND
 {
     public class Scene
     {
-        public List<Mesh> Models { get; set; }
+        public List<Model> Models { get; set; } = new List<Model>();
 
-        public Scene()
-        {
-            Models = new List<Mesh>();
-        }
-
-        public void AddModel(Mesh model)
+        public void AddModel(Model model)
         {
             Models.Add(model);
         }
 
+        public void RemoveModel(Model model)
+        {
+            Models.Remove(model);
+        }
     }
 }

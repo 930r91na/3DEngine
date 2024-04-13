@@ -18,7 +18,8 @@ namespace PLAYGROUND
 
         public Matrix transform()
         {
-            Matrix m = Matrix.MakeTranslationMatrix(this.Translation) * this.Rotation * Matrix.MakeScalingMatrix(this.Scale);
+            Matrix m = Matrix.MakeTranslationMatrix(this.Translation) * this.Rotation *
+                       Matrix.MakeScalingMatrix(this.Scale);
             return m;
         }
     }
