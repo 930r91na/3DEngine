@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System;
+using System.IO.Compression;
 using System.Linq;
 
 namespace PLAYGROUND
@@ -8,25 +9,56 @@ namespace PLAYGROUND
     public class Renderer
     {
         private readonly Canvas _canvas;
-        private readonly Camera _camera;
+        private readonly ViewPort _camera;
+        private readonly List<LightSource> _lights;
+        private readonly float[][] _depthBuffer;
 
-        public Renderer(Canvas canvas)
+        public Renderer(Canvas canvas, List <LightSource> lightSources)
         {
             this._canvas = canvas;
-            _camera = new Camera(canvas);
+            _camera = new ViewPort(canvas);
+            _lights = lightSources;
+
+            _depthBuffer = new float[canvas.Width][];
+            for (var i = 0; i < canvas.Width; i++)
+            {
+                _depthBuffer[i] = new float[canvas.Height];
+                for (var j = 0; j < canvas.Height; j++)
+                {
+                    _depthBuffer[i][j] = float.MaxValue;
+                }
+            }
+        }
+        public void ClearDepthBuffer()
+        {
+            for (int i = 0; i < _canvas.Width; i++)
+            {
+                for (int j = 0; j < _canvas.Height; j++)
+                {
+                    _depthBuffer[i][j] = float.MaxValue;
+                }
+            }
         }
 
-        public void DrawPixel(int x, int y, Color color)
+
+        public void DrawPixel(int x, int y, float z, Color color)
         {
-            x = _canvas.Width / 2 + x;
+            // TODO: CHECK THIS MTF
+            // x = _canvas.Width / 2 + x;
             y = _canvas.Height / 2 - y - 1;
+
 
             if (x < 0 || x >= _canvas.Width || y < 0 || y >= _canvas.Height)
             {
                 return;
             }
 
+            // Check if the pixel is closer than the previous one
+            // TODO: CHECK THIS occlsuion
+            if (z > _depthBuffer[x][y]) return;
+
             _canvas.SetPixel(x, y, color);
+            _depthBuffer[x][y] = z;
         }
 
         private void DrawLine(Vertex p0, Vertex p1, Color color)
@@ -41,10 +73,10 @@ namespace PLAYGROUND
                     (p0, p1) = (p1, p0);
                 }
 
-                var ys = Interpolate((int)p0.X, p0.Y, (int)p1.X, p1.Y);
+                var ys = Interpolate(p0.X, p0.Y, p1.X, p1.Y);
                 for (var x = (int)p0.X; x <= p1.X; x++)
                 {
-                    DrawPixel(x, (int)ys[(x - (int)p0.X)], color);
+                    DrawPixel(x, (int)ys[(x - (int)p0.X)], float.MaxValue, color);
                 }
             }
             else
@@ -57,7 +89,7 @@ namespace PLAYGROUND
                 var xs = Interpolate((int)p0.Y, p0.X, (int)p1.Y, p1.X);
                 for (var y = (int)p0.Y; y <= p1.Y; y++)
                 {
-                    DrawPixel((int)xs[(y - (int)p0.Y)], y, color);
+                    DrawPixel((int)xs[(y - (int)p0.Y)], y, float.MaxValue ,color);
                 }
             }
         }
@@ -84,7 +116,7 @@ namespace PLAYGROUND
         private static List<float> Interpolate(float i0, float d0, float i1, float d1)
         {
             List<float> values = new List<float>();
-            if (Math.Abs(i0 - i1) < 0)
+            if (Math.Abs(i0 - i1) < 0.01f)
             {
                 values.Add(d0);
                 return values;
@@ -101,18 +133,32 @@ namespace PLAYGROUND
             return values;
         }
 
+
+
         // RENDER FUNCTIONS
         public void RenderScene(Scene scene)
         {
             _canvas.FastClear();
+            ClearDepthBuffer();
+
+            // Render Models
             for (var m = scene.Models.Count - 1; m >= 0; m--)
             {
                 RenderModel(scene.Models[m].Mesh, scene.Models[m].Transform.transform(), scene.Models[m].Mode);
             }
 
+            // Render Lights
+            for (var l = _lights.Count - 1; l >= 0; l--)
+            {
+                RenderLight(_lights[l]);
+            }
+
             _canvas.Refresh();
         }
-
+        private void RenderLight(LightSource light)
+        {
+            DrawPixel((int)light.Position.X, (int)light.Position.Y, float.MaxValue, Color.White);
+        }
         private void RenderModel(Mesh model, Matrix transform, Mode mode)
         {
             var projected = new List<Vertex>();
@@ -148,20 +194,18 @@ namespace PLAYGROUND
             switch (mode)
             {
                 case Mode.Shaded:
-                    DrawShadowedTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C],
-                        triangle.Color);
+                    DrawShadedTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C], triangle.Color);
                     break;
                 case Mode.Wireframe:
                     DrawWireFrameTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C],
-                        triangle.Color);
+                                               triangle.Color);
                     break;
                 case Mode.Solid:
                     DrawFilledTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C],
-                        triangle.Color);
+                                               triangle.Color);
                     break;
                 default:
-                    DrawWireFrameTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C],
-                        triangle.Color);
+                    DrawShadedTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C], triangle.Color);
                     break;
             }
         }
@@ -171,6 +215,112 @@ namespace PLAYGROUND
             DrawLine(p0, p1, color);
             DrawLine(p1, p2, color);
             DrawLine(p2, p0, color);
+        }
+
+        public void DrawShadedTriangle(Vertex p0, Vertex p1, Vertex p2, Color color)
+        {
+            // Sort the vertices
+            SortByY(ref p0, ref p1, ref p2);
+
+            // Get the normal of the triangle
+            var normal = CalculateNormal(p0, p1, p2);
+
+            // Get the lighting of the vertices
+            CalculateLighting(p0, normal);
+            CalculateLighting(p1, normal);
+            CalculateLighting(p2, normal);
+
+            // Calculate x coordinates
+            var x01 = Interpolate(p0.Y, p0.X, p1.Y, p1.X);
+            var x12 = Interpolate(p1.Y, p1.X, p2.Y, p2.X);
+            var x02 = Interpolate(p0.Y, p0.X, p2.Y, p2.X);
+
+            // Calculate h 
+            var h01 = Interpolate(p0.Y, p0.H, p1.Y, p1.H);
+            var h12 = Interpolate(p1.Y, p1.H, p2.Y, p2.H);
+            var h02 = Interpolate(p0.Y, p0.H, p2.Y, p2.H);
+
+            // Calculate z coordinates
+            var z01 = Interpolate(p0.Y, p0.Z, p1.Y, p1.Z);
+            var z12 = Interpolate(p1.Y, p1.Z, p2.Y, p2.Z);
+            var z02 = Interpolate(p0.Y, p0.Z, p2.Y, p2.Z);
+
+            // Ensure lists are not empty before removing an element
+            if (x01.Count > 0 && x12.Count > 0 && IsOverlapping(x01, x12))
+            {
+                x01.RemoveAt(x01.Count - 1);
+            }
+            if (z01.Count > 0 && z12.Count > 0)
+            {
+                z01.RemoveAt(z01.Count - 1);
+            }
+            if (h01.Count > 0 && h12.Count > 0)
+            {
+                h01.RemoveAt(h01.Count - 1);
+            }
+            var x012 = x01.Concat(x12).ToList();
+            var z012 = z01.Concat(z12).ToList();
+            var h012 = h01.Concat(h12).ToList();
+
+            // Determine each side
+            List<float> xLeft, xRight, zLeft, zRight, hLeft, hRight;
+
+            // Ensure x012 and x02 have elements before accessing them
+            if (x012.Count == 0 || x02.Count == 0)
+            {
+                return;
+            }
+            if (z012.Count == 0 || z02.Count == 0)
+            {
+                return;
+            }
+            if (h012.Count == 0 || h02.Count == 0)
+            {
+                return;
+            }
+
+            var m = Math.Floor((decimal)x012.Count / 2);
+            if (x02.Count > (int)m && x012.Count > (int)m && x02[(int)m] < x012[(int)m])
+            {
+                xLeft = x02;
+                xRight = x012;
+                zLeft = z02;
+                zRight = z012;
+                hLeft = h02;
+                hRight = h012;
+            }
+            else
+            {
+                xLeft = x012;
+                xRight = x02;
+                zLeft = z012;
+                zRight = z02;
+                hLeft = h012;
+                hRight = h02;
+            }
+
+            // Fill the triangle
+            for (var y = (int)p0.Y; y <= p2.Y; y++)
+            {
+                int index = (int)y - (int)p0.Y;
+                if (index < 0 || index >= xLeft.Count || index >= xRight.Count || index >= zLeft.Count || index >= zRight.Count || index >= hLeft.Count || index >= hRight.Count) continue;
+
+                int xl = (int)xLeft[index];
+                int xr = (int)xRight[index];
+                var zl = zLeft[index];
+                var zr = zRight[index];
+                var hl = hLeft[index];
+                var hr = hRight[index];
+
+                var zSegment = Interpolate(xl, zl, xr, zr);
+                var hSegment = Interpolate(xl, hl, xr, hr);
+
+                for (var x = xl; x <= xr && x >= 0; x++)
+                {
+                    var shaded = Mult(color, hSegment[x - xl]);
+                    DrawPixel(x, y, zSegment[x - xl], shaded );
+                }
+            }
         }
 
         public void DrawFilledTriangle(Vertex p0, Vertex p1, Vertex p2, Color color)
@@ -183,16 +333,25 @@ namespace PLAYGROUND
             var x12 = Interpolate(p1.Y, p1.X, p2.Y, p2.X);
             var x02 = Interpolate(p0.Y, p0.X, p2.Y, p2.X);
 
+            var z01 = Interpolate(p0.Y, 1/p0.Z, p1.Y, 1 / p1.Z);
+            var z12 = Interpolate(p1.Y, 1/p1.Z, p2.Y, 1 / p2.Z);
+            var z02 = Interpolate(p0.Y, 1 / p0.Z, p2.Y, 1 / p2.Z);;
+
             // Ensure lists are not empty before removing an element
             if (x01.Count > 0 && x12.Count > 0 && IsOverlapping(x01, x12))
             {
-                //x01.RemoveAt(x01.Count - 1);
+                x01.RemoveAt(x01.Count - 1);
+            }
+            if (z01.Count > 0 && z12.Count > 0)
+            {
+                z01.RemoveAt(z01.Count - 1);
             }
 
             var x012 = x01.Concat(x12).ToList();
+            var z012 = z01.Concat(z12).ToList();
 
             // Determine each side
-            List<float> xLeft, xRight;
+            List<float> xLeft, xRight, zLeft, zRight;
 
             // Ensure x012 and x02 have elements before accessing them
             if (x012.Count == 0 || x02.Count == 0)
@@ -205,29 +364,34 @@ namespace PLAYGROUND
             {
                 xLeft = x02;
                 xRight = x012;
+                zLeft = z02;
+                zRight = z012;
             }
             else
             {
                 xLeft = x012;
                 xRight = x02;
+                zLeft = z012;
+                zRight = z02;
             }
 
             // Fill the triangle
             for (var y = (int)p0.Y; y <= p2.Y; y++)
             {
-                var xl = 0;
-                var yPos = y - (int)p0.Y;
+                var index = y - (int)p0.Y;
 
-                if (yPos >= 0 && yPos < xLeft.Count)
-                {
-                    xl = (int)xLeft[yPos];
-                }
+                if (index < 0 || index >= xLeft.Count || index >= xRight.Count || index >= zLeft.Count || index >= zRight.Count) continue;
 
-                var xr = yPos >= 0 && yPos < xRight.Count ? (int)xRight[yPos] : 0;
+                var xr = xRight[index];
+                var xl = xLeft[index];
+                var zl = zLeft[index];
+                var zr = zRight[index];
 
-                for (var x = xl; x <= xr && x >= 0; x++)
-                {
-                    DrawPixel(x, y, color);
+                var zSegment = Interpolate(xl, 1 / zl, xr, 1/zr);
+
+                for (int x = (int)xl; x <= xr && x >= 0; x++)
+                 {
+                    DrawPixel(x, y, zSegment[(int)(x - xl)], color);
                 }
             }
         }
@@ -246,98 +410,18 @@ namespace PLAYGROUND
             return Math.Abs(lastPointOfX01 - firstPointOfX12) < 0.01;
         }
 
-
-        public void DrawShadowedTriangle(Vertex p0, Vertex p1, Vertex p2, Color color)
+        private Vertex CalculateNormal(Vertex p0, Vertex p1, Vertex p2)
         {
-            SortByY(ref p0, ref p1, ref p2);
+            // Calculate vectors from the points
+            Vertex u = new Vertex(p1.X - p0.X, p1.Y - p0.Y, p1.Z - p0.Z, 0);
+            Vertex v = new Vertex(p2.X - p0.X, p2.Y - p0.Y, p2.Z - p0.Z, 0);
 
-            // Calculate x coordinates, h and z values
-            var x01 = Interpolate(p0.Y, p0.X, p1.Y, p1.X);
-            var x12 = Interpolate(p1.Y, p1.X, p2.Y, p2.X);
-            var x02 = Interpolate(p0.Y, p0.X, p2.Y, p2.X);
-            var h01 = Interpolate(p0.Y, p0.H, p1.Y, p1.H);
-            var h12 = Interpolate(p1.Y, p1.H, p2.Y, p2.H);
-            var h02 = Interpolate(p0.Y, p0.H, p2.Y, p2.H);
+            // Calculate the cross product
+            float nx = u.Y * v.Z - u.Z * v.Y;
+            float ny = u.Z * v.X - u.X * v.Z;
+            float nz = u.X * v.Y - u.Y * v.X;
 
-            // Ensure lists are not empty before removing an element
-            if (x01.Count > 0 && x12.Count > 0 && IsOverlapping(x01, x12))
-            {
-                x01.RemoveAt(x01.Count - 1);
-            }
-
-            if (h01.Count > 0 && h12.Count > 0 && IsOverlapping(h01, h12))
-            {
-                h01.RemoveAt(h01.Count - 1);
-            }
-
-            var x012 = x01.Concat(x12).ToList();
-            var h012 = h01.Concat(h12).ToList();
-
-            // Determine each side
-            List<float> xLeft, xRight, hLeft, hRight;
-
-            var m = Math.Floor((decimal)x012.Count / 2);
-
-            // Ensure x012 and x02 have elements before accessing them
-            if (x012.Count == 0 || x02.Count == 0 || x02.Count > m || x012.Count > m)
-            {
-                return;
-            }
-
-            // Ensure h012 and h02 have elements before accessing them
-            if (h012.Count == 0 || h02.Count == 0)
-            {
-                return;
-            }
-
-
-            if (x02[(int)m] < x012[(int)m])
-            {
-                xLeft = x02;
-                xRight = x012;
-                hLeft = h02;
-                hRight = h012;
-            }
-            else
-            {
-                xLeft = x012;
-                xRight = x02;
-                hLeft = h012;
-                hRight = h02;
-            }
-
-            // Fill the triangle
-            for (var y = (int)p0.Y; y <= p2.Y; y++)
-            {
-                var index = y - (int)p0.Y;
-
-                if (index < 0 || index >= xLeft.Count || index >= xRight.Count)
-                {
-                    continue; // Skip this iteration if the index is out of bounds
-                }
-
-                var xl = (int)xLeft[y - (int)p0.Y];
-                var xr = (int)xRight[y - (int)p0.Y];
-
-                if (hLeft.Count < 0 || hRight.Count < 0)
-                {
-                    return;
-                }
-
-                if (index >= hLeft.Count || index >= hRight.Count)
-                {
-                    continue; // Skip this iteration if the index is out of bounds
-                }
-
-                var hSegment = Interpolate(xl, hLeft[y - (int)p0.Y], xr, hRight[y - (int)p0.Y]);
-
-                for (var x = xl; x <= xr; x++)
-                {
-                    var shadedColor = Mult(color, hSegment[x - xl]);
-
-                    DrawPixel(x, y, shadedColor);
-                }
-            }
+            return new Vertex(nx, ny, nz, 0);  
         }
 
         public static Color Mult(Color color, float scalar)
@@ -356,6 +440,15 @@ namespace PLAYGROUND
             return Color.FromArgb(color.A, r, g, b);
         }
 
-        // CLIPPING FUNCTIONS
+        // Calculate the lighting of a vertex
+        private void CalculateLighting(Vertex vertex, Vertex normal)
+        {
+            for (int l = 0; l < _lights.Count; l++)
+            {
+                var light = _lights[l];
+
+                light.CalculateLighting(vertex, normal);
+            }
+        }
     }
 }

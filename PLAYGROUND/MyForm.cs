@@ -13,23 +13,21 @@ namespace PLAYGROUND
     {
         List<Scene> _scenes;
         Scene _selectedScene;
+        List<LightSource> _lights;
         Renderer _renderer;
         Canvas _canvas;
 
         private Model _selectedModel;
+        private LightSource _selectedLight;
 
         private float _angle;
-        TreeNode _selectedNode;
+        TreeNode _selectedModelNode;
+        TreeNode _selectLightNode;
 
         // Transformation variables
         private bool _isRotatingX;
         private bool _isRotatingY;
         private bool _isRotatingZ;
-
-        // Render Mode
-        bool _isWireframe;
-        bool _isSolid;
-        bool _isShaded;
 
         public MyForm()
         {
@@ -40,13 +38,15 @@ namespace PLAYGROUND
         private void Init()
         {
             _canvas = new Canvas(PCT_CANVAS);
-
-            _renderer = new Renderer(_canvas);
+            _lights = new List<LightSource>();
+            
+            _renderer = new Renderer(_canvas, _lights);
             if (_selectedScene == null)
             {
                 _selectedScene = new Scene();
                 _scenes.Add(_selectedScene);
             }
+
         }
 
         private void MyForm_SizeChanged(object sender, EventArgs e)
@@ -113,6 +113,8 @@ namespace PLAYGROUND
 
             reader.BaseStream.Seek(0, SeekOrigin.Begin);
             reader.DiscardBufferedData();
+            
+
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
@@ -137,9 +139,15 @@ namespace PLAYGROUND
                         faceIndices.Add(vertexIndex);
                     }
 
+
+
+                    
                     for (var i = 1; i < faceIndices.Count - 1; i++)
                     {
-                        var face = new Triangle(faceIndices[0], faceIndices[i], faceIndices[i + 1], Color.White);
+                        var random = new Random();
+                        var color = Color.FromArgb(random.Next(0, 255), random.Next(0, 255), random.Next(0, 255));
+
+                        var face = new Triangle(faceIndices[0], faceIndices[i], faceIndices[i + 1], color);
                         faceList.Add(face);
                     }
                 }
@@ -173,14 +181,28 @@ namespace PLAYGROUND
                 treeView1.Nodes.Add(node);
             }
 
-            // TODO: Check if remove this line
-            _renderer.RenderScene(_selectedScene);
+            treeView1.SelectedNode = treeView1.Nodes[treeView1.Nodes.Count - 1];
+            treeView1_AfterSelect(null, new TreeViewEventArgs(treeView1.SelectedNode));
         }
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            _selectedNode = e.Node;
-            _selectedModel = (Model)_selectedNode.Tag;
+            _selectedModelNode = e.Node;
+            _selectedModel = (Model)_selectedModelNode.Tag;
+
+            // Update the radio buttons based on the selected model's mode
+            switch (_selectedModel.Mode)
+            {
+                case Mode.Wireframe:
+                    RDBTNWIREFRAME.Checked = true;
+                    break;
+                case Mode.Solid:
+                    RDBTNSOLID.Checked = true;
+                    break;
+                case Mode.Shaded:
+                    RDBTNSHADED.Checked = true;
+                    break;
+            }
         }
 
         private void RDBTNWIREFRAME_CheckedChanged(object sender, EventArgs e)
@@ -192,7 +214,7 @@ namespace PLAYGROUND
 
         private void RDBTNSOLID_CheckedChanged(object sender, EventArgs e)
         {
-            if (_selectedNode == null) return;
+            if (_selectedModel == null) return;
 
             _selectedModel.Mode = Mode.Solid;
         }
@@ -279,6 +301,8 @@ namespace PLAYGROUND
 
         private void MyForm_KeyDown(object sender, KeyEventArgs e)
         {
+            if (_selectedModel == null) return;
+            // Models operations
             switch (e.KeyCode)
             {
                 case Keys.A:
@@ -309,13 +333,39 @@ namespace PLAYGROUND
                     RemoveModel(_selectedModel);
                     break;
             }
+            if (_selectedLight == null) return;
+            // Light source operations
+            switch (e.KeyCode)
+            {
+                case Keys.J:
+                    _selectedLight.Position.X -= 1f;
+                    break;
+                case Keys.L:
+                    _selectedLight.Position.X += 1f;
+                    break;
+                case Keys.I:
+                    _selectedLight.Position.Y += 1f;
+                    break;
+                case Keys.K:
+                    _selectedLight.Position.Y -= 1f;
+                    break;
+                case Keys.U:
+                    _selectedLight.Position.Z += 1f;
+                    break;
+                case Keys.O:
+                    _selectedLight.Position.Z -= 1f;
+                    break;
+                case Keys.H:
+                    RemoveLightSource(_selectedLight);
+                    break;
+            }
         }
 
         private void RemoveModel(Model model)
         {
             if (model == null) return;
             _selectedScene.RemoveModel(model);
-            treeView1.Nodes.Remove(_selectedNode);
+            treeView1.Nodes.Remove(_selectedModelNode);
             if (treeView1.Nodes.Count > 0)
             {
                 treeView1.SelectedNode = treeView1.Nodes[treeView1.Nodes.Count - 1];
@@ -352,6 +402,66 @@ namespace PLAYGROUND
             ];
 
             NewModel(vertices, faces);
+        }
+
+        // Light source management
+        private void NewLightSource(Vertex position, float intensity)
+        {
+            _lights.Add(new LightSource(position, intensity));
+            _selectedLight = _lights[_lights.Count - 1];
+            // Update the tree view
+            for (var i = 0; i < _lights.Count; i++)
+            {
+                var node = new TreeNode(@"Light " + (i + 1))
+                {
+                    Tag = _lights[i]
+                };
+                TVLIGHTS.Nodes.Add(node);
+            }
+        }
+
+        private void RemoveLightSource(LightSource light)
+        {
+            if (light == null) return;
+            _lights.Remove(light);
+            TVLIGHTS.Nodes.Remove(_selectLightNode);
+            if (TVLIGHTS.Nodes.Count > 0)
+            {
+                TVLIGHTS.SelectedNode = TVLIGHTS.Nodes[TVLIGHTS.Nodes.Count - 1];
+            }
+        }
+
+        private void BTNLIGHT_Click(object sender, EventArgs e)
+        {
+            // Get the intensity from the text box
+            if (!float.TryParse(TBINTENSITY.Text, out var intensity))
+            {
+                MessageBox.Show(@"Please enter a valid intensity value.");
+                return;
+            }
+
+            var newLight = new LightSource(new Vertex(10, 10, 10, 1), intensity);
+            _selectedLight = newLight;
+            _lights.Add(newLight);
+
+            var node = new TreeNode(@"Light " + _lights.Count)
+            {
+                Tag = _lights[_lights.Count - 1]
+            };
+            TVLIGHTS.Nodes.Add(node);
+            TVLIGHTS.SelectedNode = node;
+        }
+
+        private void TVLIGHTS_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            _selectLightNode = e.Node;
+            _selectedLight = (LightSource)_selectLightNode.Tag;
+            TBINTENSITY.Text = _selectedLight.Intensity.ToString();
+        }
+
+        private void TBINTENSITY_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -48,20 +48,26 @@ namespace PLAYGROUND
             this.PNL_BOTTOM = new System.Windows.Forms.Panel();
             this.LBL_STATUS = new System.Windows.Forms.Label();
             this.PNL_HEADER = new System.Windows.Forms.Panel();
-            this.LBLESCALATE = new System.Windows.Forms.Label();
+            this.Triangle = new System.Windows.Forms.Button();
             this.FLWLYTBTNSMOVE = new System.Windows.Forms.FlowLayoutPanel();
             this.BTNRX = new System.Windows.Forms.Button();
             this.BTNRY = new System.Windows.Forms.Button();
             this.BTNRZ = new System.Windows.Forms.Button();
-            this.BTNSCALATE = new System.Windows.Forms.TextBox();
             this.TIMER = new System.Windows.Forms.Timer(this.components);
-            this.Triangle = new System.Windows.Forms.Button();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.TVLIGHTS = new System.Windows.Forms.TreeView();
+            this.LBLLIGHT = new System.Windows.Forms.Label();
+            this.BTNLIGHT = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.TBINTENSITY = new System.Windows.Forms.TextBox();
             this.PNL_MAIN.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PCT_CANVAS)).BeginInit();
+            this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.PNL_HEADER.SuspendLayout();
             this.FLWLYTBTNSMOVE.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // PNL_MAIN
@@ -90,7 +96,7 @@ namespace PLAYGROUND
             this.PCT_CANVAS.Margin = new System.Windows.Forms.Padding(4);
             this.PCT_CANVAS.MinimumSize = new System.Drawing.Size(100, 50);
             this.PCT_CANVAS.Name = "PCT_CANVAS";
-            this.PCT_CANVAS.Size = new System.Drawing.Size(1487, 597);
+            this.PCT_CANVAS.Size = new System.Drawing.Size(1379, 597);
             this.PCT_CANVAS.TabIndex = 6;
             this.PCT_CANVAS.TabStop = false;
             this.PCT_CANVAS.Click += new System.EventHandler(this.PCT_CANVAS_Click);
@@ -98,11 +104,12 @@ namespace PLAYGROUND
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.panel2.Controls.Add(this.flowLayoutPanel2);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel2.Location = new System.Drawing.Point(1754, 123);
+            this.panel2.Location = new System.Drawing.Point(1646, 123);
             this.panel2.Margin = new System.Windows.Forms.Padding(4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(121, 597);
+            this.panel2.Size = new System.Drawing.Size(229, 597);
             this.panel2.TabIndex = 5;
             // 
             // panel1
@@ -256,9 +263,7 @@ namespace PLAYGROUND
             // 
             this.PNL_HEADER.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.PNL_HEADER.Controls.Add(this.Triangle);
-            this.PNL_HEADER.Controls.Add(this.LBLESCALATE);
             this.PNL_HEADER.Controls.Add(this.FLWLYTBTNSMOVE);
-            this.PNL_HEADER.Controls.Add(this.BTNSCALATE);
             this.PNL_HEADER.Dock = System.Windows.Forms.DockStyle.Top;
             this.PNL_HEADER.Location = new System.Drawing.Point(0, 0);
             this.PNL_HEADER.Margin = new System.Windows.Forms.Padding(4);
@@ -266,14 +271,15 @@ namespace PLAYGROUND
             this.PNL_HEADER.Size = new System.Drawing.Size(1875, 123);
             this.PNL_HEADER.TabIndex = 0;
             // 
-            // LBLESCALATE
+            // Triangle
             // 
-            this.LBLESCALATE.AutoSize = true;
-            this.LBLESCALATE.Location = new System.Drawing.Point(1611, 33);
-            this.LBLESCALATE.Name = "LBLESCALATE";
-            this.LBLESCALATE.Size = new System.Drawing.Size(143, 29);
-            this.LBLESCALATE.TabIndex = 4;
-            this.LBLESCALATE.Text = "ESCALATE:";
+            this.Triangle.Location = new System.Drawing.Point(117, 52);
+            this.Triangle.Name = "Triangle";
+            this.Triangle.Size = new System.Drawing.Size(75, 47);
+            this.Triangle.TabIndex = 5;
+            this.Triangle.Text = "T";
+            this.Triangle.UseVisualStyleBackColor = true;
+            this.Triangle.Click += new System.EventHandler(this.Triangle_Click);
             // 
             // FLWLYTBTNSMOVE
             // 
@@ -321,28 +327,71 @@ namespace PLAYGROUND
             this.BTNRZ.UseVisualStyleBackColor = false;
             this.BTNRZ.Click += new System.EventHandler(this.BTNRZ_Click);
             // 
-            // BTNSCALATE
-            // 
-            this.BTNSCALATE.Location = new System.Drawing.Point(1616, 65);
-            this.BTNSCALATE.Name = "BTNSCALATE";
-            this.BTNSCALATE.Size = new System.Drawing.Size(138, 34);
-            this.BTNSCALATE.TabIndex = 3;
-            // 
             // TIMER
             // 
             this.TIMER.Enabled = true;
             this.TIMER.Interval = 10;
             this.TIMER.Tick += new System.EventHandler(this.TIMER_Tick);
             // 
-            // Triangle
+            // flowLayoutPanel2
             // 
-            this.Triangle.Location = new System.Drawing.Point(117, 52);
-            this.Triangle.Name = "Triangle";
-            this.Triangle.Size = new System.Drawing.Size(75, 47);
-            this.Triangle.TabIndex = 5;
-            this.Triangle.Text = "T";
-            this.Triangle.UseVisualStyleBackColor = true;
-            this.Triangle.Click += new System.EventHandler(this.Triangle_Click);
+            this.flowLayoutPanel2.Controls.Add(this.label1);
+            this.flowLayoutPanel2.Controls.Add(this.TBINTENSITY);
+            this.flowLayoutPanel2.Controls.Add(this.BTNLIGHT);
+            this.flowLayoutPanel2.Controls.Add(this.LBLLIGHT);
+            this.flowLayoutPanel2.Controls.Add(this.TVLIGHTS);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(7, 17);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(215, 559);
+            this.flowLayoutPanel2.TabIndex = 0;
+            // 
+            // TVLIGHTS
+            // 
+            this.TVLIGHTS.BackColor = System.Drawing.Color.Black;
+            this.TVLIGHTS.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.TVLIGHTS.Location = new System.Drawing.Point(3, 130);
+            this.TVLIGHTS.Name = "TVLIGHTS";
+            this.TVLIGHTS.Size = new System.Drawing.Size(207, 280);
+            this.TVLIGHTS.TabIndex = 0;
+            this.TVLIGHTS.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TVLIGHTS_AfterSelect);
+            // 
+            // LBLLIGHT
+            // 
+            this.LBLLIGHT.AutoSize = true;
+            this.LBLLIGHT.Location = new System.Drawing.Point(3, 98);
+            this.LBLLIGHT.Name = "LBLLIGHT";
+            this.LBLLIGHT.Size = new System.Drawing.Size(83, 29);
+            this.LBLLIGHT.TabIndex = 1;
+            this.LBLLIGHT.Text = "Lights:";
+            // 
+            // BTNLIGHT
+            // 
+            this.BTNLIGHT.BackColor = System.Drawing.Color.Navy;
+            this.BTNLIGHT.Location = new System.Drawing.Point(3, 43);
+            this.BTNLIGHT.Name = "BTNLIGHT";
+            this.BTNLIGHT.Size = new System.Drawing.Size(207, 52);
+            this.BTNLIGHT.TabIndex = 2;
+            this.BTNLIGHT.Text = "Add Light";
+            this.BTNLIGHT.UseVisualStyleBackColor = false;
+            this.BTNLIGHT.Click += new System.EventHandler(this.BTNLIGHT_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(106, 29);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Intensity:";
+            // 
+            // TBINTENSITY
+            // 
+            this.TBINTENSITY.Location = new System.Drawing.Point(115, 3);
+            this.TBINTENSITY.Name = "TBINTENSITY";
+            this.TBINTENSITY.Size = new System.Drawing.Size(67, 34);
+            this.TBINTENSITY.TabIndex = 4;
+            this.TBINTENSITY.TextChanged += new System.EventHandler(this.TBINTENSITY_TextChanged);
+            this.TBINTENSITY.Text = "0.1";
             // 
             // MyForm
             // 
@@ -350,6 +399,7 @@ namespace PLAYGROUND
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1875, 801);
             this.Controls.Add(this.PNL_MAIN);
+            this.DoubleBuffered = true;
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MyForm";
@@ -359,12 +409,14 @@ namespace PLAYGROUND
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MyForm_KeyDown);
             this.PNL_MAIN.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PCT_CANVAS)).EndInit();
+            this.panel2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             this.PNL_HEADER.ResumeLayout(false);
-            this.PNL_HEADER.PerformLayout();
             this.FLWLYTBTNSMOVE.ResumeLayout(false);
+            this.flowLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanel2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -387,8 +439,6 @@ namespace PLAYGROUND
         private System.Windows.Forms.Button BTNRX;
         private System.Windows.Forms.Button BTNRY;
         private System.Windows.Forms.Button BTNRZ;
-        private System.Windows.Forms.Label LBLESCALATE;
-        private System.Windows.Forms.TextBox BTNSCALATE;
         private System.Windows.Forms.Label LBLTREEVIEW;
         private System.Windows.Forms.Label LBLRENDERMODE;
         private System.Windows.Forms.RadioButton RDBTNWIREFRAME;
@@ -396,6 +446,12 @@ namespace PLAYGROUND
         private System.Windows.Forms.RadioButton RDBTNSHADED;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button Triangle;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.TreeView TVLIGHTS;
+        private System.Windows.Forms.Button BTNLIGHT;
+        private System.Windows.Forms.Label LBLLIGHT;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox TBINTENSITY;
     }
 }
 
