@@ -12,9 +12,9 @@ namespace PLAYGROUND
     {
         public enum LightType
         {
-            Flat,
-            Gouraud,
-            Phong
+            Ambient,
+            Point,
+            Directional,
         }
 
         public Vertex Position;
@@ -25,18 +25,18 @@ namespace PLAYGROUND
         {
             Position = position;
             Intensity = intensity;
-            Type = LightType.Flat;
+            Type = LightType.Ambient;
         }
 
         public void CalculateLighting(Vertex v, Vertex normal)
         {
-            var illumination = 0f;
+            var illumination = 1f;
             float a = 0.1f;
             float b = 5f;
 
             switch (Type)
             {
-                case LightType.Flat:
+                case LightType.Ambient:
                         float dx = Position.X - v.X;
                         float dy = Position.Y - v.Y;
                         float dz = Position.Z - v.Z;
@@ -53,15 +53,9 @@ namespace PLAYGROUND
                         var intensity = Math.Max(dotProduct, 0) * Intensity;
 
                         illumination += intensity * (float)attenuation;
-
-                        v.H = illumination;
-                    break;
-                case LightType.Gouraud:
-                    // TODO: Implement Gouraud shading
+                        v.H += illumination;
                         
-                    break;
-                case LightType.Phong:
-                    // TODO: Implement Phong shading
+                        
                     break;
             }
         }

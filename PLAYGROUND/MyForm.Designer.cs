@@ -34,6 +34,12 @@ namespace PLAYGROUND
             this.PNL_MAIN = new System.Windows.Forms.Panel();
             this.PCT_CANVAS = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.TBINTENSITY = new System.Windows.Forms.TextBox();
+            this.BTNLIGHT = new System.Windows.Forms.Button();
+            this.LBLLIGHT = new System.Windows.Forms.Label();
+            this.TVLIGHTS = new System.Windows.Forms.TreeView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.BTNOBJ = new System.Windows.Forms.Button();
@@ -48,26 +54,27 @@ namespace PLAYGROUND
             this.PNL_BOTTOM = new System.Windows.Forms.Panel();
             this.LBL_STATUS = new System.Windows.Forms.Label();
             this.PNL_HEADER = new System.Windows.Forms.Panel();
+            this.LBLCAMARA = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.Triangle = new System.Windows.Forms.Button();
             this.FLWLYTBTNSMOVE = new System.Windows.Forms.FlowLayoutPanel();
             this.BTNRX = new System.Windows.Forms.Button();
             this.BTNRY = new System.Windows.Forms.Button();
             this.BTNRZ = new System.Windows.Forms.Button();
+            this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+            this.BTNCRX = new System.Windows.Forms.Button();
+            this.BTNCRY = new System.Windows.Forms.Button();
+            this.BTNCRZ = new System.Windows.Forms.Button();
             this.TIMER = new System.Windows.Forms.Timer(this.components);
-            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.TVLIGHTS = new System.Windows.Forms.TreeView();
-            this.LBLLIGHT = new System.Windows.Forms.Label();
-            this.BTNLIGHT = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.TBINTENSITY = new System.Windows.Forms.TextBox();
             this.PNL_MAIN.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PCT_CANVAS)).BeginInit();
             this.panel2.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.PNL_HEADER.SuspendLayout();
             this.FLWLYTBTNSMOVE.SuspendLayout();
-            this.flowLayoutPanel2.SuspendLayout();
+            this.flowLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // PNL_MAIN
@@ -111,6 +118,66 @@ namespace PLAYGROUND
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(229, 597);
             this.panel2.TabIndex = 5;
+            // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.Controls.Add(this.label1);
+            this.flowLayoutPanel2.Controls.Add(this.TBINTENSITY);
+            this.flowLayoutPanel2.Controls.Add(this.BTNLIGHT);
+            this.flowLayoutPanel2.Controls.Add(this.LBLLIGHT);
+            this.flowLayoutPanel2.Controls.Add(this.TVLIGHTS);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(7, 17);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(215, 559);
+            this.flowLayoutPanel2.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(106, 29);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Intensity:";
+            // 
+            // TBINTENSITY
+            // 
+            this.TBINTENSITY.Location = new System.Drawing.Point(115, 3);
+            this.TBINTENSITY.Name = "TBINTENSITY";
+            this.TBINTENSITY.Size = new System.Drawing.Size(67, 34);
+            this.TBINTENSITY.TabIndex = 4;
+            this.TBINTENSITY.Text = "0.1";
+            this.TBINTENSITY.TextChanged += new System.EventHandler(this.TBINTENSITY_TextChanged);
+            // 
+            // BTNLIGHT
+            // 
+            this.BTNLIGHT.BackColor = System.Drawing.Color.Navy;
+            this.BTNLIGHT.Location = new System.Drawing.Point(3, 43);
+            this.BTNLIGHT.Name = "BTNLIGHT";
+            this.BTNLIGHT.Size = new System.Drawing.Size(207, 52);
+            this.BTNLIGHT.TabIndex = 2;
+            this.BTNLIGHT.Text = "Add Light";
+            this.BTNLIGHT.UseVisualStyleBackColor = false;
+            this.BTNLIGHT.Click += new System.EventHandler(this.BTNLIGHT_Click);
+            // 
+            // LBLLIGHT
+            // 
+            this.LBLLIGHT.AutoSize = true;
+            this.LBLLIGHT.Location = new System.Drawing.Point(3, 98);
+            this.LBLLIGHT.Name = "LBLLIGHT";
+            this.LBLLIGHT.Size = new System.Drawing.Size(83, 29);
+            this.LBLLIGHT.TabIndex = 1;
+            this.LBLLIGHT.Text = "Lights:";
+            // 
+            // TVLIGHTS
+            // 
+            this.TVLIGHTS.BackColor = System.Drawing.Color.Black;
+            this.TVLIGHTS.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.TVLIGHTS.Location = new System.Drawing.Point(3, 130);
+            this.TVLIGHTS.Name = "TVLIGHTS";
+            this.TVLIGHTS.Size = new System.Drawing.Size(207, 280);
+            this.TVLIGHTS.TabIndex = 0;
+            this.TVLIGHTS.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TVLIGHTS_AfterSelect);
             // 
             // panel1
             // 
@@ -262,14 +329,35 @@ namespace PLAYGROUND
             // PNL_HEADER
             // 
             this.PNL_HEADER.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.PNL_HEADER.Controls.Add(this.LBLCAMARA);
+            this.PNL_HEADER.Controls.Add(this.label2);
             this.PNL_HEADER.Controls.Add(this.Triangle);
             this.PNL_HEADER.Controls.Add(this.FLWLYTBTNSMOVE);
+            this.PNL_HEADER.Controls.Add(this.flowLayoutPanel3);
             this.PNL_HEADER.Dock = System.Windows.Forms.DockStyle.Top;
             this.PNL_HEADER.Location = new System.Drawing.Point(0, 0);
             this.PNL_HEADER.Margin = new System.Windows.Forms.Padding(4);
             this.PNL_HEADER.Name = "PNL_HEADER";
             this.PNL_HEADER.Size = new System.Drawing.Size(1875, 123);
             this.PNL_HEADER.TabIndex = 0;
+            // 
+            // LBLCAMARA
+            // 
+            this.LBLCAMARA.AutoSize = true;
+            this.LBLCAMARA.Location = new System.Drawing.Point(1359, 25);
+            this.LBLCAMARA.Name = "LBLCAMARA";
+            this.LBLCAMARA.Size = new System.Drawing.Size(129, 36);
+            this.LBLCAMARA.TabIndex = 7;
+            this.LBLCAMARA.Text = "Camara:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(265, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(93, 29);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Model: ";
             // 
             // Triangle
             // 
@@ -286,9 +374,9 @@ namespace PLAYGROUND
             this.FLWLYTBTNSMOVE.Controls.Add(this.BTNRX);
             this.FLWLYTBTNSMOVE.Controls.Add(this.BTNRY);
             this.FLWLYTBTNSMOVE.Controls.Add(this.BTNRZ);
-            this.FLWLYTBTNSMOVE.Location = new System.Drawing.Point(267, 34);
+            this.FLWLYTBTNSMOVE.Location = new System.Drawing.Point(267, 52);
             this.FLWLYTBTNSMOVE.Name = "FLWLYTBTNSMOVE";
-            this.FLWLYTBTNSMOVE.Size = new System.Drawing.Size(502, 65);
+            this.FLWLYTBTNSMOVE.Size = new System.Drawing.Size(306, 59);
             this.FLWLYTBTNSMOVE.TabIndex = 1;
             // 
             // BTNRX
@@ -297,7 +385,7 @@ namespace PLAYGROUND
             this.BTNRX.ForeColor = System.Drawing.Color.Snow;
             this.BTNRX.Location = new System.Drawing.Point(3, 3);
             this.BTNRX.Name = "BTNRX";
-            this.BTNRX.Size = new System.Drawing.Size(154, 52);
+            this.BTNRX.Size = new System.Drawing.Size(93, 52);
             this.BTNRX.TabIndex = 0;
             this.BTNRX.Text = "RX";
             this.BTNRX.UseVisualStyleBackColor = false;
@@ -307,9 +395,9 @@ namespace PLAYGROUND
             // 
             this.BTNRY.BackColor = System.Drawing.Color.Tomato;
             this.BTNRY.ForeColor = System.Drawing.Color.Snow;
-            this.BTNRY.Location = new System.Drawing.Point(163, 3);
+            this.BTNRY.Location = new System.Drawing.Point(102, 3);
             this.BTNRY.Name = "BTNRY";
-            this.BTNRY.Size = new System.Drawing.Size(154, 52);
+            this.BTNRY.Size = new System.Drawing.Size(89, 52);
             this.BTNRY.TabIndex = 1;
             this.BTNRY.Text = "RY";
             this.BTNRY.UseVisualStyleBackColor = false;
@@ -319,79 +407,65 @@ namespace PLAYGROUND
             // 
             this.BTNRZ.BackColor = System.Drawing.Color.Tomato;
             this.BTNRZ.ForeColor = System.Drawing.Color.Snow;
-            this.BTNRZ.Location = new System.Drawing.Point(323, 3);
+            this.BTNRZ.Location = new System.Drawing.Point(197, 3);
             this.BTNRZ.Name = "BTNRZ";
-            this.BTNRZ.Size = new System.Drawing.Size(154, 52);
+            this.BTNRZ.Size = new System.Drawing.Size(90, 52);
             this.BTNRZ.TabIndex = 2;
             this.BTNRZ.Text = "RZ";
             this.BTNRZ.UseVisualStyleBackColor = false;
             this.BTNRZ.Click += new System.EventHandler(this.BTNRZ_Click);
+            // 
+            // flowLayoutPanel3
+            // 
+            this.flowLayoutPanel3.Controls.Add(this.BTNCRX);
+            this.flowLayoutPanel3.Controls.Add(this.BTNCRY);
+            this.flowLayoutPanel3.Controls.Add(this.BTNCRZ);
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(1352, 57);
+            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(294, 59);
+            this.flowLayoutPanel3.TabIndex = 3;
+            // 
+            // BTNCRX
+            // 
+            this.BTNCRX.BackColor = System.Drawing.Color.Peru;
+            this.BTNCRX.ForeColor = System.Drawing.Color.Snow;
+            this.BTNCRX.Location = new System.Drawing.Point(3, 3);
+            this.BTNCRX.Name = "BTNCRX";
+            this.BTNCRX.Size = new System.Drawing.Size(93, 52);
+            this.BTNCRX.TabIndex = 0;
+            this.BTNCRX.Text = "CRX";
+            this.BTNCRX.UseVisualStyleBackColor = false;
+            this.BTNCRX.Click += new System.EventHandler(this.CRX_Click);
+            // 
+            // BTNCRY
+            // 
+            this.BTNCRY.BackColor = System.Drawing.Color.Peru;
+            this.BTNCRY.ForeColor = System.Drawing.Color.Snow;
+            this.BTNCRY.Location = new System.Drawing.Point(102, 3);
+            this.BTNCRY.Name = "BTNCRY";
+            this.BTNCRY.Size = new System.Drawing.Size(89, 52);
+            this.BTNCRY.TabIndex = 1;
+            this.BTNCRY.Text = "CRY";
+            this.BTNCRY.UseVisualStyleBackColor = false;
+            this.BTNCRY.Click += new System.EventHandler(this.BTNCRY_Click);
+            // 
+            // BTNCRZ
+            // 
+            this.BTNCRZ.BackColor = System.Drawing.Color.Peru;
+            this.BTNCRZ.ForeColor = System.Drawing.Color.Snow;
+            this.BTNCRZ.Location = new System.Drawing.Point(197, 3);
+            this.BTNCRZ.Name = "BTNCRZ";
+            this.BTNCRZ.Size = new System.Drawing.Size(90, 52);
+            this.BTNCRZ.TabIndex = 2;
+            this.BTNCRZ.Text = "CRZ";
+            this.BTNCRZ.UseVisualStyleBackColor = false;
+            this.BTNCRZ.Click += new System.EventHandler(this.BTNCRZ_Click);
             // 
             // TIMER
             // 
             this.TIMER.Enabled = true;
             this.TIMER.Interval = 10;
             this.TIMER.Tick += new System.EventHandler(this.TIMER_Tick);
-            // 
-            // flowLayoutPanel2
-            // 
-            this.flowLayoutPanel2.Controls.Add(this.label1);
-            this.flowLayoutPanel2.Controls.Add(this.TBINTENSITY);
-            this.flowLayoutPanel2.Controls.Add(this.BTNLIGHT);
-            this.flowLayoutPanel2.Controls.Add(this.LBLLIGHT);
-            this.flowLayoutPanel2.Controls.Add(this.TVLIGHTS);
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(7, 17);
-            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(215, 559);
-            this.flowLayoutPanel2.TabIndex = 0;
-            // 
-            // TVLIGHTS
-            // 
-            this.TVLIGHTS.BackColor = System.Drawing.Color.Black;
-            this.TVLIGHTS.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.TVLIGHTS.Location = new System.Drawing.Point(3, 130);
-            this.TVLIGHTS.Name = "TVLIGHTS";
-            this.TVLIGHTS.Size = new System.Drawing.Size(207, 280);
-            this.TVLIGHTS.TabIndex = 0;
-            this.TVLIGHTS.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TVLIGHTS_AfterSelect);
-            // 
-            // LBLLIGHT
-            // 
-            this.LBLLIGHT.AutoSize = true;
-            this.LBLLIGHT.Location = new System.Drawing.Point(3, 98);
-            this.LBLLIGHT.Name = "LBLLIGHT";
-            this.LBLLIGHT.Size = new System.Drawing.Size(83, 29);
-            this.LBLLIGHT.TabIndex = 1;
-            this.LBLLIGHT.Text = "Lights:";
-            // 
-            // BTNLIGHT
-            // 
-            this.BTNLIGHT.BackColor = System.Drawing.Color.Navy;
-            this.BTNLIGHT.Location = new System.Drawing.Point(3, 43);
-            this.BTNLIGHT.Name = "BTNLIGHT";
-            this.BTNLIGHT.Size = new System.Drawing.Size(207, 52);
-            this.BTNLIGHT.TabIndex = 2;
-            this.BTNLIGHT.Text = "Add Light";
-            this.BTNLIGHT.UseVisualStyleBackColor = false;
-            this.BTNLIGHT.Click += new System.EventHandler(this.BTNLIGHT_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(106, 29);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Intensity:";
-            // 
-            // TBINTENSITY
-            // 
-            this.TBINTENSITY.Location = new System.Drawing.Point(115, 3);
-            this.TBINTENSITY.Name = "TBINTENSITY";
-            this.TBINTENSITY.Size = new System.Drawing.Size(67, 34);
-            this.TBINTENSITY.TabIndex = 4;
-            this.TBINTENSITY.TextChanged += new System.EventHandler(this.TBINTENSITY_TextChanged);
-            this.TBINTENSITY.Text = "0.1";
             // 
             // MyForm
             // 
@@ -410,13 +484,15 @@ namespace PLAYGROUND
             this.PNL_MAIN.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PCT_CANVAS)).EndInit();
             this.panel2.ResumeLayout(false);
+            this.flowLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             this.PNL_HEADER.ResumeLayout(false);
+            this.PNL_HEADER.PerformLayout();
             this.FLWLYTBTNSMOVE.ResumeLayout(false);
-            this.flowLayoutPanel2.ResumeLayout(false);
-            this.flowLayoutPanel2.PerformLayout();
+            this.flowLayoutPanel3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -452,6 +528,12 @@ namespace PLAYGROUND
         private System.Windows.Forms.Label LBLLIGHT;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox TBINTENSITY;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label LBLCAMARA;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+        private System.Windows.Forms.Button BTNCRX;
+        private System.Windows.Forms.Button BTNCRY;
+        private System.Windows.Forms.Button BTNCRZ;
     }
 }
 

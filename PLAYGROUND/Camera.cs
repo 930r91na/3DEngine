@@ -4,22 +4,31 @@ using System.Linq;
 using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PLAYGROUND
 {
-    public class ViewPort
+    public class Camera
     {
         private readonly Canvas _canvas;
-        private Transform transformations;
+
+        // Position of the camera and orientation
+        public Vertex Position { get; set; }
+        public Matrix Orientation { get; set; }
+
+        public Transform Transform;
+
+        // Viewport parameters
         private const float Distance = 1.0f;
         public float ViewportWidth { get; set; }
         public float ViewportHeight { get; set; }
 
-        public ViewPort(Canvas canvas)
+        public Camera(Canvas canvas, Transform transform)
         {
             this._canvas = canvas;
             ViewportHeight = 1;
             ViewportWidth = ((float)canvas.Width / canvas.Height) * ViewportHeight;
+            Transform = transform;
         }
 
         public Vertex Project(Vertex vertex)
@@ -31,5 +40,18 @@ namespace PLAYGROUND
         {
             return new Vertex(vertex.X * _canvas.Width/ViewportWidth,vertex.Y *_canvas.Height/ViewportHeight,vertex.Z,vertex.H);
         }
+
+        
+        public Matrix GetCameraMatrix()
+        {
+            Matrix inverseRotation = Matrix.Inverse(Transform.Rotation);
+            Matrix inverseTranslation = Matrix.MakeTranslationMatrix(new Vertex(-Transform.Translation.X, -Transform.Translation.Y, -Transform.Translation.Z, -Transform.Translation.H));
+
+            Matrix cameraMatrix = inverseRotation * inverseTranslation;
+
+            return cameraMatrix;
+        }
+
+
     }
 }

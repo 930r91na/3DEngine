@@ -9,14 +9,14 @@ namespace PLAYGROUND
     public class Renderer
     {
         private readonly Canvas _canvas;
-        private readonly ViewPort _camera;
         private readonly List<LightSource> _lights;
+        private readonly Camera _camera;
         private readonly float[][] _depthBuffer;
 
-        public Renderer(Canvas canvas, List <LightSource> lightSources)
+        public Renderer(Canvas canvas, List <LightSource> lightSources, Camera camera)
         {
             this._canvas = canvas;
-            _camera = new ViewPort(canvas);
+            _camera = camera;
             _lights = lightSources;
 
             _depthBuffer = new float[canvas.Width][];
@@ -138,13 +138,16 @@ namespace PLAYGROUND
         // RENDER FUNCTIONS
         public void RenderScene(Scene scene)
         {
+            var CameraMatrix = _camera.GetCameraMatrix();
             _canvas.FastClear();
             ClearDepthBuffer();
 
             // Render Models
             for (var m = scene.Models.Count - 1; m >= 0; m--)
             {
-                RenderModel(scene.Models[m].Mesh, scene.Models[m].Transform.transform(), scene.Models[m].Mode);
+                var sceneTransform = scene.Models[m].Transform.transform() * CameraMatrix;
+
+                RenderModel(scene.Models[m].Mesh, sceneTransform, scene.Models[m].Mode);
             }
 
             // Render Lights
@@ -157,7 +160,7 @@ namespace PLAYGROUND
         }
         private void RenderLight(LightSource light)
         {
-            DrawPixel((int)light.Position.X, (int)light.Position.Y, float.MaxValue, Color.White);
+            DrawPixel((int)light.Position.X, (int)light.Position.Y, float.MaxValue, Color.Red);
         }
         private void RenderModel(Mesh model, Matrix transform, Mode mode)
         {
@@ -217,8 +220,12 @@ namespace PLAYGROUND
             DrawLine(p2, p0, color);
         }
 
-        public void DrawShadedTriangle(Vertex p0, Vertex p1, Vertex p2, Color color)
+        public void DrawShadedTriangle(Vertex a, Vertex b, Vertex c, Color color)
         {
+            Vertex p0 = new Vertex((int)a.X, (int)a.Y, (int)a.Z, a.H);
+            Vertex p1 = new Vertex((int)b.X, (int)b.Y, (int)b.Z, b.H);
+            Vertex p2 = new Vertex((int)c.X, (int)c.Y, (int)c.Z, c.H);
+
             // Sort the vertices
             SortByY(ref p0, ref p1, ref p2);
 
@@ -250,17 +257,25 @@ namespace PLAYGROUND
             {
                 x01.RemoveAt(x01.Count - 1);
             }
+            List<float> x012 = new List<float>();
+            x012.AddRange(x01);
+            x012.AddRange(x12);
+
             if (z01.Count > 0 && z12.Count > 0)
             {
                 z01.RemoveAt(z01.Count - 1);
             }
+            List<float> z012 = new List<float>();
+            z012.AddRange(z01);
+            z012.AddRange(z12);
+
             if (h01.Count > 0 && h12.Count > 0)
             {
                 h01.RemoveAt(h01.Count - 1);
             }
-            var x012 = x01.Concat(x12).ToList();
-            var z012 = z01.Concat(z12).ToList();
-            var h012 = h01.Concat(h12).ToList();
+            List<float> h012 = new List<float>();
+            h012.AddRange(h01);
+            h012.AddRange(h12);
 
             // Determine each side
             List<float> xLeft, xRight, zLeft, zRight, hLeft, hRight;
@@ -279,7 +294,7 @@ namespace PLAYGROUND
                 return;
             }
 
-            var m = Math.Floor((decimal)x012.Count / 2);
+            var m = Math.Floor((decimal)x02.Count / 2);
             if (x02.Count > (int)m && x012.Count > (int)m && x02[(int)m] < x012[(int)m])
             {
                 xLeft = x02;
@@ -318,13 +333,17 @@ namespace PLAYGROUND
                 for (var x = xl; x <= xr && x >= 0; x++)
                 {
                     var shaded = Mult(color, hSegment[x - xl]);
-                    DrawPixel(x, y, zSegment[x - xl], shaded );
+                    DrawPixel(x, y, zSegment[x - xl], shaded);
                 }
             }
         }
 
-        public void DrawFilledTriangle(Vertex p0, Vertex p1, Vertex p2, Color color)
+        public void DrawFilledTriangle(Vertex a, Vertex b, Vertex c, Color color)
         {
+            Vertex p0 = new Vertex((int)a.X, (int)a.Y, (int)a.Z, a.H);
+            Vertex p1 = new Vertex((int)b.X, (int)b.Y, (int)b.Z, b.H);
+            Vertex p2 = new Vertex((int)c.X, (int)c.Y, (int)c.Z, c.H);
+
             // Sort the vertices
             SortByY(ref p0, ref p1, ref p2);
 

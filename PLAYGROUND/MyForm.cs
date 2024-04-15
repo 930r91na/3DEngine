@@ -16,6 +16,8 @@ namespace PLAYGROUND
         List<LightSource> _lights;
         Renderer _renderer;
         Canvas _canvas;
+        Camera _camera;
+
 
         private Model _selectedModel;
         private LightSource _selectedLight;
@@ -28,6 +30,9 @@ namespace PLAYGROUND
         private bool _isRotatingX;
         private bool _isRotatingY;
         private bool _isRotatingZ;
+        private bool _isRotatingCameraX;
+        private bool _isRotatingCameraY;
+        private bool _isRotatingCameraZ;
 
         public MyForm()
         {
@@ -39,8 +44,10 @@ namespace PLAYGROUND
         {
             _canvas = new Canvas(PCT_CANVAS);
             _lights = new List<LightSource>();
-            
-            _renderer = new Renderer(_canvas, _lights);
+            Matrix m = Matrix.Identity;
+            _camera = new Camera(_canvas, new Transform(1, new Vertex(0,0,0,0), Matrix.Identity));
+
+            _renderer = new Renderer(_canvas, _lights, _camera);
             if (_selectedScene == null)
             {
                 _selectedScene = new Scene();
@@ -233,6 +240,7 @@ namespace PLAYGROUND
         // Transformation movement
         private void UpdateAutomaticRotation()
         {
+            // Model rotation
             if (_selectedModel == null) return;
 
             if (_isRotatingX)
@@ -251,6 +259,22 @@ namespace PLAYGROUND
             {
                 _angle += 1f;
                 _selectedModel.Transform.Rotation = Matrix.RotZ(_angle);
+            }
+
+            // Camera rotation
+            if (_camera == null) return;
+
+            if (_isRotatingCameraX)
+            {
+                _camera.Transform.Rotation = Matrix.RotX(0.1f);
+            }
+            if (_isRotatingCameraY)
+            {
+                _camera.Transform.Rotation = Matrix.RotY(0.1f);
+            }
+            if (_isRotatingCameraZ)
+            {
+                _camera.Transform.Rotation = Matrix.RotZ(0.1f);
             }
         }
 
@@ -359,6 +383,23 @@ namespace PLAYGROUND
                     RemoveLightSource(_selectedLight);
                     break;
             }
+            // Camera operations
+            if (_camera == null) return;
+            switch (e.KeyCode)
+            {
+                case Keys.T:
+                    _camera.Position.X -= 1f;
+                    break;
+                case Keys.U:
+                    _camera.Position.X += 1f;
+                    break;
+                case Keys.Y:
+                    _camera.Position.Y += 1f;
+                    break;
+                case Keys.G:
+                    _camera.Position.Y -= 1f;
+                    break;
+            }
         }
 
         private void RemoveModel(Model model)
@@ -462,6 +503,50 @@ namespace PLAYGROUND
         private void TBINTENSITY_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void CRX_Click(object sender, EventArgs e)
+        {
+            _isRotatingCameraX = !_isRotatingCameraX;
+            if (!_isRotatingCameraX)
+            {
+                BTNCRX.BackColor = Color.Peru;
+                BTNCRX.ForeColor = Color.White;
+            }
+            else
+            {
+                BTNCRX.BackColor = Color.White;
+                BTNCRX.ForeColor = Color.Black;
+            }
+        }
+
+        private void BTNCRY_Click(object sender, EventArgs e)
+        {
+            _isRotatingCameraY = !_isRotatingCameraY;
+            if (!_isRotatingCameraY)
+            {
+                BTNCRY.BackColor = Color.Peru;
+                BTNCRY.ForeColor = Color.White;
+            }
+            else
+            {
+                BTNCRY.BackColor = Color.White;
+                BTNCRY.ForeColor = Color.Black;
+            }
+        }
+
+        private void BTNCRZ_Click(object sender, EventArgs e)
+        {
+            _isRotatingCameraZ = !_isRotatingCameraZ;
+            if(!_isRotatingCameraZ){
+                BTNCRZ.BackColor = Color.Peru;
+                BTNCRZ.ForeColor = Color.White;
+            }
+            else
+            {
+                BTNCRZ.BackColor = Color.White;
+                BTNCRZ.ForeColor = Color.Black;
+            }
         }
     }
 }
