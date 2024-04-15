@@ -40,6 +40,10 @@ namespace PLAYGROUND
             this.BTNLIGHT = new System.Windows.Forms.Button();
             this.LBLLIGHT = new System.Windows.Forms.Label();
             this.TVLIGHTS = new System.Windows.Forms.TreeView();
+            this.LBLTYPE = new System.Windows.Forms.Label();
+            this.RDBTNAMBIENT = new System.Windows.Forms.RadioButton();
+            this.RDBTNDIRECTION = new System.Windows.Forms.RadioButton();
+            this.RDBTNPOINT = new System.Windows.Forms.RadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.BTNOBJ = new System.Windows.Forms.Button();
@@ -56,7 +60,6 @@ namespace PLAYGROUND
             this.PNL_HEADER = new System.Windows.Forms.Panel();
             this.LBLCAMARA = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.Triangle = new System.Windows.Forms.Button();
             this.FLWLYTBTNSMOVE = new System.Windows.Forms.FlowLayoutPanel();
             this.BTNRX = new System.Windows.Forms.Button();
             this.BTNRY = new System.Windows.Forms.Button();
@@ -126,6 +129,10 @@ namespace PLAYGROUND
             this.flowLayoutPanel2.Controls.Add(this.BTNLIGHT);
             this.flowLayoutPanel2.Controls.Add(this.LBLLIGHT);
             this.flowLayoutPanel2.Controls.Add(this.TVLIGHTS);
+            this.flowLayoutPanel2.Controls.Add(this.LBLTYPE);
+            this.flowLayoutPanel2.Controls.Add(this.RDBTNAMBIENT);
+            this.flowLayoutPanel2.Controls.Add(this.RDBTNDIRECTION);
+            this.flowLayoutPanel2.Controls.Add(this.RDBTNPOINT);
             this.flowLayoutPanel2.Location = new System.Drawing.Point(7, 17);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(215, 559);
@@ -178,6 +185,52 @@ namespace PLAYGROUND
             this.TVLIGHTS.Size = new System.Drawing.Size(207, 280);
             this.TVLIGHTS.TabIndex = 0;
             this.TVLIGHTS.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TVLIGHTS_AfterSelect);
+            // 
+            // LBLTYPE
+            // 
+            this.LBLTYPE.AutoSize = true;
+            this.LBLTYPE.Location = new System.Drawing.Point(3, 413);
+            this.LBLTYPE.Name = "LBLTYPE";
+            this.LBLTYPE.Size = new System.Drawing.Size(140, 29);
+            this.LBLTYPE.TabIndex = 5;
+            this.LBLTYPE.Text = "Type:           ";
+            // 
+            // RDBTNAMBIENT
+            // 
+            this.RDBTNAMBIENT.AutoSize = true;
+            this.RDBTNAMBIENT.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RDBTNAMBIENT.Location = new System.Drawing.Point(3, 445);
+            this.RDBTNAMBIENT.Name = "RDBTNAMBIENT";
+            this.RDBTNAMBIENT.Size = new System.Drawing.Size(122, 33);
+            this.RDBTNAMBIENT.TabIndex = 6;
+            this.RDBTNAMBIENT.TabStop = true;
+            this.RDBTNAMBIENT.Text = "Ambient";
+            this.RDBTNAMBIENT.UseVisualStyleBackColor = true;
+            this.RDBTNAMBIENT.CheckedChanged += new System.EventHandler(this.RDBTNAMBIENT_CheckedChanged);
+            // 
+            // RDBTNDIRECTION
+            // 
+            this.RDBTNDIRECTION.AutoSize = true;
+            this.RDBTNDIRECTION.Location = new System.Drawing.Point(3, 484);
+            this.RDBTNDIRECTION.Name = "RDBTNDIRECTION";
+            this.RDBTNDIRECTION.Size = new System.Drawing.Size(130, 33);
+            this.RDBTNDIRECTION.TabIndex = 8;
+            this.RDBTNDIRECTION.TabStop = true;
+            this.RDBTNDIRECTION.Text = "Direction";
+            this.RDBTNDIRECTION.UseVisualStyleBackColor = true;
+            this.RDBTNDIRECTION.CheckedChanged += new System.EventHandler(this.RDBTNDIRECTION_CheckedChanged);
+            // 
+            // RDBTNPOINT
+            // 
+            this.RDBTNPOINT.AutoSize = true;
+            this.RDBTNPOINT.Location = new System.Drawing.Point(3, 523);
+            this.RDBTNPOINT.Name = "RDBTNPOINT";
+            this.RDBTNPOINT.Size = new System.Drawing.Size(89, 33);
+            this.RDBTNPOINT.TabIndex = 7;
+            this.RDBTNPOINT.TabStop = true;
+            this.RDBTNPOINT.Text = "Point";
+            this.RDBTNPOINT.UseVisualStyleBackColor = true;
+            this.RDBTNPOINT.CheckedChanged += new System.EventHandler(this.RDBTNPOINT_CheckedChanged);
             // 
             // panel1
             // 
@@ -331,7 +384,6 @@ namespace PLAYGROUND
             this.PNL_HEADER.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.PNL_HEADER.Controls.Add(this.LBLCAMARA);
             this.PNL_HEADER.Controls.Add(this.label2);
-            this.PNL_HEADER.Controls.Add(this.Triangle);
             this.PNL_HEADER.Controls.Add(this.FLWLYTBTNSMOVE);
             this.PNL_HEADER.Controls.Add(this.flowLayoutPanel3);
             this.PNL_HEADER.Dock = System.Windows.Forms.DockStyle.Top;
@@ -346,7 +398,7 @@ namespace PLAYGROUND
             this.LBLCAMARA.AutoSize = true;
             this.LBLCAMARA.Location = new System.Drawing.Point(1359, 25);
             this.LBLCAMARA.Name = "LBLCAMARA";
-            this.LBLCAMARA.Size = new System.Drawing.Size(129, 36);
+            this.LBLCAMARA.Size = new System.Drawing.Size(103, 29);
             this.LBLCAMARA.TabIndex = 7;
             this.LBLCAMARA.Text = "Camara:";
             // 
@@ -358,16 +410,6 @@ namespace PLAYGROUND
             this.label2.Size = new System.Drawing.Size(93, 29);
             this.label2.TabIndex = 6;
             this.label2.Text = "Model: ";
-            // 
-            // Triangle
-            // 
-            this.Triangle.Location = new System.Drawing.Point(117, 52);
-            this.Triangle.Name = "Triangle";
-            this.Triangle.Size = new System.Drawing.Size(75, 47);
-            this.Triangle.TabIndex = 5;
-            this.Triangle.Text = "T";
-            this.Triangle.UseVisualStyleBackColor = true;
-            this.Triangle.Click += new System.EventHandler(this.Triangle_Click);
             // 
             // FLWLYTBTNSMOVE
             // 
@@ -521,9 +563,7 @@ namespace PLAYGROUND
         private System.Windows.Forms.RadioButton RDBTNSOLID;
         private System.Windows.Forms.RadioButton RDBTNSHADED;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button Triangle;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
-        private System.Windows.Forms.TreeView TVLIGHTS;
         private System.Windows.Forms.Button BTNLIGHT;
         private System.Windows.Forms.Label LBLLIGHT;
         private System.Windows.Forms.Label label1;
@@ -534,6 +574,11 @@ namespace PLAYGROUND
         private System.Windows.Forms.Button BTNCRX;
         private System.Windows.Forms.Button BTNCRY;
         private System.Windows.Forms.Button BTNCRZ;
+        private System.Windows.Forms.Label LBLTYPE;
+        private System.Windows.Forms.RadioButton RDBTNAMBIENT;
+        private System.Windows.Forms.RadioButton RDBTNPOINT;
+        private System.Windows.Forms.RadioButton RDBTNDIRECTION;
+        private System.Windows.Forms.TreeView TVLIGHTS;
     }
 }
 

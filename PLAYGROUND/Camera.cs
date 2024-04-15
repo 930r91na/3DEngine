@@ -25,6 +25,7 @@ namespace PLAYGROUND
 
         public Camera(Canvas canvas, Transform transform)
         {
+            Orientation = Matrix.Identity;
             this._canvas = canvas;
             ViewportHeight = 1;
             ViewportWidth = ((float)canvas.Width / canvas.Height) * ViewportHeight;
@@ -44,10 +45,10 @@ namespace PLAYGROUND
         
         public Matrix GetCameraMatrix()
         {
-            Matrix inverseRotation = Matrix.Inverse(Transform.Rotation);
+            Matrix inverseRotatation = Orientation.Transposed();
             Matrix inverseTranslation = Matrix.MakeTranslationMatrix(new Vertex(-Transform.Translation.X, -Transform.Translation.Y, -Transform.Translation.Z, -Transform.Translation.H));
 
-            Matrix cameraMatrix = inverseRotation * inverseTranslation;
+            Matrix cameraMatrix = inverseRotatation * inverseTranslation;
 
             return cameraMatrix;
         }

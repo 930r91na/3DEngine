@@ -128,19 +128,17 @@ namespace PLAYGROUND
             });
         }
 
-        internal static Matrix Inverse(Matrix rotation)
+        public Matrix Transposed()
         {
-            float[,] data = new float[4, 4];
-
+            Matrix data = new Matrix(new float[4, 4]);
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    data[i, j] = rotation._data[j, i];
+                    data[i, j] = _data[j, i];
                 }
             }
-
-            return new Matrix(data);
+            return data;
         }
     }
 }

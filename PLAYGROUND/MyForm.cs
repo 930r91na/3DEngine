@@ -64,7 +64,7 @@ namespace PLAYGROUND
 
         private void TIMER_Tick(object sender, EventArgs e)
         {
-            _renderer.RenderScene(_selectedScene);
+            _renderer.RenderScene(_camera, _selectedScene);
             UpdateAutomaticRotation();
         }
 
@@ -498,6 +498,19 @@ namespace PLAYGROUND
             _selectLightNode = e.Node;
             _selectedLight = (LightSource)_selectLightNode.Tag;
             TBINTENSITY.Text = _selectedLight.Intensity.ToString();
+
+            switch (_selectedLight.Type)
+            {
+                case LightSource.LightType.Directional:
+                    RDBTNDIRECTION.Checked = true;
+                    break;
+                case LightSource.LightType.Point:
+                    RDBTNPOINT.Checked = true;
+                    break;
+                case LightSource.LightType.Ambient:
+                    RDBTNAMBIENT.Checked = true;
+                    break;
+            }
         }
 
         private void TBINTENSITY_TextChanged(object sender, EventArgs e)
@@ -547,6 +560,24 @@ namespace PLAYGROUND
                 BTNCRZ.BackColor = Color.White;
                 BTNCRZ.ForeColor = Color.Black;
             }
+        }
+
+        private void RDBTNAMBIENT_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_selectedLight == null) return;
+            _selectedLight.Type = LightSource.LightType.Ambient;
+        }
+
+        private void RDBTNDIRECTION_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_selectedLight == null) return;
+            _selectedLight.Type = LightSource.LightType.Directional;
+        }
+
+        private void RDBTNPOINT_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_selectedLight == null) return;
+            _selectedLight.Type = LightSource.LightType.Point;
         }
     }
 }

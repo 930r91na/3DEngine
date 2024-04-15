@@ -10,13 +10,11 @@ namespace PLAYGROUND
     {
         private readonly Canvas _canvas;
         private readonly List<LightSource> _lights;
-        private readonly Camera _camera;
         private readonly float[][] _depthBuffer;
 
         public Renderer(Canvas canvas, List <LightSource> lightSources, Camera camera)
         {
             this._canvas = canvas;
-            _camera = camera;
             _lights = lightSources;
 
             _depthBuffer = new float[canvas.Width][];
@@ -136,9 +134,9 @@ namespace PLAYGROUND
 
 
         // RENDER FUNCTIONS
-        public void RenderScene(Scene scene)
+        public void RenderScene(Camera camera, Scene scene)
         {
-            var CameraMatrix = _camera.GetCameraMatrix();
+            var CameraMatrix = camera.GetCameraMatrix();
             _canvas.FastClear();
             ClearDepthBuffer();
 
@@ -147,29 +145,31 @@ namespace PLAYGROUND
             {
                 var sceneTransform = CameraMatrix * scene.Models[m].Transform.transform();
 
-                RenderModel(scene.Models[m].Mesh, sceneTransform, scene.Models[m].Mode);
+                RenderModel(camera, scene.Models[m].Mesh, sceneTransform, scene.Models[m].Mode);
             }
 
             // Render Lights
             for (var l = _lights.Count - 1; l >= 0; l--)
             {
-                RenderLight(_lights[l]);
+                RenderLight(camera, _lights[l]);
             }
 
             _canvas.Refresh();
         }
-        private void RenderLight(LightSource light)
+        private void RenderLight(Camera c, LightSource light)
         {
-            DrawPixel((int)light.Position.X, (int)light.Position.Y, float.MaxValue, Color.Red);
+           //Model l = light.GenerateModel();
+            //RenderModel(c, l, )
+           DrawPixel((int)light.Position.X, (int)light.Position.Y, float.MaxValue, Color.Red);
         }
-        private void RenderModel(Mesh model, Matrix transform, Mode mode)
+        private void RenderModel(Camera c ,Mesh model, Matrix transform, Mode mode)
         {
             var projected = new List<Vertex>();
 
             for (var index = 0; index < model.Vertexes.Length; index++)
             {
                 var t = model.Vertexes[index];
-                projected.Add(_camera.Project(transform*t));
+                projected.Add(c.Project(transform*t));
             }
 
             for (var t = model.Triangles.Length - 1; t >= 0; t--)
@@ -407,7 +407,7 @@ namespace PLAYGROUND
 
                 var zSegment = Interpolate(xl, 1 / zl, xr, 1/zr);
 
-                for (int x = (int)xl; x <= xr && x >= 0; x++)
+                for (int x = (int)xl; x <= xr; x++)
                  {
                     DrawPixel(x, y, zSegment[(int)(x - xl)], color);
                 }
