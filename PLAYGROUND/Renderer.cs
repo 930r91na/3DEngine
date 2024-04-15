@@ -44,7 +44,7 @@ namespace PLAYGROUND
         public void DrawPixel(int x, int y, float z, Color color)
         {
             // TODO: CHECK THIS MTF
-            // x = _canvas.Width / 2 + x;
+            x = _canvas.Width / 2 + x;
             y = _canvas.Height / 2 - y - 1;
 
 
@@ -145,7 +145,7 @@ namespace PLAYGROUND
             // Render Models
             for (var m = scene.Models.Count - 1; m >= 0; m--)
             {
-                var sceneTransform = scene.Models[m].Transform.transform() * CameraMatrix;
+                var sceneTransform = CameraMatrix * scene.Models[m].Transform.transform();
 
                 RenderModel(scene.Models[m].Mesh, sceneTransform, scene.Models[m].Mode);
             }
@@ -257,25 +257,19 @@ namespace PLAYGROUND
             {
                 x01.RemoveAt(x01.Count - 1);
             }
-            List<float> x012 = new List<float>();
-            x012.AddRange(x01);
-            x012.AddRange(x12);
+            List<float> x012 = [.. x01, .. x12];
 
             if (z01.Count > 0 && z12.Count > 0)
             {
                 z01.RemoveAt(z01.Count - 1);
             }
-            List<float> z012 = new List<float>();
-            z012.AddRange(z01);
-            z012.AddRange(z12);
+            List<float> z012 = [.. z01, .. z12];
 
             if (h01.Count > 0 && h12.Count > 0)
             {
                 h01.RemoveAt(h01.Count - 1);
             }
-            List<float> h012 = new List<float>();
-            h012.AddRange(h01);
-            h012.AddRange(h12);
+            List<float> h012 = [.. h01, .. h12];
 
             // Determine each side
             List<float> xLeft, xRight, zLeft, zRight, hLeft, hRight;
@@ -295,6 +289,7 @@ namespace PLAYGROUND
             }
 
             var m = Math.Floor((decimal)x02.Count / 2);
+
             if (x02.Count > (int)m && x012.Count > (int)m && x02[(int)m] < x012[(int)m])
             {
                 xLeft = x02;
@@ -317,11 +312,11 @@ namespace PLAYGROUND
             // Fill the triangle
             for (var y = (int)p0.Y; y <= p2.Y; y++)
             {
-                int index = (int)y - (int)p0.Y;
-                if (index < 0 || index >= xLeft.Count || index >= xRight.Count || index >= zLeft.Count || index >= zRight.Count || index >= hLeft.Count || index >= hRight.Count) continue;
+                int index = y - (int)p0.Y;
+                if (index < 0 || index >= xLeft.Count) continue;
 
-                int xl = (int)xLeft[index];
-                int xr = (int)xRight[index];
+                var xl = xLeft[index];
+                var xr = xRight[index];
                 var zl = zLeft[index];
                 var zr = zRight[index];
                 var hl = hLeft[index];
@@ -330,10 +325,14 @@ namespace PLAYGROUND
                 var zSegment = Interpolate(xl, zl, xr, zr);
                 var hSegment = Interpolate(xl, hl, xr, hr);
 
-                for (var x = xl; x <= xr && x >= 0; x++)
+                for (float x = xl; x < xr; x++)
                 {
-                    var shaded = Mult(color, hSegment[x - xl]);
-                    DrawPixel(x, y, zSegment[x - xl], shaded);
+                    index = (int)x - (int)xl;
+
+                    if (index < 0 || index >= hSegment.Count) continue;
+
+                    var shaded = Mult(color, hSegment[index]);
+                    DrawPixel((int)x, y, zSegment[index], shaded);
                 }
             }
         }
