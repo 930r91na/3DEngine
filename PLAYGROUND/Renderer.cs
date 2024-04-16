@@ -41,7 +41,6 @@ namespace PLAYGROUND
 
         public void DrawPixel(int x, int y, float z, Color color)
         {
-            // TODO: CHECK THIS MTF
             x = _canvas.Width / 2 + x;
             y = _canvas.Height / 2 - y - 1;
 
@@ -51,8 +50,6 @@ namespace PLAYGROUND
                 return;
             }
 
-            // Check if the pixel is closer than the previous one
-            // TODO: CHECK THIS occlsuion
             if (z > _depthBuffer[x][y]) return;
 
             _canvas.SetPixel(x, y, color);
