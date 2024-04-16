@@ -216,7 +216,7 @@ namespace PLAYGROUND
             this.RDBTNDIRECTION.Size = new System.Drawing.Size(130, 33);
             this.RDBTNDIRECTION.TabIndex = 8;
             this.RDBTNDIRECTION.TabStop = true;
-            this.RDBTNDIRECTION.Text = "Direction";
+            this.RDBTNDIRECTION.Text = "Point Not Smooth";
             this.RDBTNDIRECTION.UseVisualStyleBackColor = true;
             this.RDBTNDIRECTION.CheckedChanged += new System.EventHandler(this.RDBTNDIRECTION_CheckedChanged);
             // 

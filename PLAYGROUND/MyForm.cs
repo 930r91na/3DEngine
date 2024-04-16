@@ -501,7 +501,7 @@ namespace PLAYGROUND
 
             switch (_selectedLight.Type)
             {
-                case LightSource.LightType.Directional:
+                case LightSource.LightType.PointNotSmooth:
                     RDBTNDIRECTION.Checked = true;
                     break;
                 case LightSource.LightType.Point:
@@ -571,7 +571,7 @@ namespace PLAYGROUND
         private void RDBTNDIRECTION_CheckedChanged(object sender, EventArgs e)
         {
             if (_selectedLight == null) return;
-            _selectedLight.Type = LightSource.LightType.Directional;
+            _selectedLight.Type = LightSource.LightType.PointNotSmooth;
         }
 
         private void RDBTNPOINT_CheckedChanged(object sender, EventArgs e)

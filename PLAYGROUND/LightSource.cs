@@ -15,7 +15,7 @@ namespace PLAYGROUND
         {
             Ambient,
             Point,
-            Directional,
+            PointNotSmooth,
         }
 
         public Vertex Position;
@@ -38,6 +38,9 @@ namespace PLAYGROUND
             float dy = Position.Y - v.Y;
             float dz = Position.Z - v.Z;
             float distance = (float)Math.Sqrt(dx * dx + dy * dy + dz * dz);
+            var attenuation = 1f / (a + b * Math.Log10(1 + distance));
+            Vertex nLight = Normalize(new Vertex(dx, dy, dz, 1));
+
 
             switch (Type)
             {
@@ -47,22 +50,25 @@ namespace PLAYGROUND
                     break;
 
                 case LightType.Point:
-                        // Calculate the logarithmic attenuation
-                        var attenuation = 1f / (a + b * Math.Log10(1 + distance));
-                        Vertex nLight = Normalize(new Vertex(dx,dy,dz,1));
+                    Vertex v2 = Normalize(new Vertex(dx, dy, dz, 1));
+                    float dotProduct = Vertex.DotProduct(v2, nLight);
+                    var intensity = Math.Abs(dotProduct) * Intensity * 100;
 
-                        float dotProduct = Vertex.DotProduct(normal, nLight);
-                        var intensity = Math.Abs(dotProduct) * Intensity;
+                    illumination += intensity * (float)attenuation;
+                    v.H += illumination;
 
-                        illumination += intensity * (float)attenuation;
-                        v.H += illumination;
+                    
                     break;
 
-                case LightType.Directional:
-                    nLight = Normalize(Position);
-                    attenuation = 1f / (a + b * Math.Log10(1 + distance));
-                    float ilum = Vertex.DotProduct(v, nLight) * 0.1f;
-                    v.H += (ilum * (float)attenuation);
+                case LightType.PointNotSmooth:
+                    var attenuation2 = 1f / (a + b * Math.Log10(1 + distance));
+                    Vertex nLight2 = Normalize(new Vertex(dx, dy, dz, 1));
+
+                    float dotProduct2 = Vertex.DotProduct(normal, nLight2);
+                    intensity = Math.Abs(dotProduct2) * Intensity;
+
+                    illumination += intensity * (float)attenuation2;
+                    v.H += illumination;
                     break;
             }
         }
