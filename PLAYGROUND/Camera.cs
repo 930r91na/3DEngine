@@ -25,6 +25,7 @@ namespace PLAYGROUND
 
         public Camera(Canvas canvas, Transform transform)
         {
+            Position = new Vertex(0, 0, 0, 1);
             Orientation = Matrix.Identity;
             this._canvas = canvas;
             ViewportHeight = 1;

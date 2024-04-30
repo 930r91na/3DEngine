@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,7 +40,8 @@ namespace PLAYGROUND
             float dz = Position.Z - v.Z;
             float distance = (float)Math.Sqrt(dx * dx + dy * dy + dz * dz);
             var attenuation = 1f / (a + b * Math.Log10(1 + distance));
-            Vertex nLight = Normalize(new Vertex(dx, dy, dz, 1));
+            Vertex nLight = new Vertex(dx, dy, dz, 1);
+            Normalize(ref nLight);
 
 
             switch (Type)
@@ -50,9 +52,8 @@ namespace PLAYGROUND
                     break;
 
                 case LightType.Point:
-                    Vertex v2 = Normalize(new Vertex(dx, dy, dz, 1));
-                    float dotProduct = Vertex.DotProduct(v2, nLight);
-                    var intensity = Math.Abs(dotProduct) * Intensity * 100;
+                    float dotProduct = Vertex.DotProduct(v, nLight);
+                    var intensity = Intensity * 100;
 
                     illumination += intensity * (float)attenuation;
                     v.H += illumination;
@@ -62,25 +63,32 @@ namespace PLAYGROUND
 
                 case LightType.PointNotSmooth:
                     var attenuation2 = 1f / (a + b * Math.Log10(1 + distance));
-                    Vertex nLight2 = Normalize(new Vertex(dx, dy, dz, 1));
-
-                    float dotProduct2 = Vertex.DotProduct(normal, nLight2);
+                    float dotProduct2 = Vertex.DotProduct(normal, nLight);
                     intensity = Math.Abs(dotProduct2) * Intensity;
-
+                    
                     illumination += intensity * (float)attenuation2;
+                    //var d = Vertex.Distance(Position, v);
+                    //var attenuation2 = 1f / d * d;
+                    //var intensity2 = Math.Min(Intensity * attenuation2, 1f);
+                    //
+                    //// occlusion check
+                    //var lx = Position.X;
+                    //var ly = Position.Y;
+
+                    //var zBuffer =
+                    //if ()
+                    
                     v.H += illumination;
                     break;
             }
         }
 
-        private Vertex Normalize(Vertex v)
+        private void Normalize(ref Vertex v)
         {
             float length = (float)Math.Sqrt(v.X * v.X + v.Y * v.Y + v.Z * v.Z);
             v.X /= length;
             v.Y /= length;
             v.Z /= length;
-
-            return v;
         }
 
         

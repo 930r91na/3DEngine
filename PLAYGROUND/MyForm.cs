@@ -181,7 +181,7 @@ namespace PLAYGROUND
 
             for (var i = 0; i < _selectedScene.Models.Count; i++)
             {
-                var node = new TreeNode(@"Model " + (i + 1))
+                var node = new TreeNode(@"Model " + (i + 1) + "(" + _selectedScene.Models[i].Position.X + "," + _selectedScene.Models[i].Position.Y + "," + _selectedScene.Models[i].Position.Z+ ")")
                 {
                     Tag = _selectedScene.Models[i]
                 };
@@ -453,7 +453,7 @@ namespace PLAYGROUND
             // Update the tree view
             for (var i = 0; i < _lights.Count; i++)
             {
-                var node = new TreeNode(@"Light " + (i + 1))
+                var node = new TreeNode(@"Light " + (i + 1) + "(" + _lights[i].Position.X + "," + _lights[i].Position.Y + "," + _lights[i].Position.Z +")")
                 {
                     Tag = _lights[i]
                 };
@@ -481,16 +481,7 @@ namespace PLAYGROUND
                 return;
             }
 
-            var newLight = new LightSource(new Vertex(10, 10, 10, 1), intensity);
-            _selectedLight = newLight;
-            _lights.Add(newLight);
-
-            var node = new TreeNode(@"Light " + _lights.Count)
-            {
-                Tag = _lights[_lights.Count - 1]
-            };
-            TVLIGHTS.Nodes.Add(node);
-            TVLIGHTS.SelectedNode = node;
+            NewLightSource(new Vertex(10, 10, 10, 1), intensity);
         }
 
         private void TVLIGHTS_AfterSelect(object sender, TreeViewEventArgs e)

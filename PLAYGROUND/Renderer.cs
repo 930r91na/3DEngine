@@ -458,12 +458,34 @@ namespace PLAYGROUND
         // Calculate the lighting of a vertex
         private void CalculateLighting(Vertex vertex, Vertex normal)
         {
-            for (int l = 0; l < _lights.Count; l++)
-            {
-                var light = _lights[l];
+            float illumination = 0.1f; // Ambient component
 
-                light.CalculateLighting(vertex, normal);
+            foreach (var light in _lights)
+            {
+                float dx = light.Position.X - vertex.X;
+                float dy = light.Position.Y - vertex.Y;
+                float dz = light.Position.Z - vertex.Z;
+                float distance = (float)Math.Sqrt(dx * dx + dy * dy + dz * dz);
+
+                if (_depthBuffer[(int)light.Position.X][(int)light.Position.Y] <= light.Position.Z)
+                    continue;
+
+                // Normalize light direction vector
+                Vertex nLight = new Vertex(dx / distance, dy / distance, dz / distance, 1/distance);
+
+                // Standard attenuation
+                float attenuation = 1f / (1f + 0.1f * distance + 0.01f * distance * distance);
+
+                // Dot product for angle-dependent intensity
+                //float dotProduct = Math.Abs(Vertex.DotProduct(normal, nLight));
+                
+                float intensity = light.Intensity;
+                illumination += intensity * attenuation;
+                
             }
+
+            vertex.H += illumination;
         }
+
     }
 }
