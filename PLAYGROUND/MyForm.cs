@@ -145,9 +145,6 @@ namespace PLAYGROUND
                         vertexIndex--;
                         faceIndices.Add(vertexIndex);
                     }
-
-
-
                     
                     for (var i = 1; i < faceIndices.Count - 1; i++)
                     {
@@ -179,6 +176,7 @@ namespace PLAYGROUND
 
             treeView1.Nodes.Clear();
 
+            // Add the model to the TreeView
             for (var i = 0; i < _selectedScene.Models.Count; i++)
             {
                 var node = new TreeNode(@"Model " + (i + 1) + "(" + _selectedScene.Models[i].Position.X + "," + _selectedScene.Models[i].Position.Y + "," + _selectedScene.Models[i].Position.Z+ ")")
