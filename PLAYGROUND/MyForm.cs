@@ -596,8 +596,8 @@ namespace PLAYGROUND
             {
                 int currentTime = TRK_MOVIE.Value;
                 Keyframe keyframe = new Keyframe(
-                    _selectedScene.Models[i].GetPosition(),
-                    _selectedScene.Models[i].GetTransform(),
+                    _selectedScene.Models[i].GetPosition().Clone(),
+                    _selectedScene.Models[i].GetTransform().Clone(),
                     currentTime
                 );
 

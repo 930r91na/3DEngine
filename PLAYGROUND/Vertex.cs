@@ -18,6 +18,11 @@ namespace PLAYGROUND
             H = h;
         }
 
+        public Vertex Clone()
+        {
+            return new Vertex(X, Y, Z, H);
+        }
+
         internal static float DotProduct(Vertex a, Vertex b)
         {
             // Calculate the dot product of two vectors

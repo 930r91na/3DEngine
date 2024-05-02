@@ -33,6 +33,7 @@ namespace PLAYGROUND
             Mesh = mesh;
             Transform = transform;
             this.Mode = Mode.Wireframe;
+            _keyframes.Clear();
         }
 
         // Animation

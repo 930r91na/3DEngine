@@ -13,7 +13,12 @@ namespace PLAYGROUND
         {
             this.Scale = scale;
             this.Rotation = rotation ?? Matrix.Identity;
-            this.Translation = translation;
+            this.Translation = translation.Clone();
+        }
+
+        public Transform Clone()
+        {
+            return new Transform(Scale, Translation.Clone(), Matrix.Identity);
         }
 
         public Matrix transform()
