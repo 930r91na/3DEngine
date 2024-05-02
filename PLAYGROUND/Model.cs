@@ -89,7 +89,7 @@ namespace PLAYGROUND
                 Transform.Translation.H = Lerp(start.Transform.Translation.H, end.Transform.Translation.H, lerpFactor);
 
                 // Rotation
-                Matrix interpolatedRotation = InterpolateMatrices(start.Transform.Rotation, end.Transform.Rotation, lerpFactor);
+                Matrix interpolatedRotation = Matrix.InterpolateMatrices(start.Transform.Rotation, end.Transform.Rotation, lerpFactor);
                 Transform.Rotation = interpolatedRotation;
                 
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 
 namespace PLAYGROUND
 {
@@ -29,6 +30,41 @@ namespace PLAYGROUND
         {
             return new Matrix((float[,])_data.Clone()); // Crea una nueva instancia de Matrix con una copia del arreglo
         }
+
+        public static Matrix InterpolateMatrices(Matrix start, Matrix end, float factor)
+        {
+            float[,] interpolatedData = new float[4, 4];
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    interpolatedData[i, j] = Lerp(start[i, j], end[i, j], factor);
+                }
+            }
+            Matrix result = new Matrix(interpolatedData);
+            return result.NormalizeRows(); // Método para normalizar filas
+        }
+
+        // Método para normalizar filas de la matriz (aproximación)
+        public Matrix NormalizeRows()
+        {
+            for (int i = 0; i < 3; i++)  // Solo normalizar las primeras tres filas
+            {
+                float length = (float)Math.Sqrt(_data[i, 0] * _data[i, 0] + _data[i, 1] * _data[i, 1] + _data[i, 2] * _data[i, 2]);
+                if (length != 0)
+                {
+                    _data[i, 0] /= length;
+                    _data[i, 1] /= length;
+                    _data[i, 2] /= length;
+                }
+            }
+            return this;
+        }
+
+        private static float Lerp(float start, float end, float factor)
+    {
+        return (start * (1 - factor)) + (end * factor);
+    }
 
         public static Matrix MakeScalingMatrix(float scale)
         {
