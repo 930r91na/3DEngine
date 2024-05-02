@@ -26,6 +26,11 @@ namespace PLAYGROUND
         TreeNode _selectedModelNode;
         TreeNode _selectLightNode;
 
+        // Animation
+        private int _longTrackbar = 0;
+        readonly Bitmap _bmpTimeline;
+        private Graphics _g;
+
         // Transformation variables
         private bool _isRotatingX;
         private bool _isRotatingY;
@@ -36,8 +41,15 @@ namespace PLAYGROUND
 
         public MyForm()
         {
-            _scenes = new List<Scene>();
             InitializeComponent();
+
+            _scenes = new List<Scene>();
+
+            // Animation
+            _bmpTimeline = new Bitmap(PCT_TIMELINE.Width, PCT_TIMELINE.Height);
+            _g = Graphics.FromImage(_bmpTimeline);
+            PCT_TIMELINE.Image = _bmpTimeline;
+            _longTrackbar = TRK_MOVIE.Width;
         }
 
         private void Init()
@@ -567,6 +579,85 @@ namespace PLAYGROUND
         {
             if (_selectedLight == null) return;
             _selectedLight.Type = LightSource.LightType.Point;
+        }
+
+        private void BTN_ADDKEY_Click(object sender, EventArgs e)
+        {
+            // Draw the keyframe
+            int span = _longTrackbar / 30;
+            int timelineValue = TRK_MOVIE.Value * span;
+            _canvas.DrawKeyframe(new PointF(timelineValue, 0), Color.IndianRed, _bmpTimeline);
+            PCT_TIMELINE.Invalidate();
+
+            if (_selectedScene == null) return;
+
+            // Save the properties of the Model in the Keyframe
+            for (var i = 0; i < _selectedScene.Models.Count; i++)
+            {
+                int currentTime = TRK_MOVIE.Value;
+                Keyframe keyframe = new Keyframe(
+                    _selectedScene.Models[i].GetPosition(),
+                    _selectedScene.Models[i].GetTransform(),
+                    currentTime
+                );
+
+                _selectedScene.Models[i].AddKeyFrame(keyframe);
+            }
+
+        }
+
+        private void BTN_PLAY_Click(object sender, EventArgs e)
+        {
+            int duration = 6500; // 3 seconds
+            int interval = duration / 80;
+            var timer = new System.Windows.Forms.Timer();
+            timer.Interval = interval;
+            int currentTime = 0;
+
+            timer.Tick += (o, args) =>
+            {
+                // Interpolate for each Model
+                for (var i = 0; i < _selectedScene.Models.Count; i++)
+                {
+                    _selectedScene.Models[i].Interpolate(currentTime);
+                }
+
+                TRK_MOVIE.Value = currentTime;
+                ApplyTransformationAndRender();
+
+                if (currentTime >= TRK_MOVIE.Maximum)
+                {
+                    timer.Stop();
+                    timer.Dispose();
+                }
+                else
+                {
+                    currentTime++;
+                }
+            };
+
+            timer.Start();
+
+        }
+
+        private void ApplyTransformationAndRender()
+        {
+            for (var i = 0; i < _selectedScene.Models.Count; i++)
+            {
+                _renderer.RenderScene(_camera, _selectedScene);
+            }
+
+            //PCT_CANVAS.Invalidate();
+        }
+
+        private void TRK_MOVIE_Scroll(object sender, EventArgs e)
+        {
+
+        }
+
+        private void PCT_TIMELINE_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -88,6 +88,11 @@ namespace PLAYGROUND
             });
         }
 
+        public void DrawKeyframe(PointF a, Color color, Bitmap bmpT)
+        {
+            Graphics.FromImage(bmpT).FillEllipse(new SolidBrush(color), a.X, a.Y, 8, 8);
+        }
+
         public void Refresh()
         {
             pctCanvas.Invalidate();

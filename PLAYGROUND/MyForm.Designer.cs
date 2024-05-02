@@ -56,24 +56,25 @@ namespace PLAYGROUND
             this.RDBTNSOLID = new System.Windows.Forms.RadioButton();
             this.RDBTNSHADED = new System.Windows.Forms.RadioButton();
             this.PNL_BOTTOM = new System.Windows.Forms.Panel();
+            this.PCT_TIMELINE = new System.Windows.Forms.PictureBox();
+            this.TRK_MOVIE = new System.Windows.Forms.TrackBar();
             this.LBL_STATUS = new System.Windows.Forms.Label();
             this.PNL_HEADER = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
             this.LBLCAMARA = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.FLWLYTBTNSMOVE = new System.Windows.Forms.FlowLayoutPanel();
             this.BTNRX = new System.Windows.Forms.Button();
             this.BTNRY = new System.Windows.Forms.Button();
             this.BTNRZ = new System.Windows.Forms.Button();
+            this.PanelAnimation = new System.Windows.Forms.FlowLayoutPanel();
+            this.BTN_ADDKEY = new System.Windows.Forms.Button();
+            this.BTN_PLAY = new System.Windows.Forms.Button();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.BTNCRX = new System.Windows.Forms.Button();
             this.BTNCRY = new System.Windows.Forms.Button();
             this.BTNCRZ = new System.Windows.Forms.Button();
             this.TIMER = new System.Windows.Forms.Timer(this.components);
-            this.TRK_MOVIE = new System.Windows.Forms.TrackBar();
-            this.PanelAnimation = new System.Windows.Forms.FlowLayoutPanel();
-            this.BTN_ADDKEY = new System.Windows.Forms.Button();
-            this.BTN_PLAY = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
             this.PNL_MAIN.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PCT_CANVAS)).BeginInit();
             this.panel2.SuspendLayout();
@@ -81,11 +82,12 @@ namespace PLAYGROUND
             this.panel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.PNL_BOTTOM.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PCT_TIMELINE)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TRK_MOVIE)).BeginInit();
             this.PNL_HEADER.SuspendLayout();
             this.FLWLYTBTNSMOVE.SuspendLayout();
-            this.flowLayoutPanel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.TRK_MOVIE)).BeginInit();
             this.PanelAnimation.SuspendLayout();
+            this.flowLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // PNL_MAIN
@@ -139,7 +141,7 @@ namespace PLAYGROUND
             this.flowLayoutPanel2.Controls.Add(this.RDBTNDIRECTION);
             this.flowLayoutPanel2.Controls.Add(this.RDBTNPOINT);
             this.flowLayoutPanel2.Location = new System.Drawing.Point(5, 14);
-            this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(161, 454);
             this.flowLayoutPanel2.TabIndex = 0;
@@ -157,7 +159,7 @@ namespace PLAYGROUND
             // TBINTENSITY
             // 
             this.TBINTENSITY.Location = new System.Drawing.Point(88, 2);
-            this.TBINTENSITY.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.TBINTENSITY.Margin = new System.Windows.Forms.Padding(2);
             this.TBINTENSITY.Name = "TBINTENSITY";
             this.TBINTENSITY.Size = new System.Drawing.Size(51, 29);
             this.TBINTENSITY.TabIndex = 4;
@@ -168,7 +170,7 @@ namespace PLAYGROUND
             // 
             this.BTNLIGHT.BackColor = System.Drawing.Color.Navy;
             this.BTNLIGHT.Location = new System.Drawing.Point(2, 35);
-            this.BTNLIGHT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.BTNLIGHT.Margin = new System.Windows.Forms.Padding(2);
             this.BTNLIGHT.Name = "BTNLIGHT";
             this.BTNLIGHT.Size = new System.Drawing.Size(155, 42);
             this.BTNLIGHT.TabIndex = 2;
@@ -191,7 +193,7 @@ namespace PLAYGROUND
             this.TVLIGHTS.BackColor = System.Drawing.Color.Black;
             this.TVLIGHTS.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.TVLIGHTS.Location = new System.Drawing.Point(2, 105);
-            this.TVLIGHTS.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.TVLIGHTS.Margin = new System.Windows.Forms.Padding(2);
             this.TVLIGHTS.Name = "TVLIGHTS";
             this.TVLIGHTS.Size = new System.Drawing.Size(156, 228);
             this.TVLIGHTS.TabIndex = 0;
@@ -212,7 +214,7 @@ namespace PLAYGROUND
             this.RDBTNAMBIENT.AutoSize = true;
             this.RDBTNAMBIENT.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RDBTNAMBIENT.Location = new System.Drawing.Point(2, 361);
-            this.RDBTNAMBIENT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.RDBTNAMBIENT.Margin = new System.Windows.Forms.Padding(2);
             this.RDBTNAMBIENT.Name = "RDBTNAMBIENT";
             this.RDBTNAMBIENT.Size = new System.Drawing.Size(98, 28);
             this.RDBTNAMBIENT.TabIndex = 6;
@@ -225,7 +227,7 @@ namespace PLAYGROUND
             // 
             this.RDBTNDIRECTION.AutoSize = true;
             this.RDBTNDIRECTION.Location = new System.Drawing.Point(2, 393);
-            this.RDBTNDIRECTION.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.RDBTNDIRECTION.Margin = new System.Windows.Forms.Padding(2);
             this.RDBTNDIRECTION.Name = "RDBTNDIRECTION";
             this.RDBTNDIRECTION.Size = new System.Drawing.Size(174, 28);
             this.RDBTNDIRECTION.TabIndex = 8;
@@ -238,7 +240,7 @@ namespace PLAYGROUND
             // 
             this.RDBTNPOINT.AutoSize = true;
             this.RDBTNPOINT.Location = new System.Drawing.Point(2, 425);
-            this.RDBTNPOINT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.RDBTNPOINT.Margin = new System.Windows.Forms.Padding(2);
             this.RDBTNPOINT.Name = "RDBTNPOINT";
             this.RDBTNPOINT.Size = new System.Drawing.Size(70, 28);
             this.RDBTNPOINT.TabIndex = 7;
@@ -269,7 +271,7 @@ namespace PLAYGROUND
             this.flowLayoutPanel1.Controls.Add(this.RDBTNSOLID);
             this.flowLayoutPanel1.Controls.Add(this.RDBTNSHADED);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(16, 14);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(173, 454);
             this.flowLayoutPanel1.TabIndex = 1;
@@ -279,7 +281,7 @@ namespace PLAYGROUND
             this.BTNOBJ.BackColor = System.Drawing.Color.DarkRed;
             this.BTNOBJ.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.BTNOBJ.Location = new System.Drawing.Point(2, 2);
-            this.BTNOBJ.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.BTNOBJ.Margin = new System.Windows.Forms.Padding(2);
             this.BTNOBJ.Name = "BTNOBJ";
             this.BTNOBJ.Size = new System.Drawing.Size(167, 35);
             this.BTNOBJ.TabIndex = 0;
@@ -292,7 +294,7 @@ namespace PLAYGROUND
             this.BTNCUBE.BackColor = System.Drawing.Color.DarkRed;
             this.BTNCUBE.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.BTNCUBE.Location = new System.Drawing.Point(2, 41);
-            this.BTNCUBE.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.BTNCUBE.Margin = new System.Windows.Forms.Padding(2);
             this.BTNCUBE.Name = "BTNCUBE";
             this.BTNCUBE.Size = new System.Drawing.Size(86, 35);
             this.BTNCUBE.TabIndex = 1;
@@ -305,7 +307,7 @@ namespace PLAYGROUND
             this.BTNSPHERE.BackColor = System.Drawing.Color.DarkRed;
             this.BTNSPHERE.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.BTNSPHERE.Location = new System.Drawing.Point(92, 41);
-            this.BTNSPHERE.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.BTNSPHERE.Margin = new System.Windows.Forms.Padding(2);
             this.BTNSPHERE.Name = "BTNSPHERE";
             this.BTNSPHERE.Size = new System.Drawing.Size(77, 35);
             this.BTNSPHERE.TabIndex = 2;
@@ -328,7 +330,7 @@ namespace PLAYGROUND
             this.treeView1.BackColor = System.Drawing.SystemColors.WindowText;
             this.treeView1.ForeColor = System.Drawing.Color.White;
             this.treeView1.Location = new System.Drawing.Point(2, 104);
-            this.treeView1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.treeView1.Margin = new System.Windows.Forms.Padding(2);
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(168, 193);
             this.treeView1.TabIndex = 0;
@@ -348,7 +350,7 @@ namespace PLAYGROUND
             // 
             this.RDBTNWIREFRAME.AutoSize = true;
             this.RDBTNWIREFRAME.Location = new System.Drawing.Point(2, 325);
-            this.RDBTNWIREFRAME.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.RDBTNWIREFRAME.Margin = new System.Windows.Forms.Padding(2);
             this.RDBTNWIREFRAME.Name = "RDBTNWIREFRAME";
             this.RDBTNWIREFRAME.Size = new System.Drawing.Size(114, 28);
             this.RDBTNWIREFRAME.TabIndex = 3;
@@ -361,7 +363,7 @@ namespace PLAYGROUND
             // 
             this.RDBTNSOLID.AutoSize = true;
             this.RDBTNSOLID.Location = new System.Drawing.Point(2, 357);
-            this.RDBTNSOLID.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.RDBTNSOLID.Margin = new System.Windows.Forms.Padding(2);
             this.RDBTNSOLID.Name = "RDBTNSOLID";
             this.RDBTNSOLID.Size = new System.Drawing.Size(85, 28);
             this.RDBTNSOLID.TabIndex = 4;
@@ -374,7 +376,7 @@ namespace PLAYGROUND
             // 
             this.RDBTNSHADED.AutoSize = true;
             this.RDBTNSHADED.Location = new System.Drawing.Point(2, 389);
-            this.RDBTNSHADED.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.RDBTNSHADED.Margin = new System.Windows.Forms.Padding(2);
             this.RDBTNSHADED.Name = "RDBTNSHADED";
             this.RDBTNSHADED.Size = new System.Drawing.Size(94, 28);
             this.RDBTNSHADED.TabIndex = 5;
@@ -386,12 +388,31 @@ namespace PLAYGROUND
             // PNL_BOTTOM
             // 
             this.PNL_BOTTOM.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.PNL_BOTTOM.Controls.Add(this.PCT_TIMELINE);
             this.PNL_BOTTOM.Controls.Add(this.TRK_MOVIE);
             this.PNL_BOTTOM.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.PNL_BOTTOM.Location = new System.Drawing.Point(0, 636);
             this.PNL_BOTTOM.Name = "PNL_BOTTOM";
             this.PNL_BOTTOM.Size = new System.Drawing.Size(1406, 103);
             this.PNL_BOTTOM.TabIndex = 3;
+            // 
+            // PCT_TIMELINE
+            // 
+            this.PCT_TIMELINE.Location = new System.Drawing.Point(231, 30);
+            this.PCT_TIMELINE.Name = "PCT_TIMELINE";
+            this.PCT_TIMELINE.Size = new System.Drawing.Size(855, 44);
+            this.PCT_TIMELINE.TabIndex = 1;
+            this.PCT_TIMELINE.TabStop = false;
+            this.PCT_TIMELINE.Click += new System.EventHandler(this.PCT_TIMELINE_Click);
+            // 
+            // TRK_MOVIE
+            // 
+            this.TRK_MOVIE.Location = new System.Drawing.Point(222, 6);
+            this.TRK_MOVIE.Maximum = 30;
+            this.TRK_MOVIE.Name = "TRK_MOVIE";
+            this.TRK_MOVIE.Size = new System.Drawing.Size(877, 45);
+            this.TRK_MOVIE.TabIndex = 0;
+            this.TRK_MOVIE.Scroll += new System.EventHandler(this.TRK_MOVIE_Scroll);
             // 
             // LBL_STATUS
             // 
@@ -416,6 +437,16 @@ namespace PLAYGROUND
             this.PNL_HEADER.Name = "PNL_HEADER";
             this.PNL_HEADER.Size = new System.Drawing.Size(1406, 100);
             this.PNL_HEADER.TabIndex = 0;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(594, 16);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(99, 24);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Animation:";
             // 
             // LBLCAMARA
             // 
@@ -443,7 +474,7 @@ namespace PLAYGROUND
             this.FLWLYTBTNSMOVE.Controls.Add(this.BTNRY);
             this.FLWLYTBTNSMOVE.Controls.Add(this.BTNRZ);
             this.FLWLYTBTNSMOVE.Location = new System.Drawing.Point(200, 42);
-            this.FLWLYTBTNSMOVE.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.FLWLYTBTNSMOVE.Margin = new System.Windows.Forms.Padding(2);
             this.FLWLYTBTNSMOVE.Name = "FLWLYTBTNSMOVE";
             this.FLWLYTBTNSMOVE.Size = new System.Drawing.Size(230, 48);
             this.FLWLYTBTNSMOVE.TabIndex = 1;
@@ -453,7 +484,7 @@ namespace PLAYGROUND
             this.BTNRX.BackColor = System.Drawing.Color.Tomato;
             this.BTNRX.ForeColor = System.Drawing.Color.Snow;
             this.BTNRX.Location = new System.Drawing.Point(2, 2);
-            this.BTNRX.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.BTNRX.Margin = new System.Windows.Forms.Padding(2);
             this.BTNRX.Name = "BTNRX";
             this.BTNRX.Size = new System.Drawing.Size(70, 42);
             this.BTNRX.TabIndex = 0;
@@ -466,7 +497,7 @@ namespace PLAYGROUND
             this.BTNRY.BackColor = System.Drawing.Color.Tomato;
             this.BTNRY.ForeColor = System.Drawing.Color.Snow;
             this.BTNRY.Location = new System.Drawing.Point(76, 2);
-            this.BTNRY.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.BTNRY.Margin = new System.Windows.Forms.Padding(2);
             this.BTNRY.Name = "BTNRY";
             this.BTNRY.Size = new System.Drawing.Size(67, 42);
             this.BTNRY.TabIndex = 1;
@@ -479,77 +510,13 @@ namespace PLAYGROUND
             this.BTNRZ.BackColor = System.Drawing.Color.Tomato;
             this.BTNRZ.ForeColor = System.Drawing.Color.Snow;
             this.BTNRZ.Location = new System.Drawing.Point(147, 2);
-            this.BTNRZ.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.BTNRZ.Margin = new System.Windows.Forms.Padding(2);
             this.BTNRZ.Name = "BTNRZ";
             this.BTNRZ.Size = new System.Drawing.Size(68, 42);
             this.BTNRZ.TabIndex = 2;
             this.BTNRZ.Text = "RZ";
             this.BTNRZ.UseVisualStyleBackColor = false;
             this.BTNRZ.Click += new System.EventHandler(this.BTNRZ_Click);
-            // 
-            // flowLayoutPanel3
-            // 
-            this.flowLayoutPanel3.Controls.Add(this.BTNCRX);
-            this.flowLayoutPanel3.Controls.Add(this.BTNCRY);
-            this.flowLayoutPanel3.Controls.Add(this.BTNCRZ);
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(1014, 46);
-            this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(220, 48);
-            this.flowLayoutPanel3.TabIndex = 3;
-            // 
-            // BTNCRX
-            // 
-            this.BTNCRX.BackColor = System.Drawing.Color.Peru;
-            this.BTNCRX.ForeColor = System.Drawing.Color.Snow;
-            this.BTNCRX.Location = new System.Drawing.Point(2, 2);
-            this.BTNCRX.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.BTNCRX.Name = "BTNCRX";
-            this.BTNCRX.Size = new System.Drawing.Size(70, 42);
-            this.BTNCRX.TabIndex = 0;
-            this.BTNCRX.Text = "CRX";
-            this.BTNCRX.UseVisualStyleBackColor = false;
-            this.BTNCRX.Click += new System.EventHandler(this.CRX_Click);
-            // 
-            // BTNCRY
-            // 
-            this.BTNCRY.BackColor = System.Drawing.Color.Peru;
-            this.BTNCRY.ForeColor = System.Drawing.Color.Snow;
-            this.BTNCRY.Location = new System.Drawing.Point(76, 2);
-            this.BTNCRY.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.BTNCRY.Name = "BTNCRY";
-            this.BTNCRY.Size = new System.Drawing.Size(67, 42);
-            this.BTNCRY.TabIndex = 1;
-            this.BTNCRY.Text = "CRY";
-            this.BTNCRY.UseVisualStyleBackColor = false;
-            this.BTNCRY.Click += new System.EventHandler(this.BTNCRY_Click);
-            // 
-            // BTNCRZ
-            // 
-            this.BTNCRZ.BackColor = System.Drawing.Color.Peru;
-            this.BTNCRZ.ForeColor = System.Drawing.Color.Snow;
-            this.BTNCRZ.Location = new System.Drawing.Point(147, 2);
-            this.BTNCRZ.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.BTNCRZ.Name = "BTNCRZ";
-            this.BTNCRZ.Size = new System.Drawing.Size(68, 42);
-            this.BTNCRZ.TabIndex = 2;
-            this.BTNCRZ.Text = "CRZ";
-            this.BTNCRZ.UseVisualStyleBackColor = false;
-            this.BTNCRZ.Click += new System.EventHandler(this.BTNCRZ_Click);
-            // 
-            // TIMER
-            // 
-            this.TIMER.Enabled = true;
-            this.TIMER.Interval = 10;
-            this.TIMER.Tick += new System.EventHandler(this.TIMER_Tick);
-            // 
-            // TRK_MOVIE
-            // 
-            this.TRK_MOVIE.Location = new System.Drawing.Point(222, 6);
-            this.TRK_MOVIE.Maximum = 30;
-            this.TRK_MOVIE.Name = "TRK_MOVIE";
-            this.TRK_MOVIE.Size = new System.Drawing.Size(877, 45);
-            this.TRK_MOVIE.TabIndex = 0;
             // 
             // PanelAnimation
             // 
@@ -572,6 +539,7 @@ namespace PLAYGROUND
             this.BTN_ADDKEY.TabIndex = 0;
             this.BTN_ADDKEY.Text = "Record";
             this.BTN_ADDKEY.UseVisualStyleBackColor = false;
+            this.BTN_ADDKEY.Click += new System.EventHandler(this.BTN_ADDKEY_Click);
             // 
             // BTN_PLAY
             // 
@@ -584,16 +552,63 @@ namespace PLAYGROUND
             this.BTN_PLAY.TabIndex = 1;
             this.BTN_PLAY.Text = "Play";
             this.BTN_PLAY.UseVisualStyleBackColor = false;
+            this.BTN_PLAY.Click += new System.EventHandler(this.BTN_PLAY_Click);
             // 
-            // label3
+            // flowLayoutPanel3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(594, 16);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(99, 24);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Animation:";
+            this.flowLayoutPanel3.Controls.Add(this.BTNCRX);
+            this.flowLayoutPanel3.Controls.Add(this.BTNCRY);
+            this.flowLayoutPanel3.Controls.Add(this.BTNCRZ);
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(1014, 46);
+            this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(2);
+            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(220, 48);
+            this.flowLayoutPanel3.TabIndex = 3;
+            // 
+            // BTNCRX
+            // 
+            this.BTNCRX.BackColor = System.Drawing.Color.Peru;
+            this.BTNCRX.ForeColor = System.Drawing.Color.Snow;
+            this.BTNCRX.Location = new System.Drawing.Point(2, 2);
+            this.BTNCRX.Margin = new System.Windows.Forms.Padding(2);
+            this.BTNCRX.Name = "BTNCRX";
+            this.BTNCRX.Size = new System.Drawing.Size(70, 42);
+            this.BTNCRX.TabIndex = 0;
+            this.BTNCRX.Text = "CRX";
+            this.BTNCRX.UseVisualStyleBackColor = false;
+            this.BTNCRX.Click += new System.EventHandler(this.CRX_Click);
+            // 
+            // BTNCRY
+            // 
+            this.BTNCRY.BackColor = System.Drawing.Color.Peru;
+            this.BTNCRY.ForeColor = System.Drawing.Color.Snow;
+            this.BTNCRY.Location = new System.Drawing.Point(76, 2);
+            this.BTNCRY.Margin = new System.Windows.Forms.Padding(2);
+            this.BTNCRY.Name = "BTNCRY";
+            this.BTNCRY.Size = new System.Drawing.Size(67, 42);
+            this.BTNCRY.TabIndex = 1;
+            this.BTNCRY.Text = "CRY";
+            this.BTNCRY.UseVisualStyleBackColor = false;
+            this.BTNCRY.Click += new System.EventHandler(this.BTNCRY_Click);
+            // 
+            // BTNCRZ
+            // 
+            this.BTNCRZ.BackColor = System.Drawing.Color.Peru;
+            this.BTNCRZ.ForeColor = System.Drawing.Color.Snow;
+            this.BTNCRZ.Location = new System.Drawing.Point(147, 2);
+            this.BTNCRZ.Margin = new System.Windows.Forms.Padding(2);
+            this.BTNCRZ.Name = "BTNCRZ";
+            this.BTNCRZ.Size = new System.Drawing.Size(68, 42);
+            this.BTNCRZ.TabIndex = 2;
+            this.BTNCRZ.Text = "CRZ";
+            this.BTNCRZ.UseVisualStyleBackColor = false;
+            this.BTNCRZ.Click += new System.EventHandler(this.BTNCRZ_Click);
+            // 
+            // TIMER
+            // 
+            this.TIMER.Enabled = true;
+            this.TIMER.Interval = 10;
+            this.TIMER.Tick += new System.EventHandler(this.TIMER_Tick);
             // 
             // MyForm
             // 
@@ -618,12 +633,13 @@ namespace PLAYGROUND
             this.flowLayoutPanel1.PerformLayout();
             this.PNL_BOTTOM.ResumeLayout(false);
             this.PNL_BOTTOM.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PCT_TIMELINE)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TRK_MOVIE)).EndInit();
             this.PNL_HEADER.ResumeLayout(false);
             this.PNL_HEADER.PerformLayout();
             this.FLWLYTBTNSMOVE.ResumeLayout(false);
-            this.flowLayoutPanel3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.TRK_MOVIE)).EndInit();
             this.PanelAnimation.ResumeLayout(false);
+            this.flowLayoutPanel3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -668,11 +684,12 @@ namespace PLAYGROUND
         private System.Windows.Forms.RadioButton RDBTNPOINT;
         private System.Windows.Forms.RadioButton RDBTNDIRECTION;
         private System.Windows.Forms.TreeView TVLIGHTS;
-        private System.Windows.Forms.TrackBar TRK_MOVIE;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.FlowLayoutPanel PanelAnimation;
         private System.Windows.Forms.Button BTN_ADDKEY;
         private System.Windows.Forms.Button BTN_PLAY;
+        private System.Windows.Forms.PictureBox PCT_TIMELINE;
+        private System.Windows.Forms.TrackBar TRK_MOVIE;
     }
 }
 

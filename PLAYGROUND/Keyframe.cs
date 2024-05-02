@@ -7,17 +7,16 @@ using System.Threading.Tasks;
 
 namespace PLAYGROUND
 {
-    internal class Keyframe
+    public class Keyframe
     {
-        public PointF Translation { get; set; }
-        public float Rotation { get; set; }
-        public float Escalation { get; set; }
+        public Vertex Position { get; set; }
+
+        public Transform Transform { get; set; }
         public int Time { get; set; }
 
-        public Keyframe(PointF translation, float rotation, float escalation, int time) {
-            Translation = translation;
-            Rotation = rotation;
-            Escalation = escalation;
+        public Keyframe(Vertex position, Transform transform, int time) {
+            Position = position;
+            Transform = transform;
             Time = time;
         }
     }
