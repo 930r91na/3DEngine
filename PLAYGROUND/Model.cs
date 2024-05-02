@@ -87,7 +87,25 @@ namespace PLAYGROUND
                 Transform.Translation.Y = Lerp(start.Transform.Translation.Y, end.Transform.Translation.Y, lerpFactor);
                 Transform.Translation.Z = Lerp(start.Transform.Translation.Z, end.Transform.Translation.Z, lerpFactor);
                 Transform.Translation.H = Lerp(start.Transform.Translation.H, end.Transform.Translation.H, lerpFactor);
+
+                // Rotation
+                Matrix interpolatedRotation = InterpolateMatrices(start.Transform.Rotation, end.Transform.Rotation, lerpFactor);
+                Transform.Rotation = interpolatedRotation;
+                
             }
+        }
+
+        private Matrix InterpolateMatrices(Matrix start, Matrix end, float factor)
+        {
+            float[,] interpolatedData = new float[4, 4];
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    interpolatedData[i, j] = Lerp(start[i, j], end[i, j], factor);
+                }
+            }
+            return new Matrix(interpolatedData);
         }
 
         // Set the Keyframe properties to the Model

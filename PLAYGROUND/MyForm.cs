@@ -591,17 +591,19 @@ namespace PLAYGROUND
 
             if (_selectedScene == null) return;
 
-            // Save the properties of the Model in the Keyframe
-            for (var i = 0; i < _selectedScene.Models.Count; i++)
+            int currentTime = TRK_MOVIE.Value;
+            foreach (var model in _selectedScene.Models)
             {
-                int currentTime = TRK_MOVIE.Value;
                 Keyframe keyframe = new Keyframe(
-                    _selectedScene.Models[i].GetPosition().Clone(),
-                    _selectedScene.Models[i].GetTransform().Clone(),
+                    model.GetPosition().Clone(),
+                    new Transform(
+                        model.GetTransform().Scale,
+                        model.GetTransform().Translation.Clone(),
+                        model.GetTransform().Rotation.Clone()),  // Asumiendo que tienes un método Clone() en Matrix
                     currentTime
                 );
 
-                _selectedScene.Models[i].AddKeyFrame(keyframe);
+                model.AddKeyFrame(keyframe);
             }
 
         }

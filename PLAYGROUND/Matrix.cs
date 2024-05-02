@@ -4,9 +4,9 @@ namespace PLAYGROUND
 {
     public class Matrix
     {
-        private readonly float[,] _data;
+        public readonly float[,] _data;
 
-        private float this[int x, int y]
+        public float this[int x, int y]
         {
             get { return _data[x, y]; }
             set { _data[x, y] = value; }
@@ -14,7 +14,7 @@ namespace PLAYGROUND
 
         public Matrix(float[,] data)
         {
-            this._data = data;
+            this._data = (float[,])data.Clone();
         }
 
         public static readonly Matrix Identity = new Matrix(new float[,]
@@ -24,6 +24,11 @@ namespace PLAYGROUND
             { 0, 0, 1, 0 },
             { 0, 0, 0, 1 }
         });
+
+        public Matrix Clone()
+        {
+            return new Matrix((float[,])_data.Clone()); // Crea una nueva instancia de Matrix con una copia del arreglo
+        }
 
         public static Matrix MakeScalingMatrix(float scale)
         {
