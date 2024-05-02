@@ -398,19 +398,19 @@ namespace PLAYGROUND
             // 
             // PCT_TIMELINE
             // 
-            this.PCT_TIMELINE.Location = new System.Drawing.Point(231, 30);
+            this.PCT_TIMELINE.Location = new System.Drawing.Point(279, 41);
             this.PCT_TIMELINE.Name = "PCT_TIMELINE";
-            this.PCT_TIMELINE.Size = new System.Drawing.Size(855, 44);
+            this.PCT_TIMELINE.Size = new System.Drawing.Size(865, 42);
             this.PCT_TIMELINE.TabIndex = 1;
             this.PCT_TIMELINE.TabStop = false;
             this.PCT_TIMELINE.Click += new System.EventHandler(this.PCT_TIMELINE_Click);
             // 
             // TRK_MOVIE
             // 
-            this.TRK_MOVIE.Location = new System.Drawing.Point(222, 6);
+            this.TRK_MOVIE.Location = new System.Drawing.Point(279, 15);
             this.TRK_MOVIE.Maximum = 30;
             this.TRK_MOVIE.Name = "TRK_MOVIE";
-            this.TRK_MOVIE.Size = new System.Drawing.Size(877, 45);
+            this.TRK_MOVIE.Size = new System.Drawing.Size(865, 45);
             this.TRK_MOVIE.TabIndex = 0;
             this.TRK_MOVIE.Scroll += new System.EventHandler(this.TRK_MOVIE_Scroll);
             // 

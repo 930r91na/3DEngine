@@ -45,11 +45,11 @@ namespace PLAYGROUND
 
             _scenes = new List<Scene>();
 
-            // Animation
+            // Animatio
             _bmpTimeline = new Bitmap(PCT_TIMELINE.Width, PCT_TIMELINE.Height);
             _g = Graphics.FromImage(_bmpTimeline);
             PCT_TIMELINE.Image = _bmpTimeline;
-            _longTrackbar = TRK_MOVIE.Width;
+            _longTrackbar = PCT_TIMELINE.Width;
         }
 
         private void Init()
@@ -584,9 +584,9 @@ namespace PLAYGROUND
         private void BTN_ADDKEY_Click(object sender, EventArgs e)
         {
             // Draw the keyframe
-            int span = _longTrackbar / 30;
+            int span = (_longTrackbar - 16) / 30;
             int timelineValue = TRK_MOVIE.Value * span;
-            _canvas.DrawKeyframe(new PointF(timelineValue, 0), Color.IndianRed, _bmpTimeline);
+            _canvas.DrawKeyframe(new PointF(timelineValue + 8, 0), Color.IndianRed, _bmpTimeline);
             PCT_TIMELINE.Invalidate();
 
             if (_selectedScene == null) return;
