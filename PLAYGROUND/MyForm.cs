@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 
 namespace PLAYGROUND
@@ -35,9 +33,6 @@ namespace PLAYGROUND
         private bool _isRotatingX;
         private bool _isRotatingY;
         private bool _isRotatingZ;
-        private bool _isRotatingCameraX;
-        private bool _isRotatingCameraY;
-        private bool _isRotatingCameraZ;
 
         // Filter variables
         private bool _isBrightnessActive = false;
@@ -196,7 +191,7 @@ namespace PLAYGROUND
             // Add the model to the TreeView
             for (var i = 0; i < _selectedScene.Models.Count; i++)
             {
-                var node = new TreeNode(@"Model " + (i + 1) + "(" + _selectedScene.Models[i].Position.X + "," + _selectedScene.Models[i].Position.Y + "," + _selectedScene.Models[i].Position.Z+ ")")
+                var node = new TreeNode(@"Model " + (i + 1))
                 {
                     Tag = _selectedScene.Models[i]
                 };
@@ -275,22 +270,6 @@ namespace PLAYGROUND
                 _angle += 1f;
                 _selectedModel.Transform.Rotation = Matrix.RotZ(_angle);
             }
-
-            // Camera rotation
-            if (_camera == null) return;
-
-            if (_isRotatingCameraX)
-            {
-                _camera.Transform.Rotation = Matrix.RotX(0.1f);
-            }
-            if (_isRotatingCameraY)
-            {
-                _camera.Transform.Rotation = Matrix.RotY(0.1f);
-            }
-            if (_isRotatingCameraZ)
-            {
-                _camera.Transform.Rotation = Matrix.RotZ(0.1f);
-            }
         }
 
         private void BTNRX_Click(object sender, EventArgs e)
@@ -340,80 +319,68 @@ namespace PLAYGROUND
 
         private void MyForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (_selectedModel == null) return;
-            // Models operations
-            switch (e.KeyCode)
-            {
-                case Keys.A:
-                    _selectedModel.Transform.Translation.X -= 0.1f;
-                    break;
-                case Keys.D:
-                    _selectedModel.Transform.Translation.X += 0.1f;
-                    break;
-                case Keys.W:
-                    _selectedModel.Transform.Translation.Y += 0.1f;
-                    break;
-                case Keys.S:
-                    _selectedModel.Transform.Translation.Y -= 0.1f;
-                    break;
-                case Keys.Z:
-                    _selectedModel.Transform.Translation.Z += 0.1f;
-                    break;
-                case Keys.X:
-                    _selectedModel.Transform.Translation.Z -= 0.1f;
-                    break;
-                case Keys.Q:
-                    _selectedModel.Transform.Scale += 0.1f;
-                    break;
-                case Keys.E:
-                    _selectedModel.Transform.Scale -= 0.1f;
-                    break;
-                case Keys.F:
-                    RemoveModel(_selectedModel);
-                    break;
-            }
-            if (_selectedLight == null) return;
             // Light source operations
-            switch (e.KeyCode)
+            if (_selectedLight != null)
             {
-                case Keys.J:
-                    _selectedLight.Position.X -= 1f;
-                    break;
-                case Keys.L:
-                    _selectedLight.Position.X += 1f;
-                    break;
-                case Keys.I:
-                    _selectedLight.Position.Y += 1f;
-                    break;
-                case Keys.K:
-                    _selectedLight.Position.Y -= 1f;
-                    break;
-                case Keys.U:
-                    _selectedLight.Position.Z += 1f;
-                    break;
-                case Keys.O:
-                    _selectedLight.Position.Z -= 1f;
-                    break;
-                case Keys.H:
-                    RemoveLightSource(_selectedLight);
-                    break;
+                switch (e.KeyCode)
+                {
+                    case Keys.J:
+                        _selectedLight.Position.X -= 1f;
+                        break;
+                    case Keys.L:
+                        _selectedLight.Position.X += 1f;
+                        break;
+                    case Keys.I:
+                        _selectedLight.Position.Y += 1f;
+                        break;
+                    case Keys.K:
+                        _selectedLight.Position.Y -= 1f;
+                        break;
+                    case Keys.U:
+                        _selectedLight.Position.Z += 1f;
+                        break;
+                    case Keys.O:
+                        _selectedLight.Position.Z -= 1f;
+                        break;
+                    case Keys.H:
+                        RemoveLightSource(_selectedLight);
+                        break;
+                }
             }
-            // Camera operations
-            if (_camera == null) return;
-            switch (e.KeyCode)
+
+            // Models operations
+            if (_selectedModel != null)
             {
-                case Keys.T:
-                    _camera.Position.X -= 1f;
-                    break;
-                case Keys.U:
-                    _camera.Position.X += 1f;
-                    break;
-                case Keys.Y:
-                    _camera.Position.Y += 1f;
-                    break;
-                case Keys.G:
-                    _camera.Position.Y -= 1f;
-                    break;
+                switch (e.KeyCode)
+                {
+                    case Keys.A:
+                        _selectedModel.Transform.Translation.X -= 0.1f;
+                        break;
+                    case Keys.D:
+                        _selectedModel.Transform.Translation.X += 0.1f;
+                        break;
+                    case Keys.W:
+                        _selectedModel.Transform.Translation.Y += 0.1f;
+                        break;
+                    case Keys.S:
+                        _selectedModel.Transform.Translation.Y -= 0.1f;
+                        break;
+                    case Keys.Z:
+                        _selectedModel.Transform.Translation.Z += 0.1f;
+                        break;
+                    case Keys.X:
+                        _selectedModel.Transform.Translation.Z -= 0.1f;
+                        break;
+                    case Keys.Q:
+                        _selectedModel.Transform.Scale += 0.1f;
+                        break;
+                    case Keys.E:
+                        _selectedModel.Transform.Scale -= 0.1f;
+                        break;
+                    case Keys.F:
+                        RemoveModel(_selectedModel);
+                        break;
+                }
             }
         }
 
@@ -463,12 +430,15 @@ namespace PLAYGROUND
         // Light source management
         private void NewLightSource(Vertex position, float intensity)
         {
-            _lights.Add(new LightSource(position, intensity));
+            _lights.Add(new LightSource(position, intensity, _canvas));
+
             _selectedLight = _lights[_lights.Count - 1];
-            // Update the tree view
+
+            TVLIGHTS.Nodes.Clear();
+
             for (var i = 0; i < _lights.Count; i++)
             {
-                var node = new TreeNode(@"Light " + (i + 1) + "(" + _lights[i].Position.X + "," + _lights[i].Position.Y + "," + _lights[i].Position.Z +")")
+                var node = new TreeNode(@"Light " + (i + 1) )
                 {
                     Tag = _lights[i]
                 };
@@ -496,7 +466,7 @@ namespace PLAYGROUND
                 return;
             }
 
-            NewLightSource(new Vertex(10, 10, 10, 1), intensity);
+            NewLightSource(new Vertex(0, 0, 0, 1), intensity);
         }
 
         private void TVLIGHTS_AfterSelect(object sender, TreeViewEventArgs e)
@@ -507,9 +477,6 @@ namespace PLAYGROUND
 
             switch (_selectedLight.Type)
             {
-                case LightSource.LightType.PointNotSmooth:
-                    RDBTNDIRECTION.Checked = true;
-                    break;
                 case LightSource.LightType.Point:
                     RDBTNPOINT.Checked = true;
                     break;
@@ -526,62 +493,13 @@ namespace PLAYGROUND
 
         private void CRX_Click(object sender, EventArgs e)
         {
-            /*
-            _isRotatingCameraX = !_isRotatingCameraX;
-            if (!_isRotatingCameraX)
-            {
-                BTNCRX.BackColor = Color.Peru;
-                BTNCRX.ForeColor = Color.White;
-            }
-            else
-            {
-                BTNCRX.BackColor = Color.White;
-                BTNCRX.ForeColor = Color.Black;
-            }
-            */
-
             _isBrightnessActive = !_isBrightnessActive;
         }
-
-        private void BTNCRY_Click(object sender, EventArgs e)
-        {
-            _isRotatingCameraY = !_isRotatingCameraY;
-            if (!_isRotatingCameraY)
-            {
-                BTNCRY.BackColor = Color.Peru;
-                BTNCRY.ForeColor = Color.White;
-            }
-            else
-            {
-                BTNCRY.BackColor = Color.White;
-                BTNCRY.ForeColor = Color.Black;
-            }
-        }
-
-        private void BTNCRZ_Click(object sender, EventArgs e)
-        {
-            _isRotatingCameraZ = !_isRotatingCameraZ;
-            if(!_isRotatingCameraZ){
-                BTNCRZ.BackColor = Color.Peru;
-                BTNCRZ.ForeColor = Color.White;
-            }
-            else
-            {
-                BTNCRZ.BackColor = Color.White;
-                BTNCRZ.ForeColor = Color.Black;
-            }
-        }
-
+        
         private void RDBTNAMBIENT_CheckedChanged(object sender, EventArgs e)
         {
             if (_selectedLight == null) return;
             _selectedLight.Type = LightSource.LightType.Ambient;
-        }
-
-        private void RDBTNDIRECTION_CheckedChanged(object sender, EventArgs e)
-        {
-            if (_selectedLight == null) return;
-            _selectedLight.Type = LightSource.LightType.PointNotSmooth;
         }
 
         private void RDBTNPOINT_CheckedChanged(object sender, EventArgs e)
@@ -667,6 +585,11 @@ namespace PLAYGROUND
         }
 
         private void PCT_TIMELINE_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void LBLCAMARA_Click(object sender, EventArgs e)
         {
 
         }

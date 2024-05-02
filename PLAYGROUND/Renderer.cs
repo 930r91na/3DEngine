@@ -10,9 +10,10 @@ namespace PLAYGROUND
     {
         private readonly Canvas _canvas;
         private readonly List<LightSource> _lights;
+        private readonly float[][] _depthBufferCopy;
         private readonly float[][] _depthBuffer;
 
-        public Renderer(Canvas canvas, List <LightSource> lightSources, Camera camera)
+        public Renderer(Canvas canvas, List<LightSource> lightSources, Camera camera)
         {
             this._canvas = canvas;
             _lights = lightSources;
@@ -84,7 +85,7 @@ namespace PLAYGROUND
                 var xs = Interpolate((int)p0.Y, p0.X, (int)p1.Y, p1.X);
                 for (var y = (int)p0.Y; y <= p1.Y; y++)
                 {
-                    DrawPixel((int)xs[(y - (int)p0.Y)], y, float.MaxValue ,color);
+                    DrawPixel((int)xs[(y - (int)p0.Y)], y, float.MaxValue, color);
                 }
             }
         }
@@ -160,18 +161,18 @@ namespace PLAYGROUND
         }
         private void RenderLight(Camera c, LightSource light)
         {
-           //Model l = light.GenerateModel();
+            //Model l = light.GenerateModel();
             //RenderModel(c, l, )
-           DrawPixel((int)light.Position.X, (int)light.Position.Y, float.MaxValue, Color.Red);
+            DrawPixel((int)light.Position.X, (int)light.Position.Y, float.MaxValue, Color.Red);
         }
-        private void RenderModel(Camera c ,Mesh model, Matrix transform, Mode mode)
+        private void RenderModel(Camera c, Mesh model, Matrix transform, Mode mode)
         {
             var projected = new List<Vertex>();
 
             for (var index = 0; index < model.Vertexes.Length; index++)
             {
                 var t = model.Vertexes[index];
-                projected.Add(c.Project(transform*t));
+                projected.Add(c.Project(transform * t));
             }
 
             for (var t = model.Triangles.Length - 1; t >= 0; t--)
@@ -353,9 +354,9 @@ namespace PLAYGROUND
             var x12 = Interpolate(p1.Y, p1.X, p2.Y, p2.X);
             var x02 = Interpolate(p0.Y, p0.X, p2.Y, p2.X);
 
-            var z01 = Interpolate(p0.Y, 1/p0.Z, p1.Y, 1 / p1.Z);
-            var z12 = Interpolate(p1.Y, 1/p1.Z, p2.Y, 1 / p2.Z);
-            var z02 = Interpolate(p0.Y, 1 / p0.Z, p2.Y, 1 / p2.Z);;
+            var z01 = Interpolate(p0.Y, 1 / p0.Z, p1.Y, 1 / p1.Z);
+            var z12 = Interpolate(p1.Y, 1 / p1.Z, p2.Y, 1 / p2.Z);
+            var z02 = Interpolate(p0.Y, 1 / p0.Z, p2.Y, 1 / p2.Z); ;
 
             // Ensure lists are not empty before removing an element
             if (x01.Count > 0 && x12.Count > 0 && IsOverlapping(x01, x12))
@@ -407,10 +408,10 @@ namespace PLAYGROUND
                 var zl = zLeft[index];
                 var zr = zRight[index];
 
-                var zSegment = Interpolate(xl, 1 / zl, xr, 1/zr);
+                var zSegment = Interpolate(xl, 1 / zl, xr, 1 / zr);
 
                 for (int x = (int)xl; x <= xr; x++)
-                 {
+                {
                     DrawPixel(x, y, zSegment[(int)(x - xl)], color);
                 }
             }
@@ -441,7 +442,7 @@ namespace PLAYGROUND
             float ny = u.Z * v.X - u.X * v.Z;
             float nz = u.X * v.Y - u.Y * v.X;
 
-            return new Vertex(nx, ny, nz, 0);  
+            return new Vertex(nx, ny, nz, 0);
         }
 
         public static Color Mult(Color color, float scalar)
@@ -463,33 +464,16 @@ namespace PLAYGROUND
         // Calculate the lighting of a vertex
         private void CalculateLighting(Vertex vertex, Vertex normal)
         {
-            float illumination = 0.1f; // Ambient component
-
             foreach (var light in _lights)
             {
-                float dx = light.Position.X - vertex.X;
-                float dy = light.Position.Y - vertex.Y;
-                float dz = light.Position.Z - vertex.Z;
-                float distance = (float)Math.Sqrt(dx * dx + dy * dy + dz * dz);
+                float ilumination = light.CalculateLighting(vertex, normal);
 
+                // Check for occlusion
                 if (_depthBuffer[(int)light.Position.X][(int)light.Position.Y] <= light.Position.Z)
                     continue;
 
-                // Normalize light direction vector
-                Vertex nLight = new Vertex(dx / distance, dy / distance, dz / distance, 1/distance);
-
-                // Standard attenuation
-                float attenuation = 1f / (1f + 0.1f * distance + 0.01f * distance * distance);
-
-                // Dot product for angle-dependent intensity
-                //float dotProduct = Math.Abs(Vertex.DotProduct(normal, nLight));
-                
-                float intensity = light.Intensity;
-                illumination += intensity * attenuation;
-                
+                vertex.H += ilumination;
             }
-
-            vertex.H += illumination;
         }
 
     }
