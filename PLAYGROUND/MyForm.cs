@@ -39,6 +39,9 @@ namespace PLAYGROUND
         private bool _isRotatingCameraY;
         private bool _isRotatingCameraZ;
 
+        // Filter variables
+        private bool _isBrightnessActive = false;
+
         public MyForm()
         {
             InitializeComponent();
@@ -54,6 +57,7 @@ namespace PLAYGROUND
 
         private void Init()
         {
+            _scenes = new List<Scene>();
             _canvas = new Canvas(PCT_CANVAS);
             _lights = new List<LightSource>();
             Matrix m = Matrix.Identity;
@@ -76,7 +80,7 @@ namespace PLAYGROUND
 
         private void TIMER_Tick(object sender, EventArgs e)
         {
-            _renderer.RenderScene(_camera, _selectedScene);
+            _renderer.RenderScene(_camera, _selectedScene, _isBrightnessActive);
             UpdateAutomaticRotation();
         }
 
@@ -521,6 +525,7 @@ namespace PLAYGROUND
 
         private void CRX_Click(object sender, EventArgs e)
         {
+            /*
             _isRotatingCameraX = !_isRotatingCameraX;
             if (!_isRotatingCameraX)
             {
@@ -532,6 +537,9 @@ namespace PLAYGROUND
                 BTNCRX.BackColor = Color.White;
                 BTNCRX.ForeColor = Color.Black;
             }
+            */
+
+            _isBrightnessActive = !_isBrightnessActive;
         }
 
         private void BTNCRY_Click(object sender, EventArgs e)
@@ -646,7 +654,7 @@ namespace PLAYGROUND
         {
             for (var i = 0; i < _selectedScene.Models.Count; i++)
             {
-                _renderer.RenderScene(_camera, _selectedScene);
+                _renderer.RenderScene(_camera, _selectedScene, _isBrightnessActive);
             }
 
             //PCT_CANVAS.Invalidate();

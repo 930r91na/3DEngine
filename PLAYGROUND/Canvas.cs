@@ -27,6 +27,17 @@ namespace PLAYGROUND
             pctCanvas.Image = bmp;
         }
 
+        public byte[] Bits
+        {
+            get { return _bits; }
+            set
+            {
+                _bits = value;
+                if (pctCanvas != null)
+                    pctCanvas.Invalidate();
+            }
+        }
+
         private void Init(int width, int height)
         {
             PixelFormat format;

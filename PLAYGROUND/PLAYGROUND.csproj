@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitProcess.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Canvas.cs" />
     <Compile Include="Keyframe.cs" />

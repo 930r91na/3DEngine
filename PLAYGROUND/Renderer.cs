@@ -131,7 +131,7 @@ namespace PLAYGROUND
 
 
         // RENDER FUNCTIONS
-        public void RenderScene(Camera camera, Scene scene)
+        public void RenderScene(Camera camera, Scene scene, bool BrightnessActive)
         {
             var CameraMatrix = camera.GetCameraMatrix();
             _canvas.FastClear();
@@ -149,6 +149,11 @@ namespace PLAYGROUND
             for (var l = _lights.Count - 1; l >= 0; l--)
             {
                 RenderLight(camera, _lights[l]);
+            }
+
+            if (BrightnessActive)
+            {
+                _canvas.Bits = BitProcess.Brightness(_canvas.Bits, 78);
             }
 
             _canvas.Refresh();
