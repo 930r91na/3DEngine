@@ -39,8 +39,17 @@ namespace PLAYGROUND
         // Animation
         public void AddKeyFrame(Keyframe keyframe)
         {
-            _keyframes.Add(keyframe);
-            _keyframes = _keyframes.OrderBy(k => k.Time).ToList();
+            // Check if a Keyframe already exists
+            if (!_keyframes.Any(k => k.Time == keyframe.Time))
+            {
+                _keyframes.Add(keyframe);
+                _keyframes = _keyframes.OrderBy(k => k.Time).ToList();
+            }
+            else
+            {
+                // Opcional: Notificar al usuario que ya existe un Keyframe en ese tiempo
+                Console.WriteLine("A keyframe at this time already exists.");
+            }
         }
 
         public void Interpolate(int currentTime)
