@@ -107,6 +107,7 @@ namespace PLAYGROUND
             }
         }
 
+
         public void ReadObjFromResource(string resourceName)
         {
             var assembly = Assembly.GetExecutingAssembly();
