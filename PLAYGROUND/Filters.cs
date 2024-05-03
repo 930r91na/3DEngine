@@ -106,7 +106,7 @@ namespace PLAYGROUND
             return Color.FromArgb(newRed, newGreen, newBlue);
         }
             
-        public Color ApplyFilters(int toX, int toY, Buffer[][] buffer)
+        public Color ApplyFilters(int toX, int toY, ref Buffer[][] buffer)
         {
             Color color = buffer[toX][toY].c;
 
@@ -143,8 +143,8 @@ namespace PLAYGROUND
                     color = Color.White;
                 }
             }
-
-                
+            buffer[toX][toY].c = color;
+             
             return color;
         }
 

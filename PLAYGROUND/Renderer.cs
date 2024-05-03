@@ -20,8 +20,8 @@ namespace PLAYGROUND
         private readonly Filters _filters;
         private readonly Canvas _canvas;
         private readonly List<LightSource> _lights;
-        private readonly Buffer[][] _depthBufferWithFilters;
-        private readonly Buffer[][] _depthBuffer;
+        private  Buffer[][] _depthBufferWithFilters;
+        private  Buffer[][] _depthBuffer;
 
         public Renderer(Canvas canvas, List<LightSource> lightSources, Camera camera, Filters filter)
         {
@@ -75,8 +75,8 @@ namespace PLAYGROUND
             _depthBuffer[x][y].modelIndex = model;
 
             // Pixel to Pixel filters 
-            var colorWithFilters = _filters.ApplyFilters(x, y, _depthBuffer);
-            _canvas.SetPixel(x, y, colorWithFilters);
+            var colorWithFilters = _filters.ApplyFilters(x, y, ref _depthBuffer);
+            _canvas.SetPixel(x, y, _depthBuffer[x][y].c);
         }
 
         private void DrawLine(Vertex p0, Vertex p1, Color color, int model)
