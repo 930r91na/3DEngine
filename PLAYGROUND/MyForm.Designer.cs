@@ -620,6 +620,7 @@ namespace PLAYGROUND
             this.BTNBLUR.TabIndex = 3;
             this.BTNBLUR.Text = "Blur";
             this.BTNBLUR.UseVisualStyleBackColor = false;
+            this.BTNBLUR.Click += new System.EventHandler(this.BTNBLUR_Click);
             // 
             // BTNTW
             // 

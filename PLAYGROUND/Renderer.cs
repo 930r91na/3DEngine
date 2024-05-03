@@ -3,28 +3,42 @@ using System.Drawing;
 using System;
 using System.IO.Compression;
 using System.Linq;
+using System.Drawing.Imaging;
+using System.Threading.Tasks;
 
 namespace PLAYGROUND
 {
+    struct Buffer
+    {
+        public Color c;
+        public float z;
+        public int modelIndex;
+    }
+
     public class Renderer
     {
         private readonly Canvas _canvas;
         private readonly List<LightSource> _lights;
-        private readonly float[][] _depthBufferCopy;
-        private readonly float[][] _depthBuffer;
+        private readonly Buffer[][] _depthBufferCopy;
+        private readonly Buffer[][] _depthBuffer;
 
         public Renderer(Canvas canvas, List<LightSource> lightSources, Camera camera)
         {
             this._canvas = canvas;
             _lights = lightSources;
 
-            _depthBuffer = new float[canvas.Width][];
+            _depthBuffer = new Buffer[canvas.Width][];
             for (var i = 0; i < canvas.Width; i++)
             {
-                _depthBuffer[i] = new float[canvas.Height];
+                _depthBuffer[i] = new Buffer[canvas.Height];
                 for (var j = 0; j < canvas.Height; j++)
                 {
-                    _depthBuffer[i][j] = float.MaxValue;
+                    _depthBuffer[i][j] = new Buffer
+                    {
+                        c = Color.Black,
+                        z = float.MaxValue,
+                        modelIndex = -1
+                    };
                 }
             }
         }
@@ -34,13 +48,15 @@ namespace PLAYGROUND
             {
                 for (int j = 0; j < _canvas.Height; j++)
                 {
-                    _depthBuffer[i][j] = float.MaxValue;
+                    _depthBuffer[i][j].z = float.MaxValue;
+                    _depthBuffer[i][j].c = Color.Black;
+                    _depthBuffer[i][j].modelIndex = -1;
                 }
             }
         }
 
 
-        public void DrawPixel(int x, int y, float z, Color color)
+        public void DrawPixel(int x, int y, float z, Color color, int model)
         {
             x = _canvas.Width / 2 + x;
             y = _canvas.Height / 2 - y - 1;
@@ -51,13 +67,15 @@ namespace PLAYGROUND
                 return;
             }
 
-            if (z > _depthBuffer[x][y]) return;
+            if (z > _depthBuffer[x][y].z) return;
 
             _canvas.SetPixel(x, y, color);
-            _depthBuffer[x][y] = z;
+            _depthBuffer[x][y].z = z;
+            _depthBuffer[x][y].c = color;
+            _depthBuffer[x][y].modelIndex = model;
         }
 
-        private void DrawLine(Vertex p0, Vertex p1, Color color)
+        private void DrawLine(Vertex p0, Vertex p1, Color color, int model)
         {
             var dx = p1.X - p0.X;
             var dy = p1.Y - p0.Y;
@@ -72,7 +90,7 @@ namespace PLAYGROUND
                 var ys = Interpolate(p0.X, p0.Y, p1.X, p1.Y);
                 for (var x = (int)p0.X; x <= p1.X; x++)
                 {
-                    DrawPixel(x, (int)ys[(x - (int)p0.X)], float.MaxValue, color);
+                    DrawPixel(x, (int)ys[(x - (int)p0.X)], float.MaxValue, color, model);
                 }
             }
             else
@@ -85,7 +103,7 @@ namespace PLAYGROUND
                 var xs = Interpolate((int)p0.Y, p0.X, (int)p1.Y, p1.X);
                 for (var y = (int)p0.Y; y <= p1.Y; y++)
                 {
-                    DrawPixel((int)xs[(y - (int)p0.Y)], y, float.MaxValue, color);
+                    DrawPixel((int)xs[(y - (int)p0.Y)], y, float.MaxValue, color, model);
                 }
             }
         }
@@ -161,9 +179,7 @@ namespace PLAYGROUND
         }
         private void RenderLight(Camera c, LightSource light)
         {
-            //Model l = light.GenerateModel();
-            //RenderModel(c, l, )
-            DrawPixel((int)light.Position.X, (int)light.Position.Y, float.MaxValue, Color.Red);
+            DrawPixel((int)light.Position.X, (int)light.Position.Y, float.MaxValue, Color.Red, -1);
         }
         private void RenderModel(Camera c, Mesh model, Matrix transform, Mode mode)
         {
@@ -180,50 +196,50 @@ namespace PLAYGROUND
                 switch (mode)
                 {
                     case Mode.Shaded:
-                        RenderTriangle(model.Triangles[t], projected, Mode.Shaded);
+                        RenderTriangle(model.Triangles[t], projected, Mode.Shaded, model.indexMesh);
                         break;
                     case Mode.Wireframe:
-                        RenderTriangle(model.Triangles[t], projected, Mode.Wireframe);
+                        RenderTriangle(model.Triangles[t], projected, Mode.Wireframe, model.indexMesh);
                         break;
                     case Mode.Solid:
-                        RenderTriangle(model.Triangles[t], projected, Mode.Solid);
+                        RenderTriangle(model.Triangles[t], projected, Mode.Solid, model.indexMesh);
                         break;
                     default:
-                        RenderTriangle(model.Triangles[t], projected, Mode.Wireframe);
+                        RenderTriangle(model.Triangles[t], projected, Mode.Wireframe, model.indexMesh);
                         break;
                 }
             }
         }
 
-        public void RenderTriangle(Triangle triangle, List<Vertex> projected, Mode mode)
+        public void RenderTriangle(Triangle triangle, List<Vertex> projected, Mode mode, int model)
         {
             switch (mode)
             {
                 case Mode.Shaded:
-                    DrawShadedTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C], triangle.Color);
+                    DrawShadedTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C], triangle.Color, model);
                     break;
                 case Mode.Wireframe:
                     DrawWireFrameTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C],
-                                               triangle.Color);
+                                               triangle.Color, model);
                     break;
                 case Mode.Solid:
                     DrawFilledTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C],
-                                               triangle.Color);
+                                               triangle.Color, model);
                     break;
                 default:
-                    DrawShadedTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C], triangle.Color);
+                    DrawShadedTriangle(projected[triangle.A], projected[triangle.B], projected[triangle.C], triangle.Color, model);
                     break;
             }
         }
 
-        public void DrawWireFrameTriangle(Vertex p0, Vertex p1, Vertex p2, Color color)
+        public void DrawWireFrameTriangle(Vertex p0, Vertex p1, Vertex p2, Color color, int model)
         {
-            DrawLine(p0, p1, color);
-            DrawLine(p1, p2, color);
-            DrawLine(p2, p0, color);
+            DrawLine(p0, p1, color, model);
+            DrawLine(p1, p2, color, model);
+            DrawLine(p2, p0, color, model);
         }
 
-        public void DrawShadedTriangle(Vertex a, Vertex b, Vertex c, Color color)
+        public void DrawShadedTriangle(Vertex a, Vertex b, Vertex c, Color color, int model)
         {
             Vertex p0 = new Vertex((int)a.X, (int)a.Y, (int)a.Z, a.H);
             Vertex p1 = new Vertex((int)b.X, (int)b.Y, (int)b.Z, b.H);
@@ -335,12 +351,12 @@ namespace PLAYGROUND
                     if (index < 0 || index >= hSegment.Count) continue;
 
                     var shaded = Mult(color, hSegment[index]);
-                    DrawPixel((int)x, y, zSegment[index], shaded);
+                    DrawPixel((int)x, y, zSegment[index], shaded, model);
                 }
             }
         }
 
-        public void DrawFilledTriangle(Vertex a, Vertex b, Vertex c, Color color)
+        public void DrawFilledTriangle(Vertex a, Vertex b, Vertex c, Color color, int model)
         {
             Vertex p0 = new Vertex((int)a.X, (int)a.Y, (int)a.Z, a.H);
             Vertex p1 = new Vertex((int)b.X, (int)b.Y, (int)b.Z, b.H);
@@ -412,7 +428,7 @@ namespace PLAYGROUND
 
                 for (int x = (int)xl; x <= xr; x++)
                 {
-                    DrawPixel(x, y, zSegment[(int)(x - xl)], color);
+                    DrawPixel(x, y, zSegment[(int)(x - xl)], color, model);
                 }
             }
         }
@@ -469,12 +485,79 @@ namespace PLAYGROUND
                 float ilumination = light.CalculateLighting(vertex, normal);
 
                 // Check for occlusion
-                if (_depthBuffer[(int)light.Position.X][(int)light.Position.Y] <= light.Position.Z)
+                if (_depthBuffer[(int)light.Position.X][(int)light.Position.Y].z <= light.Position.Z)
                     continue;
 
                 vertex.H += ilumination;
             }
         }
+
+
+        public static Bitmap Convolucion(Bitmap original, int width, int height)
+        {
+            Bitmap bitmapNuevo = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+            BitmapData dataSrc = original.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+            BitmapData dataDest = bitmapNuevo.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+
+            int bytesPerPixel = 3;
+            unsafe
+            {
+                byte* ptrSrc = (byte*)dataSrc.Scan0;
+                byte* ptrDest = (byte*)dataDest.Scan0;
+                int stride = dataSrc.Stride;
+
+                Parallel.For(1, height - 1, y =>
+                {
+                    for (int x = 1; x < width - 1; x++)
+                    {
+                        float sumaR = 0, sumaG = 0, sumaB = 0;
+
+                        for (int a = -1; a <= 1; a++)
+                        {
+                            for (int b = -1; b <= 1; b++)
+                            {
+                                int idx = ((y + b) * stride) + ((x + a) * bytesPerPixel);
+                                sumaR += ptrSrc[idx + 2] * conv[a + 1, b + 1];
+                                sumaG += ptrSrc[idx + 1] * conv[a + 1, b + 1];
+                                sumaB += ptrSrc[idx] * conv[a + 1, b + 1];
+                            }
+                        }
+
+                        sumaR = Clamp((sumaR / factor) + offset);
+                        sumaG = Clamp((sumaG / factor) + offset);
+                        sumaB = Clamp((sumaB / factor) + offset);
+
+                        int idxDest = (y * stride) + (x * bytesPerPixel);
+                        ptrDest[idxDest + 2] = (byte)sumaR;
+                        ptrDest[idxDest + 1] = (byte)sumaG;
+                        ptrDest[idxDest] = (byte)sumaB;
+                    }
+                });
+            }
+
+            original.UnlockBits(dataSrc);
+            bitmapNuevo.UnlockBits(dataDest);
+
+            return bitmapNuevo;
+
+
+        }
+
+        private static float Clamp(float value)
+        {
+            if (value < 0f) return 0f;
+            if (value > 255f) return 255f;
+            return value;
+        }
+
+        static float[,] conv = {
+        { 1f/9f, 1f/9f, 1f/9f },
+        { 1f/9f, 1f/9f, 1f/9f },
+        { 1f/9f, 1f/9f, 1f/9f }
+};
+        static float factor = 1f;
+        static float offset = 0f;
+
 
     }
 }

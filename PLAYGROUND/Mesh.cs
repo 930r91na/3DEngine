@@ -6,11 +6,13 @@ namespace PLAYGROUND
     {
         public readonly Vertex[] Vertexes;
         public readonly Triangle[] Triangles;
+        public readonly int indexMesh;
 
-        public Mesh(Vertex[] vertexes, Triangle[] triangles)
+        public Mesh(Vertex[] vertexes, Triangle[] triangles, int indexMesh)
         {
             Vertexes = vertexes;
             Triangles = triangles;
+            this.indexMesh = indexMesh;
         }
     }
 }

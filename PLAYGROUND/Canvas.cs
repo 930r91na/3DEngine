@@ -12,7 +12,7 @@ namespace PLAYGROUND
         static PictureBox pctCanvas;
 
         Size size;
-        Bitmap bmp;
+        public Bitmap bmp;
         public int Width, Height;
         byte[] _bits;
         Graphics g;

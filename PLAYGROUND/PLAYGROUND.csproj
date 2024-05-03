@@ -41,6 +41,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <LangVersion>default</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -52,6 +53,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <LangVersion>default</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -70,6 +72,7 @@
     <Compile Include="BitProcess.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Canvas.cs" />
+    <Compile Include="Filters.cs" />
     <Compile Include="Keyframe.cs" />
     <Compile Include="LightSource.cs" />
     <Compile Include="Matrix.cs" />

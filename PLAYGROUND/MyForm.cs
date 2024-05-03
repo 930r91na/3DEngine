@@ -36,6 +36,7 @@ namespace PLAYGROUND
 
         // Filter variables
         private bool _isBrightnessActive = false;
+        public static bool convolucion = false;
 
         public MyForm()
         {
@@ -177,7 +178,9 @@ namespace PLAYGROUND
 
         private void NewModel(Vertex[] vertices, Triangle[] triangles)
         {
-            var _mesh = new Mesh(vertices, triangles);
+            // Check number of models in the scene
+            int index = _selectedScene.Models.Count + 1;
+            var _mesh = new Mesh(vertices, triangles, index);
             var modelTransform = new Transform(1f, new Vertex(0, 0, 10, 1), Matrix.Identity);
             var newModel = new Model(new Vertex(0, 0, 0, 1), _mesh, modelTransform);
 
@@ -592,6 +595,24 @@ namespace PLAYGROUND
         private void LBLCAMARA_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void BTNBLUR_Click(object sender, EventArgs e)
+        {
+            if (!convolucion)
+            {
+                Bitmap bitmap = new Bitmap(_canvas.bmp);
+                PCT_CANVAS.Image = Renderer.Convolucion(bitmap, _canvas.Width, _canvas.Height);
+                Invalidate();
+                TIMER.Stop();
+                convolucion = true;
+            }
+            else
+            {
+                PCT_CANVAS.Image = _canvas.bmp;
+                convolucion = false;
+                TIMER.Start();
+            }
         }
     }
 }
