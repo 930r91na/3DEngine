@@ -20,7 +20,6 @@ namespace PLAYGROUND
         private readonly Filters _filters;
         private readonly Canvas _canvas;
         private readonly List<LightSource> _lights;
-        private  Buffer[][] _depthBufferWithFilters;
         private  Buffer[][] _depthBuffer;
 
         public Renderer(Canvas canvas, List<LightSource> lightSources, Camera camera, Filters filter)
@@ -75,7 +74,7 @@ namespace PLAYGROUND
             _depthBuffer[x][y].modelIndex = model;
 
             // Pixel to Pixel filters 
-            var colorWithFilters = _filters.ApplyFilters(x, y, ref _depthBuffer);
+            _filters.ApplyFilters(x, y, ref _depthBuffer);
             _canvas.SetPixel(x, y, _depthBuffer[x][y].c);
         }
 
@@ -154,7 +153,7 @@ namespace PLAYGROUND
 
 
         // RENDER FUNCTIONS
-        public void RenderScene(Camera camera, Scene scene, bool BrightnessActive)
+        public void RenderScene(Camera camera, Scene scene)
         {
             var CameraMatrix = camera.GetCameraMatrix();
             _canvas.FastClear();
@@ -174,9 +173,20 @@ namespace PLAYGROUND
                 RenderLight(camera, _lights[l]);
             }
 
-            if (BrightnessActive)
+            // Apply convolution filter
+            if (_filters.Blur)
             {
-                _canvas.Bits = BitProcess.Brightness(_canvas.Bits, 78);
+                Convolution(blur);
+            }
+
+            if (_filters.HorizontaledgeDetection)
+            {
+                Convolution(edges2);
+            }
+            
+            if (_filters.Smoothing)
+            {
+                Convolution(gsmoothing);
             }
 
             _canvas.Refresh();
@@ -497,52 +507,60 @@ namespace PLAYGROUND
         }
 
 
-        public static Bitmap Convolucion(Bitmap original, int width, int height)
+        public void Convolution(float[,] mtxconv )
         {
-            Bitmap bitmapNuevo = new Bitmap(width, height, PixelFormat.Format24bppRgb);
-            BitmapData dataSrc = original.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
-            BitmapData dataDest = bitmapNuevo.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
-
-            int bytesPerPixel = 3;
-            unsafe
+            
+            Buffer[][] newDepthBuffer = new Buffer[_canvas.Width][];
+            for (int i = 0; i < _canvas.Width; i++)
             {
-                byte* ptrSrc = (byte*)dataSrc.Scan0;
-                byte* ptrDest = (byte*)dataDest.Scan0;
-                int stride = dataSrc.Stride;
-
-                Parallel.For(1, height - 1, y =>
-                {
-                    for (int x = 1; x < width - 1; x++)
-                    {
-                        float sumaR = 0, sumaG = 0, sumaB = 0;
-
-                        for (int a = -1; a <= 1; a++)
-                        {
-                            for (int b = -1; b <= 1; b++)
-                            {
-                                int idx = ((y + b) * stride) + ((x + a) * bytesPerPixel);
-                                sumaR += ptrSrc[idx + 2] * conv[a + 1, b + 1];
-                                sumaG += ptrSrc[idx + 1] * conv[a + 1, b + 1];
-                                sumaB += ptrSrc[idx] * conv[a + 1, b + 1];
-                            }
-                        }
-
-                        sumaR = Clamp((sumaR / factor) + offset);
-                        sumaG = Clamp((sumaG / factor) + offset);
-                        sumaB = Clamp((sumaB / factor) + offset);
-
-                        int idxDest = (y * stride) + (x * bytesPerPixel);
-                        ptrDest[idxDest + 2] = (byte)sumaR;
-                        ptrDest[idxDest + 1] = (byte)sumaG;
-                        ptrDest[idxDest] = (byte)sumaB;
-                    }
-                });
+                newDepthBuffer[i] = new Buffer[_canvas.Height];
             }
 
-            original.UnlockBits(dataSrc);
-            bitmapNuevo.UnlockBits(dataDest);
+            Parallel.For(1, _canvas.Width - 1, x =>
+            {
+                for (int y = 1; y < _canvas.Height - 1; y++)
+                {
+                    float sumaR = 0, sumaG = 0, sumaB = 0;
 
-            return bitmapNuevo;
+                    for (int a = -1; a <= 1; a++)
+                    {
+                        for (int b1 = -1; b1 <= 1; b1++)
+                        {
+                            Color srcColor = _depthBuffer[x + a][y + b1].c;
+                            sumaR += srcColor.R * mtxconv[a + 1, b1 + 1];
+                            sumaG += srcColor.G * mtxconv[a + 1, b1 + 1];
+                            sumaB += srcColor.B * mtxconv[a + 1, b1 + 1];
+                        }
+                    }
+
+                    // Clamp r,g,b values to 0-255
+
+                    var newR = Clamp((int)(sumaR / factor) + offset);
+                    var newG = Clamp((int)(sumaG / factor) + offset);
+                    var newB = Clamp((int)(sumaB / factor) + offset);
+
+                    newDepthBuffer[x][y] = new Buffer
+                    {
+                        c = Color.FromArgb(255, (int)newR, (int)newG, (int)newB),
+                        z = _depthBuffer[x][y].z,
+                        modelIndex = _depthBuffer[x][y].modelIndex
+                    };
+                }
+            });
+
+            // Replace the old depth buffer with the new one after the convolution
+            _depthBuffer = newDepthBuffer;
+
+            // Redraw the canvas with the new colors
+            for (int x = 0; x < _canvas.Width; x++)
+            {
+                for (int y = 0; y < _canvas.Height; y++)
+                {
+                    _canvas.SetPixel(x, y, _depthBuffer[x][y].c);
+                }
+            }
+
+            _canvas.Refresh();
 
 
         }
@@ -554,14 +572,34 @@ namespace PLAYGROUND
             return value;
         }
 
-        static float[,] conv = {
+        static float[,] blur = {
         { 1f/9f, 1f/9f, 1f/9f },
         { 1f/9f, 1f/9f, 1f/9f },
         { 1f/9f, 1f/9f, 1f/9f }
-};
+        };
+
         static float factor = 1f;
         static float offset = 0f;
 
+        static float[,] edges = {
+            { -1f, -1f, -1f },
+            { -1f, 8f, -1f },
+            { -1f, -1f, -1f}
+        };
+
+        static float[,] edges2 =
+        {
+            { 0f, 1f, 0f },
+            { 1f, -4f, 1f },
+            { 0f, 1f, 0f }
+        };
+
+        static float[,] gsmoothing =
+        {
+            { 1f/16f, 2f/16f, 1f/16f },
+            { 2f/16f, 4f/16f, 2f/16f },
+            { 1f/16f, 2f/16f, 1f/16f }
+        };
 
     }
 }

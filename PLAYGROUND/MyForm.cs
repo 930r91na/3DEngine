@@ -36,8 +36,7 @@ namespace PLAYGROUND
         private bool _isRotatingZ;
 
         // Filter variables
-        private bool _isBrightnessActive = false;
-        public static bool convolucion = false;
+        public static bool convolution = false;
 
         public MyForm()
         {
@@ -77,7 +76,7 @@ namespace PLAYGROUND
 
         private void TIMER_Tick(object sender, EventArgs e)
         {
-            _renderer.RenderScene(_camera, _selectedScene, _isBrightnessActive);
+            _renderer.RenderScene(_camera, _selectedScene);
             UpdateAutomaticRotation();
         }
 
@@ -134,7 +133,9 @@ namespace PLAYGROUND
 
             reader.BaseStream.Seek(0, SeekOrigin.Begin);
             reader.DiscardBufferedData();
-            
+
+            var random = new Random();
+            var color = Color.FromArgb(random.Next(0, 255), random.Next(0, 255), random.Next(0, 255));
 
             while (!reader.EndOfStream)
             {
@@ -162,9 +163,6 @@ namespace PLAYGROUND
                     
                     for (var i = 1; i < faceIndices.Count - 1; i++)
                     {
-                        var random = new Random();
-                        var color = Color.FromArgb(random.Next(0, 255), random.Next(0, 255), random.Next(0, 255));
-
                         var face = new Triangle(faceIndices[0], faceIndices[i], faceIndices[i + 1], color);
                         faceList.Add(face);
                     }
@@ -571,7 +569,7 @@ namespace PLAYGROUND
         {
             for (var i = 0; i < _selectedScene.Models.Count; i++)
             {
-                _renderer.RenderScene(_camera, _selectedScene, _isBrightnessActive);
+                _renderer.RenderScene(_camera, _selectedScene);
             }
         }
 
@@ -592,19 +590,17 @@ namespace PLAYGROUND
 
         private void BTNBLUR_Click(object sender, EventArgs e)
         {
-            if (!convolucion)
+            _filters.Blur = !_filters.Blur;
+
+            if (!_filters.Blur)
             {
-                Bitmap bitmap = new Bitmap(_canvas.bmp);
-                PCT_CANVAS.Image = Renderer.Convolucion(bitmap, _canvas.Width, _canvas.Height);
-                Invalidate();
-                //TIMER.Stop();
-                convolucion = true;
+                BTNBLUR.BackColor = Color.DeepPink;
+                BTNBLUR.ForeColor = Color.White;
             }
             else
             {
-                PCT_CANVAS.Image = _canvas.bmp;
-                convolucion = false;
-                //TIMER.Start();
+                BTNBLUR.BackColor = Color.White;
+                BTNBLUR.ForeColor = Color.Black;
             }
         }
 
@@ -697,6 +693,17 @@ namespace PLAYGROUND
         private void BTNTW_Click(object sender, EventArgs e)
         {
             _filters.Twilight = !_filters.Twilight;
+
+            if (!_filters.Twilight)
+            {
+                BTNTW.BackColor = Color.DeepPink;
+                BTNTW.ForeColor = Color.White;
+            }
+            else
+            {
+                BTNTW.BackColor = Color.White;
+                BTNTW.ForeColor = Color.Black;
+            }
         }
 
         private void BTNDLFILTRS_Click(object sender, EventArgs e)
@@ -715,6 +722,37 @@ namespace PLAYGROUND
             PCT_TIMELINE.Invalidate();
             // Delete the keyframes from the timeline
             
+        }
+
+        private void BTNHEDGES_Click(object sender, EventArgs e)
+        {
+            _filters.HorizontaledgeDetection = !_filters.HorizontaledgeDetection;
+
+            if (!_filters.HorizontaledgeDetection)
+            {
+                BTNHEDGES.BackColor = Color.DeepPink;
+                BTNHEDGES.ForeColor = Color.White;
+            }
+            else
+            {
+                BTNHEDGES.BackColor = Color.White;
+                BTNHEDGES.ForeColor = Color.Black;
+            }
+        }
+
+        private void Smoothing_Click(object sender, EventArgs e)
+        {
+            _filters.Smoothing = !_filters.Smoothing;
+            if (!_filters.Smoothing)
+            {
+                BTNSMOOTHING.BackColor = Color.DeepPink;
+                BTNSMOOTHING.ForeColor = Color.White;
+            }
+            else
+            {
+                BTNSMOOTHING.BackColor = Color.White;
+                BTNSMOOTHING.ForeColor = Color.Black;
+            }
         }
     }
 }

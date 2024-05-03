@@ -45,12 +45,15 @@ namespace PLAYGROUND
                     float dy = Position.Y - v.Y;
                     float dz = Position.Z - v.Z;
                     float distance = (float)Math.Sqrt(dx * dx + dy * dy + dz * dz);
-                    // Standard attenuation
-                    float attenuation = 1f / (1f + 0.1f * distance + 0.01f * distance * distance);
+
+                    // New attenuation calculation with tweaked coefficients
+                    float Kc = 0.1f;  // Constant attenuation
+                    float Kl = 0.05f;  // Linear attenuation
+                    float Kq = 0.01f;  // Quadratic attenuation
+                    float attenuation = 1f / (Kc + Kl * distance + Kq * distance * distance);
 
                     float intensity = Intensity;
                     illumination += intensity * attenuation;
-
                     return illumination;
 
                 default:

@@ -81,6 +81,7 @@ namespace PLAYGROUND
             this.BTNHEDGES = new System.Windows.Forms.Button();
             this.BTNDLFILTRS = new System.Windows.Forms.Button();
             this.TIMER = new System.Windows.Forms.Timer(this.components);
+            this.BTNSMOOTHING = new System.Windows.Forms.Button();
             this.PNL_MAIN.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PCT_CANVAS)).BeginInit();
             this.panel2.SuspendLayout();
@@ -111,7 +112,7 @@ namespace PLAYGROUND
             this.PNL_MAIN.Location = new System.Drawing.Point(0, 0);
             this.PNL_MAIN.Margin = new System.Windows.Forms.Padding(4);
             this.PNL_MAIN.Name = "PNL_MAIN";
-            this.PNL_MAIN.Size = new System.Drawing.Size(1743, 932);
+            this.PNL_MAIN.Size = new System.Drawing.Size(1924, 932);
             this.PNL_MAIN.TabIndex = 0;
             // 
             // PCT_CANVAS
@@ -122,7 +123,7 @@ namespace PLAYGROUND
             this.PCT_CANVAS.Margin = new System.Windows.Forms.Padding(4);
             this.PCT_CANVAS.MinimumSize = new System.Drawing.Size(100, 50);
             this.PCT_CANVAS.Name = "PCT_CANVAS";
-            this.PCT_CANVAS.Size = new System.Drawing.Size(1247, 654);
+            this.PCT_CANVAS.Size = new System.Drawing.Size(1428, 654);
             this.PCT_CANVAS.TabIndex = 6;
             this.PCT_CANVAS.TabStop = false;
             this.PCT_CANVAS.Click += new System.EventHandler(this.PCT_CANVAS_Click);
@@ -132,7 +133,7 @@ namespace PLAYGROUND
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.panel2.Controls.Add(this.flowLayoutPanel2);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel2.Location = new System.Drawing.Point(1514, 123);
+            this.panel2.Location = new System.Drawing.Point(1695, 123);
             this.panel2.Margin = new System.Windows.Forms.Padding(4);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(229, 654);
@@ -385,7 +386,7 @@ namespace PLAYGROUND
             this.PNL_BOTTOM.Location = new System.Drawing.Point(0, 777);
             this.PNL_BOTTOM.Margin = new System.Windows.Forms.Padding(4);
             this.PNL_BOTTOM.Name = "PNL_BOTTOM";
-            this.PNL_BOTTOM.Size = new System.Drawing.Size(1743, 127);
+            this.PNL_BOTTOM.Size = new System.Drawing.Size(1924, 127);
             this.PNL_BOTTOM.TabIndex = 3;
             // 
             // PCT_TIMELINE
@@ -415,7 +416,7 @@ namespace PLAYGROUND
             this.LBL_STATUS.Location = new System.Drawing.Point(0, 904);
             this.LBL_STATUS.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LBL_STATUS.Name = "LBL_STATUS";
-            this.LBL_STATUS.Size = new System.Drawing.Size(1743, 28);
+            this.LBL_STATUS.Size = new System.Drawing.Size(1924, 28);
             this.LBL_STATUS.TabIndex = 2;
             // 
             // PNL_HEADER
@@ -431,7 +432,7 @@ namespace PLAYGROUND
             this.PNL_HEADER.Location = new System.Drawing.Point(0, 0);
             this.PNL_HEADER.Margin = new System.Windows.Forms.Padding(4);
             this.PNL_HEADER.Name = "PNL_HEADER";
-            this.PNL_HEADER.Size = new System.Drawing.Size(1743, 123);
+            this.PNL_HEADER.Size = new System.Drawing.Size(1924, 123);
             this.PNL_HEADER.TabIndex = 0;
             // 
             // label3
@@ -572,12 +573,13 @@ namespace PLAYGROUND
             this.flowLayoutPanel3.Controls.Add(this.BTNTW);
             this.flowLayoutPanel3.Controls.Add(this.BTNBLUR);
             this.flowLayoutPanel3.Controls.Add(this.BTNHEDGES);
+            this.flowLayoutPanel3.Controls.Add(this.BTNSMOOTHING);
             this.flowLayoutPanel3.Controls.Add(this.BTNDLFILTRS);
             this.flowLayoutPanel3.ForeColor = System.Drawing.Color.Tan;
             this.flowLayoutPanel3.Location = new System.Drawing.Point(640, 37);
             this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(1091, 59);
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(1233, 59);
             this.flowLayoutPanel3.TabIndex = 3;
             // 
             // BTNBW
@@ -680,14 +682,15 @@ namespace PLAYGROUND
             this.BTNHEDGES.Name = "BTNHEDGES";
             this.BTNHEDGES.Size = new System.Drawing.Size(103, 52);
             this.BTNHEDGES.TabIndex = 8;
-            this.BTNHEDGES.Text = "HEdges";
+            this.BTNHEDGES.Text = "Edges";
             this.BTNHEDGES.UseVisualStyleBackColor = false;
+            this.BTNHEDGES.Click += new System.EventHandler(this.BTNHEDGES_Click);
             // 
             // BTNDLFILTRS
             // 
             this.BTNDLFILTRS.BackColor = System.Drawing.Color.Red;
             this.BTNDLFILTRS.ForeColor = System.Drawing.Color.Snow;
-            this.BTNDLFILTRS.Location = new System.Drawing.Point(857, 2);
+            this.BTNDLFILTRS.Location = new System.Drawing.Point(1024, 2);
             this.BTNDLFILTRS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BTNDLFILTRS.Name = "BTNDLFILTRS";
             this.BTNDLFILTRS.Size = new System.Drawing.Size(206, 52);
@@ -702,11 +705,24 @@ namespace PLAYGROUND
             this.TIMER.Interval = 10;
             this.TIMER.Tick += new System.EventHandler(this.TIMER_Tick);
             // 
+            // BTNSMOOTHING
+            // 
+            this.BTNSMOOTHING.BackColor = System.Drawing.Color.DeepPink;
+            this.BTNSMOOTHING.ForeColor = System.Drawing.Color.Snow;
+            this.BTNSMOOTHING.Location = new System.Drawing.Point(857, 2);
+            this.BTNSMOOTHING.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.BTNSMOOTHING.Name = "BTNSMOOTHING";
+            this.BTNSMOOTHING.Size = new System.Drawing.Size(161, 52);
+            this.BTNSMOOTHING.TabIndex = 9;
+            this.BTNSMOOTHING.Text = "GSmoothing";
+            this.BTNSMOOTHING.UseVisualStyleBackColor = false;
+            this.BTNSMOOTHING.Click += new System.EventHandler(this.Smoothing_Click);
+            // 
             // MyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1743, 932);
+            this.ClientSize = new System.Drawing.Size(1924, 932);
             this.Controls.Add(this.PNL_MAIN);
             this.DoubleBuffered = true;
             this.KeyPreview = true;
@@ -789,6 +805,7 @@ namespace PLAYGROUND
         private System.Windows.Forms.Button BTNINVERSE;
         private System.Windows.Forms.Button BTNHEDGES;
         private System.Windows.Forms.Button BTNDLFILTRS;
+        private System.Windows.Forms.Button BTNSMOOTHING;
     }
 }
 

@@ -16,6 +16,7 @@ namespace PLAYGROUND
 {
     public class Model
     {
+        public Filters Filters;
         public Vertex Position;
         public Mesh Mesh;
         public Transform Transform;
@@ -30,6 +31,7 @@ namespace PLAYGROUND
 
         public Model(Vertex position, Mesh mesh, Transform transform)
         {
+            Filters = new Filters();
             Position = position;
             Mesh = mesh;
             Transform = transform;

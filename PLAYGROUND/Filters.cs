@@ -11,9 +11,7 @@ namespace PLAYGROUND
     {
         private bool _blur;
         private bool _horizontaledgeDetection;
-        private bool _verticalEdgeDetection;
         private bool _sepia;
-        private int _sepiaIntensity;
         private bool _grayscale;
         private bool _invert;
         private bool _twilight;
@@ -21,16 +19,15 @@ namespace PLAYGROUND
         private int _umbral;
         private int _brightness;
         private bool _reset;
+        private bool _smoothing;
 
         // Getters and Setters
+        public bool Smoothing { get => _smoothing; set => _smoothing = value; }
         public bool Blur { get => _blur; set => _blur = value; }
         public bool HorizontaledgeDetection { get => _horizontaledgeDetection; set => _horizontaledgeDetection = value; }
-        public bool VerticalEdgeDetection { get => _verticalEdgeDetection; set => _verticalEdgeDetection = value; }
         public bool Sepia { get => _sepia; set => _sepia = value; }
-        public int SepiaIntensity { get => _sepiaIntensity; set => _sepiaIntensity = value; }
         public bool Grayscale { get => _grayscale; set => _grayscale = value; }
         public bool Invert { get => _invert; set => _invert = value; }
-        public int Umbral { get => _umbral; set => _umbral = value; }
         public bool Twilight { get => _twilight; set => _twilight = value; }
         public bool BlackAndWhite { get => _blackAndWhite; set => _blackAndWhite = value; }
 
@@ -41,9 +38,7 @@ namespace PLAYGROUND
         {
             _blur = false;
             _horizontaledgeDetection = false;
-            _verticalEdgeDetection = false;
             _sepia = false;
-            _sepiaIntensity = 0;
             _grayscale = false;
             _invert = false;
             _umbral = 255/2;
