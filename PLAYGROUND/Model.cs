@@ -104,7 +104,8 @@ namespace PLAYGROUND
         private void ApplyKeyframeState(Keyframe keyframe)
         {
             Position = keyframe.Position;
-            Transform = keyframe.Transform;
+            Transform copyTransform = keyframe.Transform.Clone();
+            Transform = copyTransform;
         }
 
         private float Lerp(float start, float end, float factor)
