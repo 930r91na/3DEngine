@@ -785,5 +785,10 @@ namespace PLAYGROUND
             }
 
         }
+
+        private void MyForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

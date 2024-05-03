@@ -76,13 +76,13 @@ namespace PLAYGROUND
             this.BTNGRYS = new System.Windows.Forms.Button();
             this.BTNSEPIA = new System.Windows.Forms.Button();
             this.BTNBRIGHTNESS = new System.Windows.Forms.Button();
+            this.BTNNBRIGHTNESS = new System.Windows.Forms.Button();
             this.BTNTW = new System.Windows.Forms.Button();
             this.BTNBLUR = new System.Windows.Forms.Button();
             this.BTNHEDGES = new System.Windows.Forms.Button();
             this.BTNSMOOTHING = new System.Windows.Forms.Button();
             this.BTNDLFILTRS = new System.Windows.Forms.Button();
             this.TIMER = new System.Windows.Forms.Timer(this.components);
-            this.BTNNBRIGHTNESS = new System.Windows.Forms.Button();
             this.PNL_MAIN.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PCT_CANVAS)).BeginInit();
             this.panel2.SuspendLayout();
@@ -649,6 +649,19 @@ namespace PLAYGROUND
             this.BTNBRIGHTNESS.UseVisualStyleBackColor = false;
             this.BTNBRIGHTNESS.Click += new System.EventHandler(this.BTNBRIGHTNESS_Click);
             // 
+            // BTNNBRIGHTNESS
+            // 
+            this.BTNNBRIGHTNESS.BackColor = System.Drawing.Color.DeepPink;
+            this.BTNNBRIGHTNESS.ForeColor = System.Drawing.Color.Snow;
+            this.BTNNBRIGHTNESS.Location = new System.Drawing.Point(510, 2);
+            this.BTNNBRIGHTNESS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.BTNNBRIGHTNESS.Name = "BTNNBRIGHTNESS";
+            this.BTNNBRIGHTNESS.Size = new System.Drawing.Size(166, 52);
+            this.BTNNBRIGHTNESS.TabIndex = 10;
+            this.BTNNBRIGHTNESS.Text = "No Bright";
+            this.BTNNBRIGHTNESS.UseVisualStyleBackColor = false;
+            this.BTNNBRIGHTNESS.Click += new System.EventHandler(this.BTNNBRIGHTNESS_Click);
+            // 
             // BTNTW
             // 
             this.BTNTW.BackColor = System.Drawing.Color.DeepPink;
@@ -720,19 +733,6 @@ namespace PLAYGROUND
             this.TIMER.Interval = 10;
             this.TIMER.Tick += new System.EventHandler(this.TIMER_Tick);
             // 
-            // BTNNBRIGHTNESS
-            // 
-            this.BTNNBRIGHTNESS.BackColor = System.Drawing.Color.DeepPink;
-            this.BTNNBRIGHTNESS.ForeColor = System.Drawing.Color.Snow;
-            this.BTNNBRIGHTNESS.Location = new System.Drawing.Point(510, 2);
-            this.BTNNBRIGHTNESS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.BTNNBRIGHTNESS.Name = "BTNNBRIGHTNESS";
-            this.BTNNBRIGHTNESS.Size = new System.Drawing.Size(166, 52);
-            this.BTNNBRIGHTNESS.TabIndex = 10;
-            this.BTNNBRIGHTNESS.Text = "No Bright";
-            this.BTNNBRIGHTNESS.UseVisualStyleBackColor = false;
-            this.BTNNBRIGHTNESS.Click += new System.EventHandler(this.BTNNBRIGHTNESS_Click);
-            // 
             // MyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -745,6 +745,7 @@ namespace PLAYGROUND
             this.Name = "MyForm";
             this.Text = "aaa";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.MyForm_Load);
             this.SizeChanged += new System.EventHandler(this.MyForm_SizeChanged);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MyForm_KeyDown);
             this.PNL_MAIN.ResumeLayout(false);
