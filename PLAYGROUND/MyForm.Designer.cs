@@ -79,9 +79,10 @@ namespace PLAYGROUND
             this.BTNTW = new System.Windows.Forms.Button();
             this.BTNBLUR = new System.Windows.Forms.Button();
             this.BTNHEDGES = new System.Windows.Forms.Button();
+            this.BTNSMOOTHING = new System.Windows.Forms.Button();
             this.BTNDLFILTRS = new System.Windows.Forms.Button();
             this.TIMER = new System.Windows.Forms.Timer(this.components);
-            this.BTNSMOOTHING = new System.Windows.Forms.Button();
+            this.BTNNBRIGHTNESS = new System.Windows.Forms.Button();
             this.PNL_MAIN.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PCT_CANVAS)).BeginInit();
             this.panel2.SuspendLayout();
@@ -570,6 +571,7 @@ namespace PLAYGROUND
             this.flowLayoutPanel3.Controls.Add(this.BTNGRYS);
             this.flowLayoutPanel3.Controls.Add(this.BTNSEPIA);
             this.flowLayoutPanel3.Controls.Add(this.BTNBRIGHTNESS);
+            this.flowLayoutPanel3.Controls.Add(this.BTNNBRIGHTNESS);
             this.flowLayoutPanel3.Controls.Add(this.BTNTW);
             this.flowLayoutPanel3.Controls.Add(this.BTNBLUR);
             this.flowLayoutPanel3.Controls.Add(this.BTNHEDGES);
@@ -579,7 +581,7 @@ namespace PLAYGROUND
             this.flowLayoutPanel3.Location = new System.Drawing.Point(640, 37);
             this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(1233, 59);
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(1277, 59);
             this.flowLayoutPanel3.TabIndex = 3;
             // 
             // BTNBW
@@ -641,9 +643,9 @@ namespace PLAYGROUND
             this.BTNBRIGHTNESS.Location = new System.Drawing.Point(415, 2);
             this.BTNBRIGHTNESS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BTNBRIGHTNESS.Name = "BTNBRIGHTNESS";
-            this.BTNBRIGHTNESS.Size = new System.Drawing.Size(138, 52);
+            this.BTNBRIGHTNESS.Size = new System.Drawing.Size(89, 52);
             this.BTNBRIGHTNESS.TabIndex = 0;
-            this.BTNBRIGHTNESS.Text = "Brightness";
+            this.BTNBRIGHTNESS.Text = "Bright";
             this.BTNBRIGHTNESS.UseVisualStyleBackColor = false;
             this.BTNBRIGHTNESS.Click += new System.EventHandler(this.BTNBRIGHTNESS_Click);
             // 
@@ -651,7 +653,7 @@ namespace PLAYGROUND
             // 
             this.BTNTW.BackColor = System.Drawing.Color.DeepPink;
             this.BTNTW.ForeColor = System.Drawing.Color.Snow;
-            this.BTNTW.Location = new System.Drawing.Point(559, 2);
+            this.BTNTW.Location = new System.Drawing.Point(682, 2);
             this.BTNTW.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BTNTW.Name = "BTNTW";
             this.BTNTW.Size = new System.Drawing.Size(110, 52);
@@ -664,7 +666,7 @@ namespace PLAYGROUND
             // 
             this.BTNBLUR.BackColor = System.Drawing.Color.DeepPink;
             this.BTNBLUR.ForeColor = System.Drawing.Color.Snow;
-            this.BTNBLUR.Location = new System.Drawing.Point(675, 2);
+            this.BTNBLUR.Location = new System.Drawing.Point(798, 2);
             this.BTNBLUR.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BTNBLUR.Name = "BTNBLUR";
             this.BTNBLUR.Size = new System.Drawing.Size(67, 52);
@@ -677,25 +679,38 @@ namespace PLAYGROUND
             // 
             this.BTNHEDGES.BackColor = System.Drawing.Color.DeepPink;
             this.BTNHEDGES.ForeColor = System.Drawing.Color.Snow;
-            this.BTNHEDGES.Location = new System.Drawing.Point(748, 2);
+            this.BTNHEDGES.Location = new System.Drawing.Point(871, 2);
             this.BTNHEDGES.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BTNHEDGES.Name = "BTNHEDGES";
-            this.BTNHEDGES.Size = new System.Drawing.Size(103, 52);
+            this.BTNHEDGES.Size = new System.Drawing.Size(92, 52);
             this.BTNHEDGES.TabIndex = 8;
             this.BTNHEDGES.Text = "Edges";
             this.BTNHEDGES.UseVisualStyleBackColor = false;
             this.BTNHEDGES.Click += new System.EventHandler(this.BTNHEDGES_Click);
             // 
+            // BTNSMOOTHING
+            // 
+            this.BTNSMOOTHING.BackColor = System.Drawing.Color.DeepPink;
+            this.BTNSMOOTHING.ForeColor = System.Drawing.Color.Snow;
+            this.BTNSMOOTHING.Location = new System.Drawing.Point(969, 2);
+            this.BTNSMOOTHING.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.BTNSMOOTHING.Name = "BTNSMOOTHING";
+            this.BTNSMOOTHING.Size = new System.Drawing.Size(161, 52);
+            this.BTNSMOOTHING.TabIndex = 9;
+            this.BTNSMOOTHING.Text = "GSmoothing";
+            this.BTNSMOOTHING.UseVisualStyleBackColor = false;
+            this.BTNSMOOTHING.Click += new System.EventHandler(this.Smoothing_Click);
+            // 
             // BTNDLFILTRS
             // 
             this.BTNDLFILTRS.BackColor = System.Drawing.Color.Red;
             this.BTNDLFILTRS.ForeColor = System.Drawing.Color.Snow;
-            this.BTNDLFILTRS.Location = new System.Drawing.Point(1024, 2);
+            this.BTNDLFILTRS.Location = new System.Drawing.Point(1136, 2);
             this.BTNDLFILTRS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BTNDLFILTRS.Name = "BTNDLFILTRS";
-            this.BTNDLFILTRS.Size = new System.Drawing.Size(206, 52);
+            this.BTNDLFILTRS.Size = new System.Drawing.Size(108, 52);
             this.BTNDLFILTRS.TabIndex = 5;
-            this.BTNDLFILTRS.Text = "FiltersOFF/ON";
+            this.BTNDLFILTRS.Text = "ON";
             this.BTNDLFILTRS.UseVisualStyleBackColor = false;
             this.BTNDLFILTRS.Click += new System.EventHandler(this.BTNDLFILTRS_Click);
             // 
@@ -705,18 +720,18 @@ namespace PLAYGROUND
             this.TIMER.Interval = 10;
             this.TIMER.Tick += new System.EventHandler(this.TIMER_Tick);
             // 
-            // BTNSMOOTHING
+            // BTNNBRIGHTNESS
             // 
-            this.BTNSMOOTHING.BackColor = System.Drawing.Color.DeepPink;
-            this.BTNSMOOTHING.ForeColor = System.Drawing.Color.Snow;
-            this.BTNSMOOTHING.Location = new System.Drawing.Point(857, 2);
-            this.BTNSMOOTHING.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.BTNSMOOTHING.Name = "BTNSMOOTHING";
-            this.BTNSMOOTHING.Size = new System.Drawing.Size(161, 52);
-            this.BTNSMOOTHING.TabIndex = 9;
-            this.BTNSMOOTHING.Text = "GSmoothing";
-            this.BTNSMOOTHING.UseVisualStyleBackColor = false;
-            this.BTNSMOOTHING.Click += new System.EventHandler(this.Smoothing_Click);
+            this.BTNNBRIGHTNESS.BackColor = System.Drawing.Color.DeepPink;
+            this.BTNNBRIGHTNESS.ForeColor = System.Drawing.Color.Snow;
+            this.BTNNBRIGHTNESS.Location = new System.Drawing.Point(510, 2);
+            this.BTNNBRIGHTNESS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.BTNNBRIGHTNESS.Name = "BTNNBRIGHTNESS";
+            this.BTNNBRIGHTNESS.Size = new System.Drawing.Size(166, 52);
+            this.BTNNBRIGHTNESS.TabIndex = 10;
+            this.BTNNBRIGHTNESS.Text = "No Bright";
+            this.BTNNBRIGHTNESS.UseVisualStyleBackColor = false;
+            this.BTNNBRIGHTNESS.Click += new System.EventHandler(this.BTNNBRIGHTNESS_Click);
             // 
             // MyForm
             // 
@@ -806,6 +821,7 @@ namespace PLAYGROUND
         private System.Windows.Forms.Button BTNHEDGES;
         private System.Windows.Forms.Button BTNDLFILTRS;
         private System.Windows.Forms.Button BTNSMOOTHING;
+        private System.Windows.Forms.Button BTNNBRIGHTNESS;
     }
 }
 

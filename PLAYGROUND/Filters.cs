@@ -131,11 +131,11 @@ namespace PLAYGROUND
             {
                 if ((color.R + color.G + color.B) / 3 > _umbral)
                 {
-                    color = Color.Black;
+                    color = Color.White;
                 }
                 else
                 {
-                    color = Color.White;
+                    color = Color.Black;
                 }
             }
             buffer[toX][toY].c = color;

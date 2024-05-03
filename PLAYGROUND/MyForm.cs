@@ -671,21 +671,19 @@ namespace PLAYGROUND
         private void BTNBRIGHTNESS_Click(object sender, EventArgs e)
         {
             // Increase the brightness clamping to 255
-            _filters.Brightness = Math.Min(255, _filters.Brightness + 20);
 
 
-            if (_filters.Brightness != 0)
+            if (_filters.Brightness == 255)
             {
                 BTNBRIGHTNESS.BackColor = Color.DeepPink;
                 BTNBRIGHTNESS.ForeColor = Color.White;
-                //_isBrightnessActive = true;
             }
             else
             {
-                _filters.Brightness -= 20;
+                _filters.Brightness = Math.Min(255, _filters.Brightness + 20);
+
                 BTNBRIGHTNESS.BackColor = Color.White;
                 BTNBRIGHTNESS.ForeColor = Color.Black;
-                //_isBrightnessActive = false;
             }
 
         }
@@ -709,6 +707,19 @@ namespace PLAYGROUND
         private void BTNDLFILTRS_Click(object sender, EventArgs e)
         {
             _filters.Reset = !_filters.Reset;
+
+            if (!_filters.Reset)
+            {
+                BTNDLFILTRS.BackColor = Color.Red;
+                BTNDLFILTRS.ForeColor = Color.White;
+                BTNDLFILTRS.Text = "ON";
+            }
+            else
+            {
+                BTNDLFILTRS.BackColor = Color.White;
+                BTNDLFILTRS.ForeColor = Color.Red;
+                BTNDLFILTRS.Text = "OFF";
+            }
         }
 
         private void BTNDLKF_Click(object sender, EventArgs e)
@@ -753,6 +764,26 @@ namespace PLAYGROUND
                 BTNSMOOTHING.BackColor = Color.White;
                 BTNSMOOTHING.ForeColor = Color.Black;
             }
+        }
+
+        private void BTNNBRIGHTNESS_Click(object sender, EventArgs e)
+        {
+            // Dcrease the brightness clamping to 255
+            _filters.Brightness = Math.Max(0, _filters.Brightness - 20);
+
+
+            if (_filters.Brightness != 0)
+            {
+                BTNNBRIGHTNESS.BackColor = Color.DeepPink;
+                BTNNBRIGHTNESS.ForeColor = Color.White;
+            }
+            else
+            {
+                _filters.Brightness -= 20;
+                BTNNBRIGHTNESS.BackColor = Color.White;
+                BTNNBRIGHTNESS.ForeColor = Color.Black;
+            }
+
         }
     }
 }
