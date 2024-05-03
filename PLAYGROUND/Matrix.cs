@@ -28,7 +28,7 @@ namespace PLAYGROUND
 
         public Matrix Clone()
         {
-            return new Matrix((float[,])_data.Clone()); // Crea una nueva instancia de Matrix con una copia del arreglo
+            return new Matrix((float[,])_data.Clone()); // New instance of matrix with a copy of the data
         }
 
         public static Matrix InterpolateMatrices(Matrix start, Matrix end, float factor)
@@ -42,13 +42,13 @@ namespace PLAYGROUND
                 }
             }
             Matrix result = new Matrix(interpolatedData);
-            return result.NormalizeRows(); // Método para normalizar filas
+            return result.NormalizeRows(); 
         }
 
-        // Método para normalizar filas de la matriz (aproximación)
+        // Method to normalize rows
         public Matrix NormalizeRows()
         {
-            for (int i = 0; i < 3; i++)  // Solo normalizar las primeras tres filas
+            for (int i = 0; i < 3; i++) 
             {
                 float length = (float)Math.Sqrt(_data[i, 0] * _data[i, 0] + _data[i, 1] * _data[i, 1] + _data[i, 2] * _data[i, 2]);
                 if (length != 0)

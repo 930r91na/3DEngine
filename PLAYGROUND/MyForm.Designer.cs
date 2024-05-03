@@ -390,7 +390,7 @@ namespace PLAYGROUND
             // 
             // PCT_TIMELINE
             // 
-            this.PCT_TIMELINE.Location = new System.Drawing.Point(372, 50);
+            this.PCT_TIMELINE.Location = new System.Drawing.Point(372, 56);
             this.PCT_TIMELINE.Margin = new System.Windows.Forms.Padding(4);
             this.PCT_TIMELINE.Name = "PCT_TIMELINE";
             this.PCT_TIMELINE.Size = new System.Drawing.Size(1153, 52);
@@ -560,6 +560,7 @@ namespace PLAYGROUND
             this.BTNDLKF.TabIndex = 2;
             this.BTNDLKF.Text = "Delete KF";
             this.BTNDLKF.UseVisualStyleBackColor = false;
+            this.BTNDLKF.Click += new System.EventHandler(this.BTNDLKF_Click);
             // 
             // flowLayoutPanel3
             // 

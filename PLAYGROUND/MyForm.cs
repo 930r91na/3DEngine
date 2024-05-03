@@ -525,7 +525,7 @@ namespace PLAYGROUND
                     new Transform(
                         model.GetTransform().Scale,
                         model.GetTransform().Translation.Clone(),
-                        model.GetTransform().Rotation.Clone()),  // Asumiendo que tienes un método Clone() en Matrix
+                        model.GetTransform().Rotation.Clone()),  
                     currentTime
                 );
 
@@ -533,7 +533,6 @@ namespace PLAYGROUND
             }
 
         }
-
         private void BTN_PLAY_Click(object sender, EventArgs e)
         {
             int duration = 6500; // 3 seconds
@@ -574,8 +573,6 @@ namespace PLAYGROUND
             {
                 _renderer.RenderScene(_camera, _selectedScene, _isBrightnessActive);
             }
-
-            //PCT_CANVAS.Invalidate();
         }
 
         private void TRK_MOVIE_Scroll(object sender, EventArgs e)
@@ -705,6 +702,19 @@ namespace PLAYGROUND
         private void BTNDLFILTRS_Click(object sender, EventArgs e)
         {
             _filters.Reset = !_filters.Reset;
+        }
+
+        private void BTNDLKF_Click(object sender, EventArgs e)
+        {
+            // Delete all keyframes
+            foreach (var model in _selectedScene.Models)
+            {
+                model.ClearKeyframes();
+            }
+            _g.Clear(Color.FromArgb(20, 20, 20));
+            PCT_TIMELINE.Invalidate();
+            // Delete the keyframes from the timeline
+            
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 public enum Mode
 {
@@ -47,9 +48,13 @@ namespace PLAYGROUND
             }
             else
             {
-                // Opcional: Notificar al usuario que ya existe un Keyframe en ese tiempo
-                Console.WriteLine("A keyframe at this time already exists.");
+                MessageBox.Show("Ya existe un Keyframe en ese tiempo");
             }
+        }
+
+        public void ClearKeyframes()
+        {
+            _keyframes = new List<Keyframe>();
         }
 
         public void Interpolate(int currentTime)
@@ -93,19 +98,6 @@ namespace PLAYGROUND
                 Transform.Rotation = interpolatedRotation;
                 
             }
-        }
-
-        private Matrix InterpolateMatrices(Matrix start, Matrix end, float factor)
-        {
-            float[,] interpolatedData = new float[4, 4];
-            for (int i = 0; i < 4; i++)
-            {
-                for (int j = 0; j < 4; j++)
-                {
-                    interpolatedData[i, j] = Lerp(start[i, j], end[i, j], factor);
-                }
-            }
-            return new Matrix(interpolatedData);
         }
 
         // Set the Keyframe properties to the Model
