@@ -15,6 +15,7 @@ namespace PLAYGROUND
         Renderer _renderer;
         Canvas _canvas;
         Camera _camera;
+        Filters _filters;
 
 
         private Model _selectedModel;
@@ -43,7 +44,7 @@ namespace PLAYGROUND
             InitializeComponent();
 
             _scenes = new List<Scene>();
-
+            _filters = new Filters();
             // Animatio
             _bmpTimeline = new Bitmap(PCT_TIMELINE.Width, PCT_TIMELINE.Height);
             _g = Graphics.FromImage(_bmpTimeline);
@@ -59,7 +60,7 @@ namespace PLAYGROUND
             Matrix m = Matrix.Identity;
             _camera = new Camera(_canvas, new Transform(1, new Vertex(0,0,0,0), Matrix.Identity));
 
-            _renderer = new Renderer(_canvas, _lights, _camera);
+            _renderer = new Renderer(_canvas, _lights, _camera, _filters);
             if (_selectedScene == null)
             {
                 _selectedScene = new Scene();
@@ -328,22 +329,22 @@ namespace PLAYGROUND
                 switch (e.KeyCode)
                 {
                     case Keys.J:
-                        _selectedLight.Position.X -= 1f;
+                        _selectedLight.Position.X -= 5f;
                         break;
                     case Keys.L:
-                        _selectedLight.Position.X += 1f;
+                        _selectedLight.Position.X += 5f;
                         break;
                     case Keys.I:
-                        _selectedLight.Position.Y += 1f;
+                        _selectedLight.Position.Y += 5f;
                         break;
                     case Keys.K:
-                        _selectedLight.Position.Y -= 1f;
+                        _selectedLight.Position.Y -= 5f;
                         break;
                     case Keys.U:
-                        _selectedLight.Position.Z += 1f;
+                        _selectedLight.Position.Z += 10f;
                         break;
                     case Keys.O:
-                        _selectedLight.Position.Z -= 1f;
+                        _selectedLight.Position.Z -= 10f;
                         break;
                     case Keys.H:
                         RemoveLightSource(_selectedLight);
@@ -357,22 +358,22 @@ namespace PLAYGROUND
                 switch (e.KeyCode)
                 {
                     case Keys.A:
-                        _selectedModel.Transform.Translation.X -= 0.1f;
+                        _selectedModel.Transform.Translation.X -= 0.5f;
                         break;
                     case Keys.D:
-                        _selectedModel.Transform.Translation.X += 0.1f;
+                        _selectedModel.Transform.Translation.X += 0.5f;
                         break;
                     case Keys.W:
-                        _selectedModel.Transform.Translation.Y += 0.1f;
+                        _selectedModel.Transform.Translation.Y += 0.5f;
                         break;
                     case Keys.S:
-                        _selectedModel.Transform.Translation.Y -= 0.1f;
+                        _selectedModel.Transform.Translation.Y -= 0.5f;
                         break;
                     case Keys.Z:
-                        _selectedModel.Transform.Translation.Z += 0.1f;
+                        _selectedModel.Transform.Translation.Z += 0.5f;
                         break;
                     case Keys.X:
-                        _selectedModel.Transform.Translation.Z -= 0.1f;
+                        _selectedModel.Transform.Translation.Z -= 0.5f;
                         break;
                     case Keys.Q:
                         _selectedModel.Transform.Scale += 0.1f;
@@ -493,11 +494,6 @@ namespace PLAYGROUND
         {
 
         }
-
-        private void CRX_Click(object sender, EventArgs e)
-        {
-            _isBrightnessActive = !_isBrightnessActive;
-        }
         
         private void RDBTNAMBIENT_CheckedChanged(object sender, EventArgs e)
         {
@@ -604,15 +600,111 @@ namespace PLAYGROUND
                 Bitmap bitmap = new Bitmap(_canvas.bmp);
                 PCT_CANVAS.Image = Renderer.Convolucion(bitmap, _canvas.Width, _canvas.Height);
                 Invalidate();
-                TIMER.Stop();
+                //TIMER.Stop();
                 convolucion = true;
             }
             else
             {
                 PCT_CANVAS.Image = _canvas.bmp;
                 convolucion = false;
-                TIMER.Start();
+                //TIMER.Start();
             }
+        }
+
+        private void BTNGRYS_Click(object sender, EventArgs e)
+        {
+            _filters.Grayscale = !_filters.Grayscale;
+
+            if (!_filters.Grayscale)
+            {
+                BTNGRYS.BackColor = Color.DeepPink;
+                BTNGRYS.ForeColor = Color.White;
+            }
+            else
+            {
+                BTNGRYS.BackColor = Color.White;
+                BTNGRYS.ForeColor = Color.Black;
+            }
+        }
+
+        private void BTNBW_Click(object sender, EventArgs e)
+        {
+            _filters.BlackAndWhite = !_filters.BlackAndWhite;
+
+            if (!_filters.BlackAndWhite)
+            {
+                BTNBW.BackColor = Color.DeepPink;
+                BTNBW.ForeColor = Color.White;
+            }
+            else
+            {
+                BTNBW.BackColor = Color.White;
+                BTNBW.ForeColor = Color.Black;
+            }
+        }
+
+        private void BTNINVERSE_Click(object sender, EventArgs e)
+        {
+            _filters.Invert = !_filters.Invert;
+
+            if (!_filters.Invert)
+            {
+                BTNINVERSE.BackColor = Color.DeepPink;
+                BTNINVERSE.ForeColor = Color.White;
+            }
+            else
+            {
+                BTNINVERSE.BackColor = Color.White;
+                BTNINVERSE.ForeColor = Color.Black;
+            }
+        }
+
+        private void BTNSEPIA_Click(object sender, EventArgs e)
+        {
+            _filters.Sepia = !_filters.Sepia;
+
+            if (!_filters.Sepia)
+            {
+                BTNSEPIA.BackColor = Color.DeepPink;
+                BTNSEPIA.ForeColor = Color.White;
+            }
+            else
+            {
+                BTNSEPIA.BackColor = Color.White;
+                BTNSEPIA.ForeColor = Color.Black;
+            }
+        }
+
+        private void BTNBRIGHTNESS_Click(object sender, EventArgs e)
+        {
+            // Increase the brightness clamping to 255
+            _filters.Brightness = Math.Min(255, _filters.Brightness + 20);
+
+
+            if (_filters.Brightness != 0)
+            {
+                BTNBRIGHTNESS.BackColor = Color.DeepPink;
+                BTNBRIGHTNESS.ForeColor = Color.White;
+                //_isBrightnessActive = true;
+            }
+            else
+            {
+                _filters.Brightness -= 20;
+                BTNBRIGHTNESS.BackColor = Color.White;
+                BTNBRIGHTNESS.ForeColor = Color.Black;
+                //_isBrightnessActive = false;
+            }
+
+        }
+
+        private void BTNTW_Click(object sender, EventArgs e)
+        {
+            _filters.Twilight = !_filters.Twilight;
+        }
+
+        private void BTNDLFILTRS_Click(object sender, EventArgs e)
+        {
+            _filters.Reset = !_filters.Reset;
         }
     }
 }

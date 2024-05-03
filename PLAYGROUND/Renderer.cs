@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PLAYGROUND
 {
-    struct Buffer
+    public struct Buffer
     {
         public Color c;
         public float z;
@@ -17,13 +17,15 @@ namespace PLAYGROUND
 
     public class Renderer
     {
+        private readonly Filters _filters;
         private readonly Canvas _canvas;
         private readonly List<LightSource> _lights;
-        private readonly Buffer[][] _depthBufferCopy;
+        private readonly Buffer[][] _depthBufferWithFilters;
         private readonly Buffer[][] _depthBuffer;
 
-        public Renderer(Canvas canvas, List<LightSource> lightSources, Camera camera)
+        public Renderer(Canvas canvas, List<LightSource> lightSources, Camera camera, Filters filter)
         {
+            _filters = filter;
             this._canvas = canvas;
             _lights = lightSources;
 
@@ -68,11 +70,13 @@ namespace PLAYGROUND
             }
 
             if (z > _depthBuffer[x][y].z) return;
-
-            _canvas.SetPixel(x, y, color);
             _depthBuffer[x][y].z = z;
             _depthBuffer[x][y].c = color;
             _depthBuffer[x][y].modelIndex = model;
+
+            // Pixel to Pixel filters 
+            var colorWithFilters = _filters.ApplyFilters(x, y, _depthBuffer);
+            _canvas.SetPixel(x, y, colorWithFilters);
         }
 
         private void DrawLine(Vertex p0, Vertex p1, Color color, int model)
@@ -485,7 +489,7 @@ namespace PLAYGROUND
                 float ilumination = light.CalculateLighting(vertex, normal);
 
                 // Check for occlusion
-                if (_depthBuffer[(int)light.Position.X][(int)light.Position.Y].z <= light.Position.Z)
+                if (_depthBuffer[(_canvas.Width/2) +(int)light.Position.X][(_canvas.Height/2)+(int)light.Position.Y].z <= light.Position.Z)
                     continue;
 
                 vertex.H += ilumination;

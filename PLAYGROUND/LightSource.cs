@@ -24,7 +24,8 @@ namespace PLAYGROUND
 
         public LightSource(Vertex position, float intensity, Canvas _canvas)
         {
-            Position = new Vertex(position.X + _canvas.Width / 2, position.Y + _canvas.Height / 2, position.Z, position.H);
+
+            Position = new Vertex(position.X , position.Y , position.Z, position.H);
             Intensity = intensity;
             Type = LightType.Ambient;
         }
