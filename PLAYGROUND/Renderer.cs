@@ -174,19 +174,22 @@ namespace PLAYGROUND
             }
 
             // Apply convolution filter
-            if (_filters.Blur)
+            if (!_filters.Reset)
             {
-                Convolution(blur);
-            }
+                if (_filters.Blur)
+                {
+                    Convolution(blur);
+                }
 
-            if (_filters.HorizontaledgeDetection)
-            {
-                Convolution(edges2);
-            }
-            
-            if (_filters.Smoothing)
-            {
-                Convolution(gsmoothing);
+                if (_filters.HorizontaledgeDetection)
+                {
+                    Convolution(edges2);
+                }
+
+                if (_filters.Smoothing)
+                {
+                    Convolution(gsmoothing);
+                }
             }
 
             _canvas.Refresh();

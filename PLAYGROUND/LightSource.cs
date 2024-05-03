@@ -48,8 +48,8 @@ namespace PLAYGROUND
 
                     // New attenuation calculation with tweaked coefficients
                     float Kc = 0.1f;  // Constant attenuation
-                    float Kl = 0.05f;  // Linear attenuation
-                    float Kq = 0.01f;  // Quadratic attenuation
+                    float Kl = 0.01f;  // Linear attenuation
+                    float Kq = 0.001f;  // Quadratic attenuation
                     float attenuation = 1f / (Kc + Kl * distance + Kq * distance * distance);
 
                     float intensity = Intensity;
